@@ -656,21 +656,24 @@ private: System::Void encodeButton_Click(System::Object^  sender, System::EventA
 			 if(encoder->SelectedIndex == 0){
 				 if (String::IsNullOrEmpty(oggPath))
 			     {
-					 MessageBox::Show("Ogg encoder not specified");
+					 /*MessageBox::Show("Ogg encoder not specified");
 					 encodeButton->Enabled = true;
-				     return;
+				     return;*/
+					 oggPath = System::IO::Path::GetDirectoryName(Application::ExecutablePath) + "\\oggenc.exe";
 			     }
 			 }
 			 else{
 				 if(String::IsNullOrEmpty(lamePath)){
-					 MessageBox::Show("Lame encoder not specified");
+					 /*MessageBox::Show("Lame encoder not specified");
 					 encodeButton->Enabled = true;
-					 return;
+					 return;*/
+					 lamePath = System::IO::Path::GetDirectoryName(Application::ExecutablePath) + "\\lame.exe";
 				 }
 				 if(String::IsNullOrEmpty(flacexe)){
-					 MessageBox::Show("Flac decoder not specified");
+					 /*MessageBox::Show("Flac decoder not specified");
 					 encodeButton->Enabled = true;
-					 return;
+					 return;*/
+					 flacexe = System::IO::Path::GetDirectoryName(Application::ExecutablePath) + "\\flac.exe";
 				 }
 			 }
 
