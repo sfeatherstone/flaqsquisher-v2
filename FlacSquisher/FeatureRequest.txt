@@ -2,7 +2,6 @@ FlacSquisher Requested/Planned Features
 =============
 Single cmd window per core/hidden window
 Progress bar
-Load configuration from file
 MP3 tagging (OggEnc2 carries over FLAC tags)
 Offload thread to new class
 	http://msdn.microsoft.com/en-us/library/ts553s52.aspx
@@ -12,3 +11,4 @@ Done
 Ogg Vorbis encoding using OggEnc2
 Multi-threaded/multi-process encoding
 MP3 encoding using LAME
+Load configuration from file

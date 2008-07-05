@@ -75,7 +75,7 @@ namespace FlacSquisher {
 
 			findFlac->Visible = false;
 			
-			settingsPath = "config.cfg";
+			settingsPath = System::IO::Path::GetDirectoryName(Application::ExecutablePath) + "\\config.cfg";
 
 			// check if settings file exists
 			//if(_access(settingsPath, 0) == -1){
@@ -545,6 +545,7 @@ namespace FlacSquisher {
 			this->MainMenuStrip = this->menuStrip1;
 			this->Name = L"FlacToPortable";
 			this->Text = L"Flac Squisher";
+			this->FormClosing += gcnew System::Windows::Forms::FormClosingEventHandler(this, &FlacToPortable::FlacToPortable_FormClosing);
 			this->menuStrip1->ResumeLayout(false);
 			this->menuStrip1->PerformLayout();
 			this->groupBox1->ResumeLayout(false);
@@ -572,7 +573,9 @@ namespace FlacSquisher {
 				 outputDir->Text = sr->ReadLine();
 				 encoder->SelectedIndex = Convert::ToInt32(sr->ReadLine());
 				 oggPath = sr->ReadLine();
+				 flacexe = sr->ReadLine();
 				 lamePath = sr->ReadLine();
+				 cliParams->Text = sr->ReadLine();
 				 sr->Close();
 			 }
 			 catch(Exception^ ex){
@@ -586,7 +589,9 @@ namespace FlacSquisher {
 				 sw->Write(outputDir->Text + Environment::NewLine);
 				 sw->Write(encoder->SelectedIndex + Environment::NewLine);
 				 sw->Write(oggPath + Environment::NewLine);
+				 sw->Write(flacexe + Environment::NewLine);
 				 sw->Write(lamePath + Environment::NewLine);
+				 sw->Write(cliParams->Text + Environment::NewLine);
 				 sw->Close();
 			 }
 			 catch(Exception^ ex){
@@ -831,5 +836,8 @@ private: void encodeFile(FileInfo^ fi){
 					  p->Close();
 				  }
 
+private: System::Void FlacToPortable_FormClosing(System::Object^  sender, System::Windows::Forms::FormClosingEventArgs^  e) {
+		     saveSettingsFile(settingsPath);
+		 }
 };
 }
