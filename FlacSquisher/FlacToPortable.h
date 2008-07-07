@@ -20,6 +20,7 @@
 
 #include <io.h>
 #include <windows.h>
+#include "AboutWindow.h"
 
 #pragma once
 
@@ -258,6 +259,7 @@ namespace FlacSquisher {
 			this->optionsToolStripMenuItem->Name = L"optionsToolStripMenuItem";
 			this->optionsToolStripMenuItem->Size = System::Drawing::Size(123, 22);
 			this->optionsToolStripMenuItem->Text = L"Options...";
+			this->optionsToolStripMenuItem->Click += gcnew System::EventHandler(this, &FlacToPortable::optionsToolStripMenuItem_Click);
 			// 
 			// helpToolStripMenuItem
 			// 
@@ -272,18 +274,21 @@ namespace FlacSquisher {
 			this->onlineHelpToolStripMenuItem->Name = L"onlineHelpToolStripMenuItem";
 			this->onlineHelpToolStripMenuItem->Size = System::Drawing::Size(163, 22);
 			this->onlineHelpToolStripMenuItem->Text = L"Online Help";
+			this->onlineHelpToolStripMenuItem->Click += gcnew System::EventHandler(this, &FlacToPortable::onlineHelpToolStripMenuItem_Click);
 			// 
 			// checkForUpdatesToolStripMenuItem
 			// 
 			this->checkForUpdatesToolStripMenuItem->Name = L"checkForUpdatesToolStripMenuItem";
 			this->checkForUpdatesToolStripMenuItem->Size = System::Drawing::Size(163, 22);
 			this->checkForUpdatesToolStripMenuItem->Text = L"Check for Updates";
+			this->checkForUpdatesToolStripMenuItem->Click += gcnew System::EventHandler(this, &FlacToPortable::checkForUpdatesToolStripMenuItem_Click);
 			// 
 			// aboutToolStripMenuItem
 			// 
 			this->aboutToolStripMenuItem->Name = L"aboutToolStripMenuItem";
 			this->aboutToolStripMenuItem->Size = System::Drawing::Size(163, 22);
 			this->aboutToolStripMenuItem->Text = L"About...";
+			this->aboutToolStripMenuItem->Click += gcnew System::EventHandler(this, &FlacToPortable::aboutToolStripMenuItem_Click);
 			// 
 			// flacDirLabel
 			// 
@@ -466,6 +471,7 @@ namespace FlacSquisher {
 			// 
 			// exitButton
 			// 
+			this->exitButton->DialogResult = System::Windows::Forms::DialogResult::Cancel;
 			this->exitButton->Location = System::Drawing::Point(3, 32);
 			this->exitButton->Name = L"exitButton";
 			this->exitButton->Size = System::Drawing::Size(75, 23);
@@ -537,8 +543,10 @@ namespace FlacSquisher {
 			// 
 			// FlacToPortable
 			// 
+			this->AcceptButton = this->encodeButton;
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
+			this->CancelButton = this->exitButton;
 			this->ClientSize = System::Drawing::Size(553, 263);
 			this->Controls->Add(this->tableLayoutPanel1);
 			this->Controls->Add(this->menuStrip1);
@@ -742,8 +750,8 @@ private: void encodingThread(){
 					 updateProgressBar();
 			     }
 			 }
-			 catch(Exception^ e){
-			     
+			 catch(Exception^ ex){
+			     ex->ToString();
 			 }
 		 }
 private: void recurseDirs(String^ rootDir) {
@@ -838,6 +846,24 @@ private: void encodeFile(FileInfo^ fi){
 
 private: System::Void FlacToPortable_FormClosing(System::Object^  sender, System::Windows::Forms::FormClosingEventArgs^  e) {
 		     saveSettingsFile(settingsPath);
+		 }
+private: System::Void onlineHelpToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+			 WebBrowser^ wb = gcnew WebBrowser();
+			 // second argument of Navigate() puts URL in new window rather than an internal form
+			 wb->Navigate("https://sourceforge.net/projects/flacsquisher/", true);
+		 }
+private: System::Void optionsToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+			 MessageBox::Show("Options window not yet implemented");
+		 }
+private: System::Void checkForUpdatesToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+			 // eventually, this method will 
+			 WebBrowser^ wb = gcnew WebBrowser();
+			 // second argument of Navigate() puts URL in new window rather than an internal form
+			 wb->Navigate("https://sourceforge.net/projects/flacsquisher/", true);
+		 }
+private: System::Void aboutToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+			 AboutWindow^ aw = gcnew AboutWindow();
+			 aw->ShowDialog(this);
 		 }
 };
 }

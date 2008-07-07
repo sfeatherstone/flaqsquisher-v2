@@ -5,6 +5,7 @@ Progress bar
 MP3 tagging (OggEnc2 carries over FLAC tags)
 Offload thread to new class
 	http://msdn.microsoft.com/en-us/library/ts553s52.aspx
+Make "Online Help" go to default browser rather than IE
 
 Done
 =============
