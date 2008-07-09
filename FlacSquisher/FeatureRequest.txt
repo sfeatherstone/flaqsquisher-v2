@@ -13,3 +13,4 @@ Ogg Vorbis encoding using OggEnc2
 Multi-threaded/multi-process encoding
 MP3 encoding using LAME
 Load configuration from file
+Put encoder selection in Options window

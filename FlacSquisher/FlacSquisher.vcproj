@@ -208,6 +208,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\OptionsWindow.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\stdafx.cpp"
 				>
 				<FileConfiguration
@@ -249,6 +253,16 @@
 				>
 				<File
 					RelativePath=".\FlacToPortable.resX"
+					SubType="Designer"
+					>
+				</File>
+			</File>
+			<File
+				RelativePath=".\OptionsWindow.h"
+				FileType="3"
+				>
+				<File
+					RelativePath=".\OptionsWindow.resx"
 					SubType="Designer"
 					>
 				</File>

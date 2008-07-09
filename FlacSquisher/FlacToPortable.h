@@ -1,6 +1,6 @@
 // FlacSquisher - A utility to convert a directory of Flac audio files
 // to MP3 or Ogg Vorbis format, preserving the directory structure of
-// the Flac 
+// the Flac files
 
 /*
  Copyright 2008 Michael Brown
@@ -21,6 +21,7 @@
 #include <io.h>
 #include <windows.h>
 #include "AboutWindow.h"
+#include "OptionsWindow.h"
 
 #pragma once
 
@@ -84,8 +85,9 @@ namespace FlacSquisher {
 				loadSettingsFile(settingsPath);
 			}
 			else{
-				oggPath = "";
-				lamePath = "";
+				oggPath = System::IO::Path::GetDirectoryName(Application::ExecutablePath) + "\\oggenc.exe";
+				flacexe = System::IO::Path::GetDirectoryName(Application::ExecutablePath) + "\\flac.exe";
+				lamePath = System::IO::Path::GetDirectoryName(Application::ExecutablePath) + "\\lame.exe";
 			}
 
 			encodeStatus->Text = "Ready";
@@ -424,6 +426,7 @@ namespace FlacSquisher {
 			this->findFlac->TabIndex = 12;
 			this->findFlac->Text = L"Flac Decoder...";
 			this->findFlac->UseVisualStyleBackColor = true;
+			this->findFlac->Visible = false;
 			this->findFlac->Click += gcnew System::EventHandler(this, &FlacToPortable::findFlac_Click);
 			// 
 			// findEncoder
@@ -434,6 +437,7 @@ namespace FlacSquisher {
 			this->findEncoder->TabIndex = 11;
 			this->findEncoder->Text = L"Find Encoder...";
 			this->findEncoder->UseVisualStyleBackColor = true;
+			this->findEncoder->Visible = false;
 			this->findEncoder->Click += gcnew System::EventHandler(this, &FlacToPortable::findEncoder_Click);
 			// 
 			// tableLayoutPanel1
@@ -552,7 +556,7 @@ namespace FlacSquisher {
 			this->Controls->Add(this->menuStrip1);
 			this->MainMenuStrip = this->menuStrip1;
 			this->Name = L"FlacToPortable";
-			this->Text = L"Flac Squisher";
+			this->Text = L"FlacSquisher";
 			this->FormClosing += gcnew System::Windows::Forms::FormClosingEventHandler(this, &FlacToPortable::FlacToPortable_FormClosing);
 			this->menuStrip1->ResumeLayout(false);
 			this->menuStrip1->PerformLayout();
@@ -853,10 +857,22 @@ private: System::Void onlineHelpToolStripMenuItem_Click(System::Object^  sender,
 			 wb->Navigate("https://sourceforge.net/projects/flacsquisher/", true);
 		 }
 private: System::Void optionsToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
-			 MessageBox::Show("Options window not yet implemented");
+			 //MessageBox::Show("Options window not yet implemented");
+			 OptionsWindow^ ow = gcnew OptionsWindow();
+			 ow->setOgg(oggPath);
+			 ow->setLame(lamePath);
+			 ow->setFlac(flacexe);
+			 ow->ShowDialog(this);
+
+			 if(ow->DialogResult == Windows::Forms::DialogResult::OK){
+			     oggPath = ow->getOgg();
+			     lamePath = ow->getLame();
+				 flacexe = ow->getFlac();
+			 }
 		 }
 private: System::Void checkForUpdatesToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
-			 // eventually, this method will 
+			 // eventually, this method will check with a server to see if there's a newer version
+			 // for now, open up the project page so the user can check for updates
 			 WebBrowser^ wb = gcnew WebBrowser();
 			 // second argument of Navigate() puts URL in new window rather than an internal form
 			 wb->Navigate("https://sourceforge.net/projects/flacsquisher/", true);
