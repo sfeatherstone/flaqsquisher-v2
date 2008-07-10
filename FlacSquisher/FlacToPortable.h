@@ -560,7 +560,7 @@ namespace FlacSquisher {
 			this->Controls->Add(this->menuStrip1);
 			this->MainMenuStrip = this->menuStrip1;
 			this->Name = L"FlacToPortable";
-			this->Text = L"FlacSquisher";
+			this->Text = L"FlacSquisher v0.0.2";
 			this->FormClosing += gcnew System::Windows::Forms::FormClosingEventHandler(this, &FlacToPortable::FlacToPortable_FormClosing);
 			this->menuStrip1->ResumeLayout(false);
 			this->menuStrip1->PerformLayout();

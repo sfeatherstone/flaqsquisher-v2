@@ -19,3 +19,5 @@ Put encoder selection in Options window
 Progress bar
 Main thread no longer becomes unresponsive waiting for other threads to finish (not using "join()" anymore)
 Make only the last thread finished re-enable the encode button
+----Alpha 0.0.2 released----
+Added version number to title bar
