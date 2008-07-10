@@ -79,12 +79,11 @@ namespace FlacSquisher {
 			
 			settingsPath = System::IO::Path::GetDirectoryName(Application::ExecutablePath) + "\\config.cfg";
 
-			// check if settings file exists
-			//if(_access(settingsPath, 0) == -1){
+			// check if config file exists
 			if(File::Exists(settingsPath)){
 				loadSettingsFile(settingsPath);
 			}
-			else{
+			else{ // load defaults (in executable's directory) if config file does not exist
 				oggPath = System::IO::Path::GetDirectoryName(Application::ExecutablePath) + "\\oggenc.exe";
 				flacexe = System::IO::Path::GetDirectoryName(Application::ExecutablePath) + "\\flac.exe";
 				lamePath = System::IO::Path::GetDirectoryName(Application::ExecutablePath) + "\\lame.exe";
@@ -95,6 +94,8 @@ namespace FlacSquisher {
 			encodeProgress->Visible = false;
 
 			ProgressBarUpdate = gcnew ProgressBarUpdateDelegate(this, &FlacToPortable::updateProgressBar);
+
+			rwl = gcnew ReaderWriterLock();
 		}
 
 	protected:
@@ -119,6 +120,8 @@ namespace FlacSquisher {
 			 static String^ options;
 			 static int encoderChoice;
 			 static System::Collections::Generic::Queue<FileInfo^> jobQueue;
+			 static int threadCount;
+			 static ReaderWriterLock^ rwl;
 			 System::Collections::Generic::List<Thread^> threadList;
 			 int initSize; // size of job queue
 			 ProgressBarUpdateDelegate^ ProgressBarUpdate;
@@ -535,6 +538,7 @@ namespace FlacSquisher {
 			// 
 			// encodeProgress
 			// 
+			this->encodeProgress->MarqueeAnimationSpeed = 10;
 			this->encodeProgress->Name = L"encodeProgress";
 			this->encodeProgress->Size = System::Drawing::Size(200, 16);
 			this->encodeProgress->Visible = false;
@@ -578,7 +582,8 @@ namespace FlacSquisher {
 		}
 #pragma endregion
 
-	private: Void loadSettingsFile(String^ filePath){
+	// called on initialization to restore the settings from the last session (called only if the config file exists)
+	private: int loadSettingsFile(String^ filePath){
 			 try{
 				 StreamReader^ sr = gcnew StreamReader(filePath, Encoding::UTF8);
 				 flacDir->Text = sr->ReadLine();
@@ -589,14 +594,17 @@ namespace FlacSquisher {
 				 lamePath = sr->ReadLine();
 				 cliParams->Text = sr->ReadLine();
 				 sr->Close();
+				 return 1;
 			 }
-			 catch(Exception^ ex){
+			 catch(Exception^ ex){ // any settings loaded before the error remain -- this may or may not be desired
 				 MessageBox::Show("Could not read correctly from file: " + ex->ToString());
+				 return 0;
 			 }
 		 }
-	private: Void saveSettingsFile(String^ filePath){
+    // called on formClose to save settings from this session
+	private: int saveSettingsFile(String^ filePath){
 			 try{
-				 StreamWriter^ sw = gcnew StreamWriter(filePath, false, Encoding::UTF8);
+				 StreamWriter^ sw = gcnew StreamWriter(filePath, false, Encoding::UTF8); // false is "Don't append"
 				 sw->Write(flacDir->Text + Environment::NewLine);
 				 sw->Write(outputDir->Text + Environment::NewLine);
 				 sw->Write(encoder->SelectedIndex + Environment::NewLine);
@@ -605,49 +613,46 @@ namespace FlacSquisher {
 				 sw->Write(lamePath + Environment::NewLine);
 				 sw->Write(cliParams->Text + Environment::NewLine);
 				 sw->Close();
+				 return 1;
 			 }
-			 catch(Exception^ ex){
+			 catch(Exception^ ex){ // any errors are likely discovered on attempting to open the file, so most likely nothing is written
 				 MessageBox::Show("Could not write to file: " + ex->ToString());
+				 return 0;
 			 }
 			 
 		 }
-
+	// called by File->Exit menu item
 	private: System::Void exitToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
 				 this->Close();
 			 }
+// called by Exit button on form
 private: System::Void exitButton_Click(System::Object^  sender, System::EventArgs^  e) {
 			 this->Close();
 		 }
+// chooses "source" directory containing Flac files to be recoded
 private: System::Void flacDirButton_Click(System::Object^  sender, System::EventArgs^  e) {
-			 String^ initStr = flacDir->Text;
 			 FolderBrowserDialog^ fbd = gcnew FolderBrowserDialog();
-			 if(fbd->ShowDialog() == Windows::Forms::DialogResult::Cancel){
-			     flacDir->Text = initStr;
-			 }
-			 else{
-				 flacDir->Text = fbd->SelectedPath;
+			 if(fbd->ShowDialog() != Windows::Forms::DialogResult::Cancel){
+			     flacDir->Text = fbd->SelectedPath;
 			 }
 		 }
+// chooses "destination" directory to contain files output by the recoding
 private: System::Void outputDirButton_Click(System::Object^  sender, System::EventArgs^  e) {
-			 String^ initStr = outputDir->Text;
 			 FolderBrowserDialog^ fbd = gcnew FolderBrowserDialog();
-			 if(fbd->ShowDialog() == Windows::Forms::DialogResult::Cancel){
-			     outputDir->Text = initStr;
-			 }
-			 else{
+			 if(fbd->ShowDialog() != Windows::Forms::DialogResult::Cancel){
 			     outputDir->Text = fbd->SelectedPath;
 			 }
 		 }
+// if encoder is changed, load default command-line options for that encoder
 private: System::Void encoder_SelectedIndexChanged(System::Object^  sender, System::EventArgs^  e) {
 			 if(encoder->SelectedIndex == 0){
-			     cliParams->Text = "-q 6";
-				 findFlac->Visible = false;
+			     cliParams->Text = "-q 6"; // oggenc options
 			 }
 			 else{
-			     cliParams->Text = "-V2 --vbr-new -q0";
-				 findFlac->Visible = true;
+			     cliParams->Text = "-V2 --vbr-new -q0"; // lame options
 			 }
 		 }
+// deprecated function -- encoders are now selected in the Tools->Options window
 private: System::Void findEncoder_Click(System::Object^  sender, System::EventArgs^  e) {
 			 OpenFileDialog^ ofd = gcnew OpenFileDialog();
 			 ofd->Filter = "Executable Files (*.exe)|*.exe";
@@ -660,6 +665,7 @@ private: System::Void findEncoder_Click(System::Object^  sender, System::EventAr
 				 }
 			 }
 		 }
+// deprecated function -- encoders are now selected in the Tools->Options window
 private: System::Void findFlac_Click(System::Object^  sender, System::EventArgs^  e) {
 			 OpenFileDialog^ ofd = gcnew OpenFileDialog();
 			 ofd->Filter = "Executable Files (*.exe)|*.exe";
@@ -667,50 +673,61 @@ private: System::Void findFlac_Click(System::Object^  sender, System::EventArgs^
 				 flacexe = ofd->FileName;
 			 }
 		 }
-
+// called with "Encode" button -- queues files in the "source" directory to be processed,
+// then starts 'n' encoding threads to process the queue
 private: System::Void encodeButton_Click(System::Object^  sender, System::EventArgs^  e) {
+			 // disable encodeButton until encoding is finished
 			 encodeButton->Enabled = false;
+			 // this section should be kept in case of bad config files, etc.
 			 if(encoder->SelectedIndex == 0){
 				 if (String::IsNullOrEmpty(oggPath))
 			     {
-					 /*MessageBox::Show("Ogg encoder not specified");
-					 encodeButton->Enabled = true;
-				     return;*/
 					 oggPath = System::IO::Path::GetDirectoryName(Application::ExecutablePath) + "\\oggenc.exe";
 			     }
 			 }
 			 else{
 				 if(String::IsNullOrEmpty(lamePath)){
-					 /*MessageBox::Show("Lame encoder not specified");
-					 encodeButton->Enabled = true;
-					 return;*/
 					 lamePath = System::IO::Path::GetDirectoryName(Application::ExecutablePath) + "\\lame.exe";
 				 }
 				 if(String::IsNullOrEmpty(flacexe)){
-					 /*MessageBox::Show("Flac decoder not specified");
-					 encodeButton->Enabled = true;
-					 return;*/
 					 flacexe = System::IO::Path::GetDirectoryName(Application::ExecutablePath) + "\\flac.exe";
 				 }
 			 }
 
+			 // set up status bar
 			 encodeStatus->Text = "Recursing directories...";
-			 encodeProgress->Size.Width = 200;
-			 encodeProgress->Maximum = jobQueue.Count;
+			 encodeProgress->Width = 200;
 			 encodeProgress->Value = 0;
+			 encodeProgress->MarqueeAnimationSpeed = 35;
+			 encodeProgress->Style = ProgressBarStyle::Marquee;
+			 encodeProgress->Visible = true;
+
+			 // find files in "source" directory
 			 recurseDirs(flacDir->Text);
-			 encodeStatus->Text = "Processing files...";
+
+			 // set up encoder
 			 flacPath = flacDir->Text;
 			 outputPath = outputDir->Text;
 			 encoderChoice = encoder->SelectedIndex;
 			 options = cliParams->Text;
 
-			 
+			 encodeStatus->Text = "Setting up threads...";
+			 rwl->AcquireWriterLock(-1); // -1 == wait forever for the lock
+			 try{
+				 threadCount = (int) threadCounter->Value; // Value is a System::Decimal, hence the cast
+			 }
+			 finally{
+				 rwl->ReleaseWriterLock();
+			 }
 
+			 // update status bar
+			 encodeStatus->Text = "Starting to encode...";
+			 encodeProgress->Style = ProgressBarStyle::Continuous;
+			 encodeProgress->Value = 0;
+			 encodeProgress->Maximum = jobQueue.Count;
+
+			 // set up 'n' threads for processing the queue
 			 for(int i=0; i<threadCounter->Value; i++){
-				 //int l_iNum=10;
-				 //CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)encodingThread, NULL, 0, NULL);
-
 				 Thread^ InstanceCaller = gcnew Thread(
 		         gcnew ThreadStart(this, &FlacToPortable::encodingThread));
 				 InstanceCaller->IsBackground = true;
@@ -720,57 +737,72 @@ private: System::Void encodeButton_Click(System::Object^  sender, System::EventA
 			     InstanceCaller->Start();
 				 
 			 }
-			 
-			 for each(Thread^ t in threadList){
-				 t->Join();
-			 }
-
-			 encodeButton->Enabled = true;
+			 encodeStatus->Text = encodeProgress->Value + " of " + encodeProgress->Maximum + " files completed";
 		 }
 
 private: void updateProgressBar(){
-			 /*if(this->InvokeRequired){
-				 this->Invoke(ProgressBarUpdate);
-				 return;
-			 }*/
-			 encodeProgress->Value = min(encodeProgress->Value + 1, encodeProgress->Maximum);
-		     encodeStatus->Text = encodeProgress->Value + " files completed";
-			 encodeProgress->Invalidate();
-			 encodeStatus->Invalidate();
+			 // bounds checking
+			 encodeProgress->Value = min((encodeProgress->Value + 1), encodeProgress->Maximum);
+			 // update the status text
+		     encodeStatus->Text = encodeProgress->Value + " of " + encodeProgress->Maximum + " files completed";
+			 // refresh the window, just in case
+			 this->Refresh();
 		 }
 private: void encodingThread(){
 			 try{ // exception will occur when queue is empty
 			     FileInfo^ fi;
+				 // goes until the queue is empty
 			     while(fi = jobQueue.Dequeue()){
 				     encodeFile(fi);
 
-					 //MethodInvoker^ mi = gcnew MethodInvoker(this, &FlacToPortable::updateProgressBar);
-					 //this->BeginInvoke(mi);
-
-					 //Thread^ InstanceCaller = gcnew Thread(
-					 //gcnew ThreadStart(this, &FlacToPortable::updateProgressBar));
-					 //InstanceCaller->Start();
-
+					 // increment "value" on the progress bar by one
 					 updateProgressBar();
 			     }
 			 }
 			 catch(Exception^ ex){
-			     ex->ToString();
+			     ex->ToString(); // this line only present to prevent a compiler warning
+
+				 // enable the encode button only if this is the last thread executing
+				 rwl->AcquireWriterLock(-1);
+                 try{
+                     if(threadCount > 1){
+						 try{
+							 threadCount--;
+						 }
+						 finally{
+						 }
+                     }
+                     else{
+						 encodeButton->Enabled = true;
+                     }
+				 }
+				 finally{
+					 rwl->ReleaseWriterLock();
+				 }
 			 }
 		 }
+// recurse through the directories and add all files found to the queue
 private: void recurseDirs(String^ rootDir) {
 					  DirectoryInfo^ dirinfo = gcnew DirectoryInfo(rootDir);
 					  
 					  for each(FileInfo^ fi in dirinfo->GetFiles()){
-						  //encodeFile(fi);
 						  jobQueue.Enqueue(fi);
-						  this->Refresh();
+						  // ProgressBar marquee style is broken, this is a hack to get a similar effect
+						  if(encodeProgress->Value < encodeProgress->Maximum){
+						      //encodeProgress->Increment(1);
+						  }
+						  else{
+							  encodeProgress->Value = encodeProgress->Minimum;
+						  }
 					  }
+					  // pseudo-tail-recursive, if this compiler is helped by that at all
 					  for each(DirectoryInfo^ di in dirinfo->GetDirectories()){
 						  recurseDirs(di->FullName);
 					  }
 				  }
+// take the file file passed in, and encode it using the selected encoder and options
 private: void encodeFile(FileInfo^ fi){
+					  // get the portion of the path that will be shared by the source and destination paths
 				      String^ partialPath = fi->DirectoryName->Remove(0, flacPath->Length);
 					  String^ destPath;
 					  if(encoderChoice == 0){
@@ -779,12 +811,16 @@ private: void encodeFile(FileInfo^ fi){
 					  else{
 						  destPath = outputPath + partialPath + "\\" + fi->Name->Replace(".flac", ".mp3");
 					  }
+					  // if the resulting path exists already, we don't need to encode again
 					  if(File::Exists(destPath)){
 					      return;
 					  }
+					  // LAME doesn't like to output to non-existent directories
 					  if(!Directory::Exists(outputPath + partialPath)){
 						  Directory::CreateDirectory(outputPath + partialPath);
 					  }
+
+					  // this code was an early attempt to keep one thread within one cmd window
 					  /*Process^ p = gcnew Process();
 					  p->StartInfo->FileName = "cmd.exe";
 					  p->StartInfo->UseShellExecute = false;
@@ -826,57 +862,68 @@ private: void encodeFile(FileInfo^ fi){
 					  p->Close();
 					  */
 
+					  // call different things on the command line, depending on which encoder is being used
 					  ProcessStartInfo^ psi = gcnew ProcessStartInfo();
 					  if(encoderChoice == 0){
+						  // oggenc can take Flac files as input, so no decoding necessary
 					      psi->FileName = oggPath;
 						  psi->Arguments = "\"" + fi->FullName + "\" -o \"" + destPath + "\" " + options;
 					  }
 					  else{
+						  // LAME cannot take Flac files as input as of 3.97, so we need to decode using flac.exe first
 					      psi->FileName = "cmd.exe";
+						  // "/s" switch allows us to give the arguments of "/c" inside quotes
 						  psi->Arguments = "/s /c \"\"" + flacexe + "\" -dc \"" + fi->FullName + "\" | \"" + lamePath + "\" " + options + " --verbose - \"" + destPath + "\"\"";
-						  //MessageBox::Show(psi->Arguments);
 					  }
 					  
 					  //status.Text += "Calling Lame with arguments: " + psi.Arguments
 						  //+ Environment.NewLine;
 					  //status.Update();
+
+					  // TODO: make an option to make this hidden or normal
 					  psi->WindowStyle = ProcessWindowStyle::Normal;
 					  System::Diagnostics::Process^ p = System::Diagnostics::Process::Start(psi);
 
+					  // don't set a timeout, cause encoding could take a long time, depending on CPU speed, load, and file length
 					  p->WaitForExit();
 
+					  // close the process handle when it's exited
 					  p->Close();
 				  }
-
+// when the program is being closed, save the config file
 private: System::Void FlacToPortable_FormClosing(System::Object^  sender, System::Windows::Forms::FormClosingEventArgs^  e) {
 		     saveSettingsFile(settingsPath);
 		 }
+// goes to the project page. Maybe send them instead to the forums?
 private: System::Void onlineHelpToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
 			 WebBrowser^ wb = gcnew WebBrowser();
 			 // second argument of Navigate() puts URL in new window rather than an internal form
 			 wb->Navigate("https://sourceforge.net/projects/flacsquisher/", true);
 		 }
+// open the options window
 private: System::Void optionsToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
-			 //MessageBox::Show("Options window not yet implemented");
 			 OptionsWindow^ ow = gcnew OptionsWindow();
+			 // populate the window with the current encoder path values
 			 ow->setOgg(oggPath);
 			 ow->setLame(lamePath);
 			 ow->setFlac(flacexe);
 			 ow->ShowDialog(this);
 
 			 if(ow->DialogResult == Windows::Forms::DialogResult::OK){
+				 // write the values back
 			     oggPath = ow->getOgg();
 			     lamePath = ow->getLame();
 				 flacexe = ow->getFlac();
 			 }
 		 }
+// eventually, this method will check with a server to see if there's a newer version
+// for now, open up the project page so the user can check for updates
 private: System::Void checkForUpdatesToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
-			 // eventually, this method will check with a server to see if there's a newer version
-			 // for now, open up the project page so the user can check for updates
 			 WebBrowser^ wb = gcnew WebBrowser();
 			 // second argument of Navigate() puts URL in new window rather than an internal form
 			 wb->Navigate("https://sourceforge.net/projects/flacsquisher/", true);
 		 }
+// bring up the About window
 private: System::Void aboutToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
 			 AboutWindow^ aw = gcnew AboutWindow();
 			 aw->ShowDialog(this);
