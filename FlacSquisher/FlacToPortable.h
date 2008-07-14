@@ -93,7 +93,7 @@ namespace FlacSquisher {
 			encodeProgress->Size.Width = 0;
 			encodeProgress->Visible = false;
 
-			ProgressBarUpdate = gcnew ProgressBarUpdateDelegate(this, &FlacToPortable::updateProgressBar);
+			//ProgressBarUpdate = gcnew ProgressBarUpdateDelegate(this, &FlacToPortable::updateProgressBar);
 
 			rwl = gcnew ReaderWriterLock();
 		}
@@ -124,7 +124,7 @@ namespace FlacSquisher {
 			 static ReaderWriterLock^ rwl;
 			 System::Collections::Generic::List<Thread^> threadList;
 			 int initSize; // size of job queue
-			 ProgressBarUpdateDelegate^ ProgressBarUpdate;
+			 //ProgressBarUpdateDelegate^ ProgressBarUpdate;
 
 	private: System::Windows::Forms::MenuStrip^  menuStrip1;
 	protected: 
@@ -759,9 +759,7 @@ private: void encodingThread(){
 					 updateProgressBar();
 			     }
 			 }
-			 catch(Exception^ ex){
-			     ex->ToString(); // this line only present to prevent a compiler warning
-
+			 finally{
 				 // enable the encode button only if this is the last thread executing
 				 rwl->AcquireWriterLock(-1);
                  try{
@@ -787,13 +785,6 @@ private: void recurseDirs(String^ rootDir) {
 					  
 					  for each(FileInfo^ fi in dirinfo->GetFiles()){
 						  jobQueue.Enqueue(fi);
-						  // ProgressBar marquee style is broken, this is a hack to get a similar effect
-						  if(encodeProgress->Value < encodeProgress->Maximum){
-						      //encodeProgress->Increment(1);
-						  }
-						  else{
-							  encodeProgress->Value = encodeProgress->Minimum;
-						  }
 					  }
 					  // pseudo-tail-recursive, if this compiler is helped by that at all
 					  for each(DirectoryInfo^ di in dirinfo->GetDirectories()){
