@@ -7,6 +7,7 @@ Offload thread to new class
 Make "Online Help" go to default browser rather than IE
 Create "Console" window containing a log of activities
 Use Win32 API instead of VC++ runtimes
+Add Options sub-window for encoder presets (similar to LAME suggested UI)
 
 Done
 =============
