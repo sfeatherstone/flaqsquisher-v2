@@ -518,5 +518,51 @@ namespace FlacSquisher {
 	private: System::Void okButton_Click(System::Object^  sender, System::EventArgs^  e) {
 				 this->Close();
 			 }
+	public: System::Void setLameTarget(int target){
+	    if(target == 0){
+                qualityRadio->Checked = true;
+            }
+            else{
+                bitrateRadio->Checked = true;
+            }
+	}
+        public: int getLameTarget(){
+            if(qualityRadio->Checked){
+                return 0;
+            }
+            else{
+                return 1;
+            }
+        }
+	public: System::Void setMono(bool monoEnc){
+	    mono->Checked = monoEnc;
+	}
+	public: bool getMono(){
+	    return mono->Checked;
+	}
+	public: System::Void setCbr(bool constbr){
+	    cbr->Checked = constbr;
+	}
+	public: bool getCbr(){
+	    return cbr->Checked;
+	}
+	public: System::Void setBitrate(int br){
+	    bitrateBar->Value = br;
+	}
+	public: int getBitrate(){
+	    return bitrateBar->Value;
+	}
+	public: System::Void setQuality(int qu){
+	    qualBar->Value = qu;
+	}
+	public: int getQuality(){
+	    return qualBar->Value;
+	}
+	public: System::Void setVbrMode(int mode){
+	    vbrMode->SelectedIndex = mode;
+	}
+	public: int getVbrMode(){
+	    return vbrMode->SelectedIndex;
+	}
 };
 }
