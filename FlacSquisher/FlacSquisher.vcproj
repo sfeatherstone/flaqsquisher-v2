@@ -204,6 +204,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\EncoderOptions.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\FlacSquisher.cpp"
 				>
 			</File>
@@ -243,6 +247,16 @@
 				>
 				<File
 					RelativePath=".\AboutWindow.resx"
+					SubType="Designer"
+					>
+				</File>
+			</File>
+			<File
+				RelativePath=".\EncoderOptions.h"
+				FileType="3"
+				>
+				<File
+					RelativePath=".\EncoderOptions.resx"
 					SubType="Designer"
 					>
 				</File>

@@ -87,6 +87,7 @@ namespace FlacSquisher {
 				oggPath = System::IO::Path::GetDirectoryName(Application::ExecutablePath) + "\\oggenc.exe";
 				flacexe = System::IO::Path::GetDirectoryName(Application::ExecutablePath) + "\\flac.exe";
 				lamePath = System::IO::Path::GetDirectoryName(Application::ExecutablePath) + "\\lame.exe";
+				hidewin = true;
 			}
 
 			encodeStatus->Text = "Ready";
@@ -125,6 +126,7 @@ namespace FlacSquisher {
 			 System::Collections::Generic::List<Thread^> threadList;
 			 int initSize; // size of job queue
 			 //ProgressBarUpdateDelegate^ ProgressBarUpdate;
+			 static bool hidewin;
 
 	private: System::Windows::Forms::MenuStrip^  menuStrip1;
 	protected: 
@@ -593,6 +595,7 @@ namespace FlacSquisher {
 				 flacexe = sr->ReadLine();
 				 lamePath = sr->ReadLine();
 				 cliParams->Text = sr->ReadLine();
+				 hidewin = bool::Parse(sr->ReadLine());
 				 sr->Close();
 				 return 1;
 			 }
@@ -612,6 +615,7 @@ namespace FlacSquisher {
 				 sw->Write(flacexe + Environment::NewLine);
 				 sw->Write(lamePath + Environment::NewLine);
 				 sw->Write(cliParams->Text + Environment::NewLine);
+				 sw->Write(hidewin.ToString());
 				 sw->Close();
 				 return 1;
 			 }
@@ -871,8 +875,12 @@ private: void encodeFile(FileInfo^ fi){
 						  //+ Environment.NewLine;
 					  //status.Update();
 
-					  // TODO: make an option to make this hidden or normal
-					  psi->WindowStyle = ProcessWindowStyle::Normal;
+					  if(hidewin){
+						  psi->WindowStyle = ProcessWindowStyle::Hidden;
+					  }
+					  else{
+						  psi->WindowStyle = ProcessWindowStyle::Normal;
+					  }
 					  System::Diagnostics::Process^ p = System::Diagnostics::Process::Start(psi);
 
 					  // don't set a timeout, cause encoding could take a long time, depending on CPU speed, load, and file length
@@ -898,6 +906,7 @@ private: System::Void optionsToolStripMenuItem_Click(System::Object^  sender, Sy
 			 ow->setOgg(oggPath);
 			 ow->setLame(lamePath);
 			 ow->setFlac(flacexe);
+			 ow->setHide(hidewin);
 			 ow->ShowDialog(this);
 
 			 if(ow->DialogResult == Windows::Forms::DialogResult::OK){
@@ -905,6 +914,7 @@ private: System::Void optionsToolStripMenuItem_Click(System::Object^  sender, Sy
 			     oggPath = ow->getOgg();
 			     lamePath = ow->getLame();
 				 flacexe = ow->getFlac();
+				 hidewin = ow->getHide();
 			 }
 		 }
 // eventually, this method will check with a server to see if there's a newer version
