@@ -79,6 +79,11 @@ namespace FlacSquisher {
 	private: System::Windows::Forms::Label^  lame50;
 	private: System::Windows::Forms::Label^  lame100;
 	private: System::Windows::Forms::Label^  lame10;
+	private: System::Windows::Forms::GroupBox^  oggQualGroup;
+	private: System::Windows::Forms::TrackBar^  oggQual;
+	private: System::Windows::Forms::Label^  ogg10;
+	private: System::Windows::Forms::Label^  ogg6;
+	private: System::Windows::Forms::Label^  oggneg1;
 
 
 
@@ -105,6 +110,8 @@ namespace FlacSquisher {
 			this->oggtab = (gcnew System::Windows::Forms::TabPage());
 			this->tableLayoutPanel1 = (gcnew System::Windows::Forms::TableLayoutPanel());
 			this->lametab = (gcnew System::Windows::Forms::TabPage());
+			this->panel3 = (gcnew System::Windows::Forms::Panel());
+			this->lamelabel = (gcnew System::Windows::Forms::Label());
 			this->tableLayoutPanel2 = (gcnew System::Windows::Forms::TableLayoutPanel());
 			this->targetGroup = (gcnew System::Windows::Forms::GroupBox());
 			this->qualityRadio = (gcnew System::Windows::Forms::RadioButton());
@@ -112,28 +119,33 @@ namespace FlacSquisher {
 			this->panel1 = (gcnew System::Windows::Forms::Panel());
 			this->mono = (gcnew System::Windows::Forms::CheckBox());
 			this->bitrateGroup = (gcnew System::Windows::Forms::GroupBox());
+			this->lame256 = (gcnew System::Windows::Forms::Label());
+			this->lame128 = (gcnew System::Windows::Forms::Label());
+			this->lame64 = (gcnew System::Windows::Forms::Label());
+			this->lame320 = (gcnew System::Windows::Forms::Label());
+			this->lame8 = (gcnew System::Windows::Forms::Label());
+			this->lame192 = (gcnew System::Windows::Forms::Label());
 			this->cbr = (gcnew System::Windows::Forms::CheckBox());
 			this->bitrateBar = (gcnew System::Windows::Forms::TrackBar());
 			this->qualityGroup = (gcnew System::Windows::Forms::GroupBox());
+			this->lame50 = (gcnew System::Windows::Forms::Label());
+			this->lame100 = (gcnew System::Windows::Forms::Label());
+			this->lame10 = (gcnew System::Windows::Forms::Label());
 			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->vbrMode = (gcnew System::Windows::Forms::ComboBox());
 			this->qualBar = (gcnew System::Windows::Forms::TrackBar());
 			this->okButton = (gcnew System::Windows::Forms::Button());
 			this->cancelButton = (gcnew System::Windows::Forms::Button());
-			this->lamelabel = (gcnew System::Windows::Forms::Label());
-			this->panel3 = (gcnew System::Windows::Forms::Panel());
-			this->lame192 = (gcnew System::Windows::Forms::Label());
-			this->lame8 = (gcnew System::Windows::Forms::Label());
-			this->lame320 = (gcnew System::Windows::Forms::Label());
-			this->lame64 = (gcnew System::Windows::Forms::Label());
-			this->lame128 = (gcnew System::Windows::Forms::Label());
-			this->lame256 = (gcnew System::Windows::Forms::Label());
-			this->lame10 = (gcnew System::Windows::Forms::Label());
-			this->lame100 = (gcnew System::Windows::Forms::Label());
-			this->lame50 = (gcnew System::Windows::Forms::Label());
+			this->oggQualGroup = (gcnew System::Windows::Forms::GroupBox());
+			this->oggQual = (gcnew System::Windows::Forms::TrackBar());
+			this->oggneg1 = (gcnew System::Windows::Forms::Label());
+			this->ogg6 = (gcnew System::Windows::Forms::Label());
+			this->ogg10 = (gcnew System::Windows::Forms::Label());
 			this->tabControl1->SuspendLayout();
 			this->oggtab->SuspendLayout();
+			this->tableLayoutPanel1->SuspendLayout();
 			this->lametab->SuspendLayout();
+			this->panel3->SuspendLayout();
 			this->tableLayoutPanel2->SuspendLayout();
 			this->targetGroup->SuspendLayout();
 			this->panel1->SuspendLayout();
@@ -141,7 +153,8 @@ namespace FlacSquisher {
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->bitrateBar))->BeginInit();
 			this->qualityGroup->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->qualBar))->BeginInit();
-			this->panel3->SuspendLayout();
+			this->oggQualGroup->SuspendLayout();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->oggQual))->BeginInit();
 			this->SuspendLayout();
 			// 
 			// tabControl1
@@ -174,6 +187,7 @@ namespace FlacSquisher {
 				50)));
 			this->tableLayoutPanel1->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent, 
 				50)));
+			this->tableLayoutPanel1->Controls->Add(this->oggQualGroup, 0, 0);
 			this->tableLayoutPanel1->Dock = System::Windows::Forms::DockStyle::Fill;
 			this->tableLayoutPanel1->Location = System::Drawing::Point(3, 3);
 			this->tableLayoutPanel1->Name = L"tableLayoutPanel1";
@@ -195,6 +209,24 @@ namespace FlacSquisher {
 			this->lametab->Text = L"LAME (MP3)";
 			this->lametab->UseVisualStyleBackColor = true;
 			// 
+			// panel3
+			// 
+			this->panel3->Controls->Add(this->lamelabel);
+			this->panel3->Dock = System::Windows::Forms::DockStyle::Fill;
+			this->panel3->Location = System::Drawing::Point(3, 371);
+			this->panel3->Name = L"panel3";
+			this->panel3->Size = System::Drawing::Size(528, 25);
+			this->panel3->TabIndex = 1;
+			// 
+			// lamelabel
+			// 
+			this->lamelabel->AutoSize = true;
+			this->lamelabel->Location = System::Drawing::Point(3, 3);
+			this->lamelabel->Name = L"lamelabel";
+			this->lamelabel->Size = System::Drawing::Size(148, 13);
+			this->lamelabel->TabIndex = 4;
+			this->lamelabel->Text = L"Using LAME encoding engine";
+			// 
 			// tableLayoutPanel2
 			// 
 			this->tableLayoutPanel2->ColumnCount = 3;
@@ -203,7 +235,7 @@ namespace FlacSquisher {
 			this->tableLayoutPanel2->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent, 
 				54.67033F)));
 			this->tableLayoutPanel2->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Absolute, 
-				171)));
+				176)));
 			this->tableLayoutPanel2->Controls->Add(this->targetGroup, 0, 0);
 			this->tableLayoutPanel2->Controls->Add(this->panel1, 2, 0);
 			this->tableLayoutPanel2->Controls->Add(this->bitrateGroup, 0, 1);
@@ -225,7 +257,7 @@ namespace FlacSquisher {
 			this->targetGroup->Dock = System::Windows::Forms::DockStyle::Fill;
 			this->targetGroup->Location = System::Drawing::Point(3, 3);
 			this->targetGroup->Name = L"targetGroup";
-			this->targetGroup->Size = System::Drawing::Size(155, 98);
+			this->targetGroup->Size = System::Drawing::Size(153, 98);
 			this->targetGroup->TabIndex = 0;
 			this->targetGroup->TabStop = false;
 			this->targetGroup->Text = L"Target";
@@ -241,6 +273,7 @@ namespace FlacSquisher {
 			this->qualityRadio->TabStop = true;
 			this->qualityRadio->Text = L"Quality";
 			this->qualityRadio->UseVisualStyleBackColor = true;
+			this->qualityRadio->CheckedChanged += gcnew System::EventHandler(this, &EncoderOptions::qualityRadio_CheckedChanged);
 			// 
 			// bitrateRadio
 			// 
@@ -251,14 +284,15 @@ namespace FlacSquisher {
 			this->bitrateRadio->TabIndex = 0;
 			this->bitrateRadio->Text = L"Bitrate";
 			this->bitrateRadio->UseVisualStyleBackColor = true;
+			this->bitrateRadio->CheckedChanged += gcnew System::EventHandler(this, &EncoderOptions::bitrateRadio_CheckedChanged);
 			// 
 			// panel1
 			// 
 			this->panel1->Controls->Add(this->mono);
 			this->panel1->Dock = System::Windows::Forms::DockStyle::Fill;
-			this->panel1->Location = System::Drawing::Point(359, 3);
+			this->panel1->Location = System::Drawing::Point(354, 3);
 			this->panel1->Name = L"panel1";
-			this->panel1->Size = System::Drawing::Size(166, 98);
+			this->panel1->Size = System::Drawing::Size(171, 98);
 			this->panel1->TabIndex = 1;
 			// 
 			// mono
@@ -289,6 +323,60 @@ namespace FlacSquisher {
 			this->bitrateGroup->TabIndex = 2;
 			this->bitrateGroup->TabStop = false;
 			this->bitrateGroup->Text = L"Bitrate";
+			// 
+			// lame256
+			// 
+			this->lame256->AutoSize = true;
+			this->lame256->Location = System::Drawing::Point(391, 23);
+			this->lame256->Name = L"lame256";
+			this->lame256->Size = System::Drawing::Size(25, 13);
+			this->lame256->TabIndex = 7;
+			this->lame256->Text = L"256";
+			// 
+			// lame128
+			// 
+			this->lame128->AutoSize = true;
+			this->lame128->Location = System::Drawing::Point(193, 23);
+			this->lame128->Name = L"lame128";
+			this->lame128->Size = System::Drawing::Size(25, 13);
+			this->lame128->TabIndex = 6;
+			this->lame128->Text = L"128";
+			// 
+			// lame64
+			// 
+			this->lame64->AutoSize = true;
+			this->lame64->Location = System::Drawing::Point(96, 23);
+			this->lame64->Name = L"lame64";
+			this->lame64->Size = System::Drawing::Size(19, 13);
+			this->lame64->TabIndex = 5;
+			this->lame64->Text = L"64";
+			// 
+			// lame320
+			// 
+			this->lame320->AutoSize = true;
+			this->lame320->Location = System::Drawing::Point(491, 23);
+			this->lame320->Name = L"lame320";
+			this->lame320->Size = System::Drawing::Size(25, 13);
+			this->lame320->TabIndex = 4;
+			this->lame320->Text = L"320";
+			// 
+			// lame8
+			// 
+			this->lame8->AutoSize = true;
+			this->lame8->Location = System::Drawing::Point(12, 23);
+			this->lame8->Name = L"lame8";
+			this->lame8->Size = System::Drawing::Size(13, 13);
+			this->lame8->TabIndex = 3;
+			this->lame8->Text = L"8";
+			// 
+			// lame192
+			// 
+			this->lame192->AutoSize = true;
+			this->lame192->Location = System::Drawing::Point(292, 23);
+			this->lame192->Name = L"lame192";
+			this->lame192->Size = System::Drawing::Size(25, 13);
+			this->lame192->TabIndex = 2;
+			this->lame192->Text = L"192";
 			// 
 			// cbr
 			// 
@@ -330,6 +418,33 @@ namespace FlacSquisher {
 			this->qualityGroup->TabIndex = 3;
 			this->qualityGroup->TabStop = false;
 			this->qualityGroup->Text = L"Quality";
+			// 
+			// lame50
+			// 
+			this->lame50->AutoSize = true;
+			this->lame50->Location = System::Drawing::Point(232, 24);
+			this->lame50->Name = L"lame50";
+			this->lame50->Size = System::Drawing::Size(19, 13);
+			this->lame50->TabIndex = 5;
+			this->lame50->Text = L"50";
+			// 
+			// lame100
+			// 
+			this->lame100->AutoSize = true;
+			this->lame100->Location = System::Drawing::Point(391, 24);
+			this->lame100->Name = L"lame100";
+			this->lame100->Size = System::Drawing::Size(25, 13);
+			this->lame100->TabIndex = 4;
+			this->lame100->Text = L"100";
+			// 
+			// lame10
+			// 
+			this->lame10->AutoSize = true;
+			this->lame10->Location = System::Drawing::Point(103, 24);
+			this->lame10->Name = L"lame10";
+			this->lame10->Size = System::Drawing::Size(19, 13);
+			this->lame10->TabIndex = 3;
+			this->lame10->Text = L"10";
 			// 
 			// label1
 			// 
@@ -383,104 +498,56 @@ namespace FlacSquisher {
 			this->cancelButton->Text = L"Cancel";
 			this->cancelButton->UseVisualStyleBackColor = true;
 			// 
-			// lamelabel
+			// oggQualGroup
 			// 
-			this->lamelabel->AutoSize = true;
-			this->lamelabel->Location = System::Drawing::Point(3, 3);
-			this->lamelabel->Name = L"lamelabel";
-			this->lamelabel->Size = System::Drawing::Size(148, 13);
-			this->lamelabel->TabIndex = 4;
-			this->lamelabel->Text = L"Using LAME encoding engine";
+			this->tableLayoutPanel1->SetColumnSpan(this->oggQualGroup, 2);
+			this->oggQualGroup->Controls->Add(this->ogg10);
+			this->oggQualGroup->Controls->Add(this->ogg6);
+			this->oggQualGroup->Controls->Add(this->oggneg1);
+			this->oggQualGroup->Controls->Add(this->oggQual);
+			this->oggQualGroup->Dock = System::Windows::Forms::DockStyle::Fill;
+			this->oggQualGroup->Location = System::Drawing::Point(3, 3);
+			this->oggQualGroup->Name = L"oggQualGroup";
+			this->oggQualGroup->Size = System::Drawing::Size(522, 190);
+			this->oggQualGroup->TabIndex = 0;
+			this->oggQualGroup->TabStop = false;
+			this->oggQualGroup->Text = L"Quality";
 			// 
-			// panel3
+			// oggQual
 			// 
-			this->panel3->Controls->Add(this->lamelabel);
-			this->panel3->Dock = System::Windows::Forms::DockStyle::Fill;
-			this->panel3->Location = System::Drawing::Point(3, 371);
-			this->panel3->Name = L"panel3";
-			this->panel3->Size = System::Drawing::Size(528, 25);
-			this->panel3->TabIndex = 1;
+			this->oggQual->Location = System::Drawing::Point(101, 54);
+			this->oggQual->Minimum = -1;
+			this->oggQual->Name = L"oggQual";
+			this->oggQual->Size = System::Drawing::Size(316, 45);
+			this->oggQual->TabIndex = 0;
+			this->oggQual->Value = 10;
 			// 
-			// lame192
+			// oggneg1
 			// 
-			this->lame192->AutoSize = true;
-			this->lame192->Location = System::Drawing::Point(292, 23);
-			this->lame192->Name = L"lame192";
-			this->lame192->Size = System::Drawing::Size(25, 13);
-			this->lame192->TabIndex = 2;
-			this->lame192->Text = L"192";
+			this->oggneg1->AutoSize = true;
+			this->oggneg1->Location = System::Drawing::Point(105, 38);
+			this->oggneg1->Name = L"oggneg1";
+			this->oggneg1->Size = System::Drawing::Size(16, 13);
+			this->oggneg1->TabIndex = 1;
+			this->oggneg1->Text = L"-1";
 			// 
-			// lame8
+			// ogg6
 			// 
-			this->lame8->AutoSize = true;
-			this->lame8->Location = System::Drawing::Point(12, 23);
-			this->lame8->Name = L"lame8";
-			this->lame8->Size = System::Drawing::Size(13, 13);
-			this->lame8->TabIndex = 3;
-			this->lame8->Text = L"8";
+			this->ogg6->AutoSize = true;
+			this->ogg6->Location = System::Drawing::Point(291, 38);
+			this->ogg6->Name = L"ogg6";
+			this->ogg6->Size = System::Drawing::Size(13, 13);
+			this->ogg6->TabIndex = 2;
+			this->ogg6->Text = L"6";
 			// 
-			// lame320
+			// ogg10
 			// 
-			this->lame320->AutoSize = true;
-			this->lame320->Location = System::Drawing::Point(491, 23);
-			this->lame320->Name = L"lame320";
-			this->lame320->Size = System::Drawing::Size(25, 13);
-			this->lame320->TabIndex = 4;
-			this->lame320->Text = L"320";
-			// 
-			// lame64
-			// 
-			this->lame64->AutoSize = true;
-			this->lame64->Location = System::Drawing::Point(96, 23);
-			this->lame64->Name = L"lame64";
-			this->lame64->Size = System::Drawing::Size(19, 13);
-			this->lame64->TabIndex = 5;
-			this->lame64->Text = L"64";
-			// 
-			// lame128
-			// 
-			this->lame128->AutoSize = true;
-			this->lame128->Location = System::Drawing::Point(193, 23);
-			this->lame128->Name = L"lame128";
-			this->lame128->Size = System::Drawing::Size(25, 13);
-			this->lame128->TabIndex = 6;
-			this->lame128->Text = L"128";
-			// 
-			// lame256
-			// 
-			this->lame256->AutoSize = true;
-			this->lame256->Location = System::Drawing::Point(391, 23);
-			this->lame256->Name = L"lame256";
-			this->lame256->Size = System::Drawing::Size(25, 13);
-			this->lame256->TabIndex = 7;
-			this->lame256->Text = L"256";
-			// 
-			// lame10
-			// 
-			this->lame10->AutoSize = true;
-			this->lame10->Location = System::Drawing::Point(103, 24);
-			this->lame10->Name = L"lame10";
-			this->lame10->Size = System::Drawing::Size(19, 13);
-			this->lame10->TabIndex = 3;
-			this->lame10->Text = L"10";
-			// 
-			// lame100
-			// 
-			this->lame100->AutoSize = true;
-			this->lame100->Location = System::Drawing::Point(391, 24);
-			this->lame100->Name = L"lame100";
-			this->lame100->Size = System::Drawing::Size(25, 13);
-			this->lame100->TabIndex = 4;
-			this->lame100->Text = L"100";
-			// 
-			// lame50
-			// 
-			this->lame50->AutoSize = true;
-			this->lame50->Location = System::Drawing::Point(232, 24);
-			this->lame50->Name = L"lame50";
-			this->lame50->Size = System::Drawing::Size(19, 13);
-			this->lame50->TabIndex = 5;
-			this->lame50->Text = L"50";
+			this->ogg10->AutoSize = true;
+			this->ogg10->Location = System::Drawing::Point(393, 38);
+			this->ogg10->Name = L"ogg10";
+			this->ogg10->Size = System::Drawing::Size(19, 13);
+			this->ogg10->TabIndex = 3;
+			this->ogg10->Text = L"10";
 			// 
 			// EncoderOptions
 			// 
@@ -495,9 +562,13 @@ namespace FlacSquisher {
 			this->Name = L"EncoderOptions";
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterParent;
 			this->Text = L"Encoder Configuration";
+			this->Load += gcnew System::EventHandler(this, &EncoderOptions::EncoderOptions_Load);
 			this->tabControl1->ResumeLayout(false);
 			this->oggtab->ResumeLayout(false);
+			this->tableLayoutPanel1->ResumeLayout(false);
 			this->lametab->ResumeLayout(false);
+			this->panel3->ResumeLayout(false);
+			this->panel3->PerformLayout();
 			this->tableLayoutPanel2->ResumeLayout(false);
 			this->targetGroup->ResumeLayout(false);
 			this->targetGroup->PerformLayout();
@@ -509,8 +580,9 @@ namespace FlacSquisher {
 			this->qualityGroup->ResumeLayout(false);
 			this->qualityGroup->PerformLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->qualBar))->EndInit();
-			this->panel3->ResumeLayout(false);
-			this->panel3->PerformLayout();
+			this->oggQualGroup->ResumeLayout(false);
+			this->oggQualGroup->PerformLayout();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->oggQual))->EndInit();
 			this->ResumeLayout(false);
 
 		}
@@ -564,5 +636,16 @@ namespace FlacSquisher {
 	public: int getVbrMode(){
 	    return vbrMode->SelectedIndex;
 	}
+private: System::Void EncoderOptions_Load(System::Object^  sender, System::EventArgs^  e) {
+			 qualityRadio->Checked = true;
+			 bitrateGroup->Enabled = false;
+			 vbrMode->SelectedIndex = 1;
+		 }
+private: System::Void bitrateRadio_CheckedChanged(System::Object^  sender, System::EventArgs^  e) {
+			 bitrateGroup->Enabled = bitrateRadio->Checked;
+		 }
+private: System::Void qualityRadio_CheckedChanged(System::Object^  sender, System::EventArgs^  e) {
+			 qualityGroup->Enabled = qualityRadio->Checked;
+		 }
 };
 }
