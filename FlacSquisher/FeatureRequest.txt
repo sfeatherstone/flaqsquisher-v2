@@ -3,7 +3,7 @@ FlacSquisher Requested/Planned Features
 Single cmd window per core
 MP3 tagging (OggEnc2 carries over FLAC tags)
 Offload thread to new class
-	http://msdn.microsoft.com/en-us/library/ts553s52.aspx
+    http://msdn.microsoft.com/en-us/library/ts553s52.aspx
 Make "Online Help" go to default browser rather than IE
 Create "Console" window containing a log of activities
 Use Win32 API instead of VC++ runtimes
