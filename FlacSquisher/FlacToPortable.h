@@ -763,6 +763,9 @@ namespace FlacSquisher {
                          updateProgressBar();
                      }
                  }
+				 catch(Exception^ e){
+					 e->ToString();
+				 }
                  finally{
                      // enable the encode button only if this is the last thread executing
                      rwl->AcquireWriterLock(-1);
@@ -778,6 +781,9 @@ namespace FlacSquisher {
                              encodeButton->Enabled = true;
                          }
                      }
+					 catch(Exception^ ex){
+						 ex->ToString();
+					 }
                      finally{
                          rwl->ReleaseWriterLock();
                      }
