@@ -587,6 +587,17 @@ namespace FlacSquisher {
 
         }
 #pragma endregion
+
+		/*struct OptionsSet {
+			int encoder;
+			int target;
+			bool mono;
+			bool cbr;
+			int bitrate;
+			int quality;
+			int vbrmode;
+		};*/
+
     private: System::Void okButton_Click(System::Object^  sender, System::EventArgs^  e) {
                  this->Close();
              }
