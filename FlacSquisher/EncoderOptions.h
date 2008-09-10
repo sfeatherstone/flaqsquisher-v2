@@ -296,7 +296,7 @@ namespace FlacSquisher {
 			this->tableLayoutPanel2->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent, 
 				54.67033F)));
 			this->tableLayoutPanel2->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Absolute, 
-				177)));
+				178)));
 			this->tableLayoutPanel2->Controls->Add(this->targetGroup, 0, 0);
 			this->tableLayoutPanel2->Controls->Add(this->panel1, 2, 0);
 			this->tableLayoutPanel2->Controls->Add(this->bitrateGroup, 0, 1);
@@ -318,7 +318,7 @@ namespace FlacSquisher {
 			this->targetGroup->Dock = System::Windows::Forms::DockStyle::Fill;
 			this->targetGroup->Location = System::Drawing::Point(3, 3);
 			this->targetGroup->Name = L"targetGroup";
-			this->targetGroup->Size = System::Drawing::Size(153, 98);
+			this->targetGroup->Size = System::Drawing::Size(152, 98);
 			this->targetGroup->TabIndex = 0;
 			this->targetGroup->TabStop = false;
 			this->targetGroup->Text = L"Target";
@@ -351,9 +351,9 @@ namespace FlacSquisher {
 			// 
 			this->panel1->Controls->Add(this->mono);
 			this->panel1->Dock = System::Windows::Forms::DockStyle::Fill;
-			this->panel1->Location = System::Drawing::Point(353, 3);
+			this->panel1->Location = System::Drawing::Point(352, 3);
 			this->panel1->Name = L"panel1";
-			this->panel1->Size = System::Drawing::Size(172, 98);
+			this->panel1->Size = System::Drawing::Size(173, 98);
 			this->panel1->TabIndex = 1;
 			// 
 			// mono
@@ -519,7 +519,7 @@ namespace FlacSquisher {
 			// vbrMode
 			// 
 			this->vbrMode->FormattingEnabled = true;
-			this->vbrMode->Items->AddRange(gcnew cli::array< System::Object^  >(2) {L"standard", L"fast"});
+			this->vbrMode->Items->AddRange(gcnew cli::array< System::Object^  >(2) {L"fast", L"standard"});
 			this->vbrMode->Location = System::Drawing::Point(164, 91);
 			this->vbrMode->Name = L"vbrMode";
 			this->vbrMode->Size = System::Drawing::Size(140, 21);
@@ -698,8 +698,26 @@ namespace FlacSquisher {
 				if(tabControl1->SelectedIndex == 0){
 					str = "-q " + oggQual->Value;
 				}
-				else{
+				else{ // using LAME
 					str = "";
+					if(qualityRadio->Checked){ // vbr
+						double qual = 10.0 - (qualBar->Value * 0.1);
+						str += "-V" + qual + " ";
+						if(vbrMode->SelectedIndex == 1){ // "standard" instead of "fast"
+							str += " --vbr-old ";
+						}
+					}
+					else{
+						if(cbr->Checked){
+							str += " -b " + bitrateBar->Value + " ";
+						}
+						else{ // abr
+							str += " --abr " + bitrateBar->Value + " ";
+						}
+					}
+					if(mono->Checked){
+						str += " -a ";
+					}
 				}
 				return str;
 			}
