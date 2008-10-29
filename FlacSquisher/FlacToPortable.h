@@ -122,6 +122,7 @@ namespace FlacSquisher {
              static int encoderChoice;
              static System::Collections::Generic::Queue<FileInfo^> jobQueue;
              static int threadCount;
+			 static String^ debugResults;
              static ReaderWriterLock^ rwl;
              System::Collections::Generic::List<Thread^> threadList;
              int initSize; // size of job queue
@@ -745,10 +746,14 @@ namespace FlacSquisher {
              }
 
     private: void updateProgressBar(){
-                 // bounds checking
+                 // min() included for bounds checking, lock needed to prevent count being "short"
+				 rwl->AcquireWriterLock(-1);
                  encodeProgress->Value = min((encodeProgress->Value + 1), encodeProgress->Maximum);
+				 rwl->ReleaseWriterLock();
+
                  // update the status text
                  encodeStatus->Text = encodeProgress->Value + " of " + encodeProgress->Maximum + " files completed";
+
                  // refresh the window, just in case
                  this->Refresh();
              }
@@ -921,6 +926,8 @@ namespace FlacSquisher {
                      lamePath = ow->getLame();
                      flacexe = ow->getFlac();
                      hidewin = ow->getHide();
+					 encoder->SelectedIndex = ow->getEncoder();
+					 cliParams->Text = ow->getEncoderStr();
                  }
              }
              // eventually, this method will check with a server to see if there's a newer version

@@ -296,7 +296,7 @@ namespace FlacSquisher {
 			this->tableLayoutPanel2->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent, 
 				54.67033F)));
 			this->tableLayoutPanel2->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Absolute, 
-				178)));
+				179)));
 			this->tableLayoutPanel2->Controls->Add(this->targetGroup, 0, 0);
 			this->tableLayoutPanel2->Controls->Add(this->panel1, 2, 0);
 			this->tableLayoutPanel2->Controls->Add(this->bitrateGroup, 0, 1);
@@ -351,9 +351,9 @@ namespace FlacSquisher {
 			// 
 			this->panel1->Controls->Add(this->mono);
 			this->panel1->Dock = System::Windows::Forms::DockStyle::Fill;
-			this->panel1->Location = System::Drawing::Point(352, 3);
+			this->panel1->Location = System::Drawing::Point(351, 3);
 			this->panel1->Name = L"panel1";
-			this->panel1->Size = System::Drawing::Size(173, 98);
+			this->panel1->Size = System::Drawing::Size(174, 98);
 			this->panel1->TabIndex = 1;
 			// 
 			// mono
@@ -540,6 +540,7 @@ namespace FlacSquisher {
 			// okButton
 			// 
 			this->okButton->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Bottom | System::Windows::Forms::AnchorStyles::Right));
+			this->okButton->DialogResult = System::Windows::Forms::DialogResult::OK;
 			this->okButton->Location = System::Drawing::Point(374, 431);
 			this->okButton->Name = L"okButton";
 			this->okButton->Size = System::Drawing::Size(75, 23);
@@ -658,6 +659,12 @@ namespace FlacSquisher {
 			int quality;
 			int vbrmode;
     };*/
+	public: int getEncoder(){
+				return tabControl1->SelectedIndex;
+			}
+	public: void setEncoder(int choice){
+				tabControl1->SelectedIndex = choice;
+			}
 	public: OptionsSet getOptions(){
 				OptionsSet os;
 				os.encoder = tabControl1->SelectedIndex;
@@ -722,9 +729,10 @@ namespace FlacSquisher {
 				return str;
 			}
     private: System::Void EncoderOptions_Load(System::Object^  sender, System::EventArgs^  e) {
-                 //qualityRadio->Checked = true;
-                 //bitrateGroup->Enabled = false;
-                 //vbrMode->SelectedIndex = 1;
+                 // change MP3 options so nothing's enabled that shouldn't be
+				 qualityRadio->Checked = true;
+                 bitrateGroup->Enabled = false;
+                 vbrMode->SelectedIndex = 0;
              }
     private: System::Void bitrateRadio_CheckedChanged(System::Object^  sender, System::EventArgs^  e) {
                  bitrateGroup->Enabled = bitrateRadio->Checked;

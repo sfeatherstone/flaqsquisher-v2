@@ -30,6 +30,8 @@ namespace FlacSquisher {
             //
             //TODO: Add the constructor code here
             //
+			encoderStr = "";
+			encoderChoice = -1;
         }
 
     protected:
@@ -43,6 +45,9 @@ namespace FlacSquisher {
                 delete components;
             }
         }
+	private: String^ encoderStr;
+			 int encoderChoice;
+
     private: System::Windows::Forms::Label^  OggencLabel;
     private: System::Windows::Forms::TextBox^  oggLocation;
     protected: 
@@ -361,6 +366,12 @@ namespace FlacSquisher {
     public: bool getHide(){
                 return hideCmd->Checked;
             }
+	public: String^ getEncoderStr(){
+				return encoderStr;
+			}
+	public: int getEncoder(){
+				return encoderChoice;
+			}
     private: System::Void okButton_Click(System::Object^  sender, System::EventArgs^  e) {
                  this->Close();
              }
@@ -392,7 +403,10 @@ namespace FlacSquisher {
              }
     private: System::Void encOptsButton_Click(System::Object^  sender, System::EventArgs^  e) {
                  EncoderOptions^ eo = gcnew EncoderOptions();
-                 if(eo->ShowDialog() != Windows::Forms::DialogResult::Cancel){
+				 Windows::Forms::DialogResult dr = eo->ShowDialog();
+                 if(dr != Windows::Forms::DialogResult::Cancel){
+					 encoderStr = eo->toString();
+					 encoderChoice = eo->getEncoder();
                  }
              }
     };

@@ -7,8 +7,8 @@ Offload thread to new class
 Make "Online Help" go to default browser rather than IE
 Create "Console" window containing a log of activities
 Use Win32 API instead of VC++ runtimes
-Add Options sub-window for encoder presets (similar to LAME suggested UI)
 Add icons
+Set "Encoder Options" settings based on current selected encoder and CLI options
 
 Done
 =============
@@ -27,3 +27,5 @@ Added option to hide command windows
 Added window to choose encoder options
     LAME options follow official LAME UI Guidelines
     http://lame.sourceforge.net/lame_ui_example.php
+Added thread lock on file count (fixes lower-than-expected count)
+----Beta 0.0.3 released----
