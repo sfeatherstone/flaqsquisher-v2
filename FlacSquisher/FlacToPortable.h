@@ -563,7 +563,7 @@ namespace FlacSquisher {
 			this->Controls->Add(this->menuStrip1);
 			this->MainMenuStrip = this->menuStrip1;
 			this->Name = L"FlacToPortable";
-			this->Text = L"FlacSquisher v0.0.3";
+			this->Text = L"FlacSquisher v0.3.1";
 			this->FormClosing += gcnew System::Windows::Forms::FormClosingEventHandler(this, &FlacToPortable::FlacToPortable_FormClosing);
 			this->menuStrip1->ResumeLayout(false);
 			this->menuStrip1->PerformLayout();
@@ -601,7 +601,13 @@ namespace FlacSquisher {
                      return 1;
                  }
                  catch(Exception^ ex){ // any settings loaded before the error remain -- this may or may not be desired
-                     MessageBox::Show("Could not read correctly from file: " + ex->ToString());
+                     #ifdef DEBUG
+					     MessageBox::Show("Could not read correctly from file: " + ex->ToString());
+                     #endif
+					 //else{
+						 MessageBox::Show("The configuration file was not read in properly. This sometimes happens when upgrading from an earlier version. Please ensure that your settings were imported properly.",
+							 "Configuration file error", MessageBoxButtons::OK, MessageBoxIcon::Exclamation, MessageBoxDefaultButton::Button1, MessageBoxOptions::DefaultDesktopOnly, false);
+					 //}
                      return 0;
                  }
              }
@@ -710,6 +716,15 @@ namespace FlacSquisher {
                  // find files in "source" directory
                  recurseDirs(flacDir->Text);
 
+				 // if source directory is empty, don't bother making encoding threads
+				 if(jobQueue.Count < 1){
+					 MessageBox::Show("The Flac directory is empty.", "Empty source directory", MessageBoxButtons::OK, MessageBoxIcon::Exclamation, MessageBoxDefaultButton::Button1, MessageBoxOptions::DefaultDesktopOnly, false);
+					 encodeStatus->Text = "Ready";
+					 encodeProgress->Visible = false;
+					 encodeButton->Enabled = true;
+					 return;
+				 }
+
                  // set up encoder
                  flacPath = flacDir->Text;
                  outputPath = outputDir->Text;
@@ -797,6 +812,10 @@ namespace FlacSquisher {
              // recurse through the directories and add all files found to the queue
     private: void recurseDirs(String^ rootDir) {
                  DirectoryInfo^ dirinfo = gcnew DirectoryInfo(rootDir);
+				 // make sure source directory exists (most of the time, only relevant on first level of recursion)
+				 if(!dirinfo->Exists){
+					 return;
+				 }
 
                  for each(FileInfo^ fi in dirinfo->GetFiles()){
                      jobQueue.Enqueue(fi);
@@ -906,9 +925,10 @@ namespace FlacSquisher {
              }
              // goes to the project page. Maybe send them instead to the forums?
     private: System::Void onlineHelpToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
-                 WebBrowser^ wb = gcnew WebBrowser();
+                 //WebBrowser^ wb = gcnew WebBrowser();
                  // second argument of Navigate() puts URL in new window rather than an internal form
-                 wb->Navigate("https://sourceforge.net/projects/flacsquisher/", true);
+                 //wb->Navigate("https://sourceforge.net/projects/flacsquisher/", true);
+				 System::Diagnostics::Process::Start("https://sourceforge.net/projects/flacsquisher/");
              }
              // open the options window
     private: System::Void optionsToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
@@ -933,9 +953,10 @@ namespace FlacSquisher {
              // eventually, this method will check with a server to see if there's a newer version
              // for now, open up the project page so the user can check for updates
     private: System::Void checkForUpdatesToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
-                 WebBrowser^ wb = gcnew WebBrowser();
+                 //WebBrowser^ wb = gcnew WebBrowser();
                  // second argument of Navigate() puts URL in new window rather than an internal form
-                 wb->Navigate("https://sourceforge.net/projects/flacsquisher/", true);
+                 //wb->Navigate("https://sourceforge.net/projects/flacsquisher/", true);
+				 System::Diagnostics::Process::Start("https://sourceforge.net/projects/flacsquisher/");
              }
              // bring up the About window
     private: System::Void aboutToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {

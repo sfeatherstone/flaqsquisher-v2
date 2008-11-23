@@ -4,7 +4,6 @@ Single cmd window per core
 MP3 tagging (OggEnc2 carries over FLAC tags)
 Offload thread to new class
     http://msdn.microsoft.com/en-us/library/ts553s52.aspx
-Make "Online Help" go to default browser rather than IE
 Create "Console" window containing a log of activities
 Use Win32 API instead of VC++ runtimes
 Add icons
@@ -30,3 +29,7 @@ Added window to choose encoder options
 Added thread lock on file count (fixes lower-than-expected count)
 Changed included version of LAME encoder from 3.97 to 3.98
 ----Beta 0.0.3 released----
+Updated error message when config file isn't properly loaded on startup to be more user-friendly
+Fixed crash when source directory does not exist
+Changed "Online Help" and other links to go to default browser rather than IE
+----Beta 0.3.1 released----

@@ -61,71 +61,76 @@ namespace FlacSquisher {
         /// </summary>
         void InitializeComponent(void)
         {
-            this->NameLabel = (gcnew System::Windows::Forms::Label());
-            this->CRLabel = (gcnew System::Windows::Forms::Label());
-            this->URLLabel = (gcnew System::Windows::Forms::LinkLabel());
-            this->okButton = (gcnew System::Windows::Forms::Button());
-            this->SuspendLayout();
-            // 
-            // NameLabel
-            // 
-            this->NameLabel->AutoSize = true;
-            this->NameLabel->Location = System::Drawing::Point(104, 9);
-            this->NameLabel->Name = L"NameLabel";
-            this->NameLabel->Size = System::Drawing::Size(68, 13);
-            this->NameLabel->TabIndex = 0;
-            this->NameLabel->Text = L"FlacSquisher";
-            this->NameLabel->TextAlign = System::Drawing::ContentAlignment::TopCenter;
-            // 
-            // CRLabel
-            // 
-            this->CRLabel->AutoSize = true;
-            this->CRLabel->Location = System::Drawing::Point(74, 31);
-            this->CRLabel->Name = L"CRLabel";
-            this->CRLabel->Size = System::Drawing::Size(116, 13);
-            this->CRLabel->TabIndex = 1;
-            this->CRLabel->Text = L"© Michael Brown 2008";
-            // 
-            // URLLabel
-            // 
-            this->URLLabel->AutoSize = true;
-            this->URLLabel->Location = System::Drawing::Point(33, 55);
-            this->URLLabel->Name = L"URLLabel";
-            this->URLLabel->Size = System::Drawing::Size(225, 13);
-            this->URLLabel->TabIndex = 2;
-            this->URLLabel->TabStop = true;
-            this->URLLabel->Text = L"https://sourceforge.net/projects/flacsquisher/";
-            // 
-            // okButton
-            // 
-            this->okButton->Location = System::Drawing::Point(107, 81);
-            this->okButton->Name = L"okButton";
-            this->okButton->Size = System::Drawing::Size(75, 23);
-            this->okButton->TabIndex = 3;
-            this->okButton->Text = L"OK";
-            this->okButton->UseVisualStyleBackColor = true;
-            // 
-            // AboutWindow
-            // 
-            this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
-            this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-            this->CancelButton = this->okButton;
-            this->ClientSize = System::Drawing::Size(292, 116);
-            this->Controls->Add(this->okButton);
-            this->Controls->Add(this->URLLabel);
-            this->Controls->Add(this->CRLabel);
-            this->Controls->Add(this->NameLabel);
-            this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedDialog;
-            this->MaximizeBox = false;
-            this->MinimizeBox = false;
-            this->Name = L"AboutWindow";
-            this->StartPosition = System::Windows::Forms::FormStartPosition::CenterParent;
-            this->Text = L"About FlacSquisher";
-            this->TopMost = true;
-            this->ResumeLayout(false);
-            this->PerformLayout();
+			this->NameLabel = (gcnew System::Windows::Forms::Label());
+			this->CRLabel = (gcnew System::Windows::Forms::Label());
+			this->URLLabel = (gcnew System::Windows::Forms::LinkLabel());
+			this->okButton = (gcnew System::Windows::Forms::Button());
+			this->SuspendLayout();
+			// 
+			// NameLabel
+			// 
+			this->NameLabel->AutoSize = true;
+			this->NameLabel->Location = System::Drawing::Point(104, 9);
+			this->NameLabel->Name = L"NameLabel";
+			this->NameLabel->Size = System::Drawing::Size(68, 13);
+			this->NameLabel->TabIndex = 0;
+			this->NameLabel->Text = L"FlacSquisher";
+			this->NameLabel->TextAlign = System::Drawing::ContentAlignment::TopCenter;
+			// 
+			// CRLabel
+			// 
+			this->CRLabel->AutoSize = true;
+			this->CRLabel->Location = System::Drawing::Point(74, 31);
+			this->CRLabel->Name = L"CRLabel";
+			this->CRLabel->Size = System::Drawing::Size(116, 13);
+			this->CRLabel->TabIndex = 1;
+			this->CRLabel->Text = L"© Michael Brown 2008";
+			// 
+			// URLLabel
+			// 
+			this->URLLabel->AutoSize = true;
+			this->URLLabel->Location = System::Drawing::Point(33, 55);
+			this->URLLabel->Name = L"URLLabel";
+			this->URLLabel->Size = System::Drawing::Size(225, 13);
+			this->URLLabel->TabIndex = 2;
+			this->URLLabel->TabStop = true;
+			this->URLLabel->Text = L"https://sourceforge.net/projects/flacsquisher/";
+			this->URLLabel->LinkClicked += gcnew System::Windows::Forms::LinkLabelLinkClickedEventHandler(this, &AboutWindow::URLLabel_LinkClicked);
+			// 
+			// okButton
+			// 
+			this->okButton->DialogResult = System::Windows::Forms::DialogResult::Cancel;
+			this->okButton->Location = System::Drawing::Point(107, 81);
+			this->okButton->Name = L"okButton";
+			this->okButton->Size = System::Drawing::Size(75, 23);
+			this->okButton->TabIndex = 3;
+			this->okButton->Text = L"OK";
+			this->okButton->UseVisualStyleBackColor = true;
+			// 
+			// AboutWindow
+			// 
+			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
+			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
+			this->CancelButton = this->okButton;
+			this->ClientSize = System::Drawing::Size(292, 116);
+			this->Controls->Add(this->okButton);
+			this->Controls->Add(this->URLLabel);
+			this->Controls->Add(this->CRLabel);
+			this->Controls->Add(this->NameLabel);
+			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedDialog;
+			this->MaximizeBox = false;
+			this->MinimizeBox = false;
+			this->Name = L"AboutWindow";
+			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterParent;
+			this->Text = L"About FlacSquisher";
+			this->TopMost = true;
+			this->ResumeLayout(false);
+			this->PerformLayout();
 
-        }
+		}
 #pragma endregion
-    };
+	private: System::Void URLLabel_LinkClicked(System::Object^  sender, System::Windows::Forms::LinkLabelLinkClickedEventArgs^  e) {
+				 System::Diagnostics::Process::Start("https://sourceforge.net/projects/flacsquisher/");
+			 }
+};
 }
