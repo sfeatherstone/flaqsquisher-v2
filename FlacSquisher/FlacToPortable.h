@@ -956,7 +956,15 @@ namespace FlacSquisher {
                  //WebBrowser^ wb = gcnew WebBrowser();
                  // second argument of Navigate() puts URL in new window rather than an internal form
                  //wb->Navigate("https://sourceforge.net/projects/flacsquisher/", true);
-				 System::Diagnostics::Process::Start("https://sourceforge.net/projects/flacsquisher/");
+
+				 try{
+					 StreamReader^ sr = gcnew StreamReader("http://flacsquisher.sourceforge.net/latest.txt", Encoding::UTF8);
+					 String^ version = sr->ReadLine();
+				 }
+				 catch(Exception e){
+
+				 }
+				 //System::Diagnostics::Process::Start("https://sourceforge.net/projects/flacsquisher/");
              }
              // bring up the About window
     private: System::Void aboutToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
