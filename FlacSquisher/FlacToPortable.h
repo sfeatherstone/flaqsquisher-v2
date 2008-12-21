@@ -22,6 +22,7 @@ limitations under the License.
 #include <windows.h>
 #include "AboutWindow.h"
 #include "OptionsWindow.h"
+#include "UpdateResults.h"
 
 #pragma once
 
@@ -39,6 +40,7 @@ namespace FlacSquisher {
     using namespace System::Diagnostics;
     using namespace System::Collections;
     using namespace System::Threading;
+	using namespace System::Net;
 
 
 
@@ -94,6 +96,10 @@ namespace FlacSquisher {
             encodeProgress->Size.Width = 0;
             encodeProgress->Visible = false;
 
+			majorv = 0;
+			minorv = 3;
+			rev = 1;
+
             //ProgressBarUpdate = gcnew ProgressBarUpdateDelegate(this, &FlacToPortable::updateProgressBar);
 
             rwl = gcnew ReaderWriterLock();
@@ -128,6 +134,10 @@ namespace FlacSquisher {
              int initSize; // size of job queue
              //ProgressBarUpdateDelegate^ ProgressBarUpdate;
              static bool hidewin;
+
+			 int majorv;
+			 int minorv;
+			 int rev;
 
     private: System::Windows::Forms::MenuStrip^  menuStrip1;
     protected: 
@@ -958,11 +968,35 @@ namespace FlacSquisher {
                  //wb->Navigate("https://sourceforge.net/projects/flacsquisher/", true);
 
 				 try{
-					 StreamReader^ sr = gcnew StreamReader("http://flacsquisher.sourceforge.net/latest.txt", Encoding::UTF8);
-					 String^ version = sr->ReadLine();
+					 
+					 WebRequest^ req = WebRequest::Create("http://flacsquisher.sourceforge.net/latest.txt");
+					 WebResponse^ resp = req->GetResponse();
+					 StreamReader^ sr = gcnew StreamReader(resp->GetResponseStream(), Encoding::UTF8);
+					 String^ newest = sr->ReadLine();
+					 int firstperiod = newest->IndexOf(".");
+					 int lastperiod = newest->LastIndexOf(".");
+					 int newmajor = int::Parse( newest->Substring(0, firstperiod) );
+					 int newminor = int::Parse( newest->Substring(firstperiod+1, lastperiod-firstperiod-1) );
+					 int newrev = int::Parse( newest->Substring(lastperiod+1) );
+					 if(majorv < newmajor || (majorv == newmajor && minorv < newminor) || (majorv == newmajor && minorv == newminor && rev < newrev)){
+						 UpdateResults^ ur = gcnew UpdateResults();
+						 ur->setResults("Version " + newest + " is available." + Environment::NewLine + "Would you like to download it?");
+						 ur->ShowDialog();
+						 if(ur->DialogResult == Windows::Forms::DialogResult::Yes){
+							 System::Diagnostics::Process::Start("http://sourceforge.net/project/showfiles.php?group_id=232925");
+						 }
+					 }
+					 else{
+						 MessageBox::Show("No newer version is available");
+					 }
 				 }
-				 catch(Exception e){
-
+				 catch(Exception^ ex){
+					 UpdateResults^ ur = gcnew UpdateResults();
+					 ur->setResults("Error contacting the server to check for updates." + Environment::NewLine + "Would you like to check manually on the web?");
+					 ur->ShowDialog();
+					 if(ur->DialogResult == Windows::Forms::DialogResult::Yes){
+						 System::Diagnostics::Process::Start("https://sourceforge.net/projects/flacsquisher/");
+					 }
 				 }
 				 //System::Diagnostics::Process::Start("https://sourceforge.net/projects/flacsquisher/");
              }
