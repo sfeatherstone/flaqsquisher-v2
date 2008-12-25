@@ -828,7 +828,12 @@ namespace FlacSquisher {
 				 }
 
                  for each(FileInfo^ fi in dirinfo->GetFiles()){
-                     jobQueue.Enqueue(fi);
+					 if(!fi->Name->ToLower()->EndsWith("txt") && !fi->Name->ToLower()->EndsWith("jpg") && !fi->Name->ToLower()->EndsWith("pdf") && !fi->Name->ToLower()->EndsWith("log")){
+						 //if(!fi->Name->ToLower()->EndsWith("flac")){
+							 //MessageBox::Show(fi->Name);
+						 //}
+						 jobQueue.Enqueue(fi);
+					 }
                  }
                  // pseudo-tail-recursive, if this compiler is helped by that at all
                  for each(DirectoryInfo^ di in dirinfo->GetDirectories()){
