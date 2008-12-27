@@ -33,3 +33,7 @@ Updated error message when config file isn't properly loaded on startup to be mo
 Fixed crash when source directory does not exist
 Changed "Online Help" and other links to go to default browser rather than IE
 ----Beta 0.3.1 released----
+Implemented version check system
+Now ignores files with certain extensions -- by default: txt, jpg, log, pdf
+Set maximum number of threads to a very high value (65535), due to the increasing number of cores in modern CPUs
+Fixed a bug where opening the Options window, and not the Encoder Options window, reset the encoder and options

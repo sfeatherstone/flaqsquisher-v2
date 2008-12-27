@@ -89,6 +89,7 @@ namespace FlacSquisher {
                 oggPath = System::IO::Path::GetDirectoryName(Application::ExecutablePath) + "\\oggenc.exe";
                 flacexe = System::IO::Path::GetDirectoryName(Application::ExecutablePath) + "\\flac.exe";
                 lamePath = System::IO::Path::GetDirectoryName(Application::ExecutablePath) + "\\lame.exe";
+				ignoredExts = "txt jpg log pdf";
                 hidewin = true;
             }
 
@@ -98,7 +99,7 @@ namespace FlacSquisher {
 
 			majorv = 0;
 			minorv = 3;
-			rev = 1;
+			rev = 2;
 
             //ProgressBarUpdate = gcnew ProgressBarUpdateDelegate(this, &FlacToPortable::updateProgressBar);
 
@@ -125,6 +126,8 @@ namespace FlacSquisher {
              static String^ flacPath;
              static String^ outputPath;
              static String^ options;
+			 static String^ ignoredExts;
+			 static bool copyFiles;
              static int encoderChoice;
              static System::Collections::Generic::Queue<FileInfo^> jobQueue;
              static int threadCount;
@@ -532,7 +535,7 @@ namespace FlacSquisher {
 			// threadCounter
 			// 
 			this->threadCounter->Location = System::Drawing::Point(3, 20);
-			this->threadCounter->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) {8, 0, 0, 0});
+			this->threadCounter->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) {65535, 0, 0, 0});
 			this->threadCounter->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4) {1, 0, 0, 0});
 			this->threadCounter->Name = L"threadCounter";
 			this->threadCounter->Size = System::Drawing::Size(37, 20);
@@ -607,6 +610,8 @@ namespace FlacSquisher {
                      lamePath = sr->ReadLine();
                      cliParams->Text = sr->ReadLine();
                      hidewin = bool::Parse(sr->ReadLine());
+					 ignoredExts = sr->ReadLine();
+					 copyFiles = bool::Parse(sr->ReadLine());
                      sr->Close();
                      return 1;
                  }
@@ -632,12 +637,14 @@ namespace FlacSquisher {
                      sw->Write(flacexe + Environment::NewLine);
                      sw->Write(lamePath + Environment::NewLine);
                      sw->Write(cliParams->Text + Environment::NewLine);
-                     sw->Write(hidewin.ToString());
+					 sw->Write(hidewin.ToString() + Environment::NewLine);
+					 sw->Write(ignoredExts->ToString() + Environment::NewLine);
+					 sw->Write(copyFiles.ToString());
                      sw->Close();
                      return 1;
                  }
                  catch(Exception^ ex){ // any errors are likely discovered on attempting to open the file, so most likely nothing is written
-                     MessageBox::Show("Could not write to file: " + ex->ToString());
+					 MessageBox::Show("The config file was not written properly. Please report this to the application owners: " + ex->ToString());
                      return 0;
                  }
 
@@ -723,8 +730,12 @@ namespace FlacSquisher {
                  encodeProgress->Style = ProgressBarStyle::Marquee;
                  encodeProgress->Visible = true;
 
+				 System::Collections::Generic::List<String^> ignoreList;
+
+				 ignoreList = ignoredExts->Split(' ');
+
                  // find files in "source" directory
-                 recurseDirs(flacDir->Text);
+                 recurseDirs(flacDir->Text, ignoreList);
 
 				 // if source directory is empty, don't bother making encoding threads
 				 if(jobQueue.Count < 1){
@@ -820,15 +831,23 @@ namespace FlacSquisher {
                  }
              }
              // recurse through the directories and add all files found to the queue
-    private: void recurseDirs(String^ rootDir) {
+    private: void recurseDirs(String^ rootDir, System::Collections::Generic::List<String^> ignoreList) {
                  DirectoryInfo^ dirinfo = gcnew DirectoryInfo(rootDir);
 				 // make sure source directory exists (most of the time, only relevant on first level of recursion)
 				 if(!dirinfo->Exists){
 					 return;
 				 }
 
+				 bool foundExt;
+
                  for each(FileInfo^ fi in dirinfo->GetFiles()){
-					 if(!fi->Name->ToLower()->EndsWith("txt") && !fi->Name->ToLower()->EndsWith("jpg") && !fi->Name->ToLower()->EndsWith("pdf") && !fi->Name->ToLower()->EndsWith("log")){
+					 foundExt = false;
+					 for each(String^ ext in ignoreList){
+						 if(fi->Name->ToLower()->EndsWith(ext->ToLower())){
+							 foundExt = true;
+						 }
+					 }
+					 if(!foundExt || copyFiles){
 						 //if(!fi->Name->ToLower()->EndsWith("flac")){
 							 //MessageBox::Show(fi->Name);
 						 //}
@@ -837,7 +856,7 @@ namespace FlacSquisher {
                  }
                  // pseudo-tail-recursive, if this compiler is helped by that at all
                  for each(DirectoryInfo^ di in dirinfo->GetDirectories()){
-                     recurseDirs(di->FullName);
+                     recurseDirs(di->FullName, ignoreList);
                  }
              }
              // take the file file passed in, and encode it using the selected encoder and options
@@ -948,11 +967,14 @@ namespace FlacSquisher {
              // open the options window
     private: System::Void optionsToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
                  OptionsWindow^ ow = gcnew OptionsWindow();
-                 // populate the window with the current encoder path values
+                 
+				 // populate the window with the current encoder path values
                  ow->setOgg(oggPath);
                  ow->setLame(lamePath);
                  ow->setFlac(flacexe);
                  ow->setHide(hidewin);
+				 ow->setIgnored(ignoredExts);
+				 ow->setCopy(copyFiles);
                  ow->ShowDialog(this);
 
                  if(ow->DialogResult == Windows::Forms::DialogResult::OK){
@@ -961,14 +983,20 @@ namespace FlacSquisher {
                      lamePath = ow->getLame();
                      flacexe = ow->getFlac();
                      hidewin = ow->getHide();
-					 encoder->SelectedIndex = ow->getEncoder();
-					 cliParams->Text = ow->getEncoderStr();
+					 ignoredExts = ow->getIgnored();
+					 copyFiles = ow->getCopy();
+					 if(ow->getEncoder() != -1){
+						 encoder->SelectedIndex = ow->getEncoder();
+					 }
+					 if(!String::IsNullOrEmpty(ow->getEncoderStr())){
+						 cliParams->Text = ow->getEncoderStr();
+					 }
                  }
              }
-             // eventually, this method will check with a server to see if there's a newer version
-             // for now, open up the project page so the user can check for updates
+             // this method checks with the project webserver to see if there's a newer version
     private: System::Void checkForUpdatesToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
-                 //WebBrowser^ wb = gcnew WebBrowser();
+                 // Originally, this method only opened the project webpage so the user could check manually
+				 //WebBrowser^ wb = gcnew WebBrowser();
                  // second argument of Navigate() puts URL in new window rather than an internal form
                  //wb->Navigate("https://sourceforge.net/projects/flacsquisher/", true);
 

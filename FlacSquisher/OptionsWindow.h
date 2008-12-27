@@ -112,17 +112,17 @@ namespace FlacSquisher {
 			this->hideCmd = (gcnew System::Windows::Forms::CheckBox());
 			this->tableLayoutPanel1 = (gcnew System::Windows::Forms::TableLayoutPanel());
 			this->encoderBox = (gcnew System::Windows::Forms::GroupBox());
-			this->panel1 = (gcnew System::Windows::Forms::Panel());
 			this->panel2 = (gcnew System::Windows::Forms::Panel());
 			this->encOptsButton = (gcnew System::Windows::Forms::Button());
+			this->panel1 = (gcnew System::Windows::Forms::Panel());
 			this->panel3 = (gcnew System::Windows::Forms::Panel());
-			this->ignoredExt = (gcnew System::Windows::Forms::TextBox());
-			this->ExtLabel = (gcnew System::Windows::Forms::Label());
 			this->copyIgnored = (gcnew System::Windows::Forms::CheckBox());
+			this->ExtLabel = (gcnew System::Windows::Forms::Label());
+			this->ignoredExt = (gcnew System::Windows::Forms::TextBox());
 			this->tableLayoutPanel1->SuspendLayout();
 			this->encoderBox->SuspendLayout();
-			this->panel1->SuspendLayout();
 			this->panel2->SuspendLayout();
+			this->panel1->SuspendLayout();
 			this->panel3->SuspendLayout();
 			this->SuspendLayout();
 			// 
@@ -304,16 +304,6 @@ namespace FlacSquisher {
 			this->encoderBox->TabStop = false;
 			this->encoderBox->Text = L"Encoders";
 			// 
-			// panel1
-			// 
-			this->panel1->Controls->Add(this->okButton);
-			this->panel1->Controls->Add(this->cancelButton);
-			this->panel1->Dock = System::Windows::Forms::DockStyle::Fill;
-			this->panel1->Location = System::Drawing::Point(226, 235);
-			this->panel1->Name = L"panel1";
-			this->panel1->Size = System::Drawing::Size(203, 29);
-			this->panel1->TabIndex = 14;
-			// 
 			// panel2
 			// 
 			this->panel2->Controls->Add(this->encOptsButton);
@@ -334,6 +324,16 @@ namespace FlacSquisher {
 			this->encOptsButton->UseVisualStyleBackColor = true;
 			this->encOptsButton->Click += gcnew System::EventHandler(this, &OptionsWindow::encOptsButton_Click);
 			// 
+			// panel1
+			// 
+			this->panel1->Controls->Add(this->okButton);
+			this->panel1->Controls->Add(this->cancelButton);
+			this->panel1->Dock = System::Windows::Forms::DockStyle::Fill;
+			this->panel1->Location = System::Drawing::Point(226, 235);
+			this->panel1->Name = L"panel1";
+			this->panel1->Size = System::Drawing::Size(203, 29);
+			this->panel1->TabIndex = 14;
+			// 
 			// panel3
 			// 
 			this->tableLayoutPanel1->SetColumnSpan(this->panel3, 2);
@@ -346,13 +346,15 @@ namespace FlacSquisher {
 			this->panel3->Size = System::Drawing::Size(426, 46);
 			this->panel3->TabIndex = 16;
 			// 
-			// ignoredExt
+			// copyIgnored
 			// 
-			this->ignoredExt->Location = System::Drawing::Point(3, 20);
-			this->ignoredExt->Name = L"ignoredExt";
-			this->ignoredExt->Size = System::Drawing::Size(314, 20);
-			this->ignoredExt->TabIndex = 0;
-			this->ignoredExt->Text = L"txt jpg log pdf";
+			this->copyIgnored->AutoSize = true;
+			this->copyIgnored->Location = System::Drawing::Point(323, 20);
+			this->copyIgnored->Name = L"copyIgnored";
+			this->copyIgnored->Size = System::Drawing::Size(100, 17);
+			this->copyIgnored->TabIndex = 2;
+			this->copyIgnored->Text = L"Copy these files";
+			this->copyIgnored->UseVisualStyleBackColor = true;
 			// 
 			// ExtLabel
 			// 
@@ -363,15 +365,12 @@ namespace FlacSquisher {
 			this->ExtLabel->TabIndex = 1;
 			this->ExtLabel->Text = L"File extensions to ignore";
 			// 
-			// copyIgnored
+			// ignoredExt
 			// 
-			this->copyIgnored->AutoSize = true;
-			this->copyIgnored->Location = System::Drawing::Point(323, 20);
-			this->copyIgnored->Name = L"copyIgnored";
-			this->copyIgnored->Size = System::Drawing::Size(100, 17);
-			this->copyIgnored->TabIndex = 2;
-			this->copyIgnored->Text = L"Copy these files";
-			this->copyIgnored->UseVisualStyleBackColor = true;
+			this->ignoredExt->Location = System::Drawing::Point(3, 20);
+			this->ignoredExt->Name = L"ignoredExt";
+			this->ignoredExt->Size = System::Drawing::Size(314, 20);
+			this->ignoredExt->TabIndex = 0;
 			// 
 			// OptionsWindow
 			// 
@@ -388,8 +387,8 @@ namespace FlacSquisher {
 			this->tableLayoutPanel1->PerformLayout();
 			this->encoderBox->ResumeLayout(false);
 			this->encoderBox->PerformLayout();
-			this->panel1->ResumeLayout(false);
 			this->panel2->ResumeLayout(false);
+			this->panel1->ResumeLayout(false);
 			this->panel3->ResumeLayout(false);
 			this->panel3->PerformLayout();
 			this->ResumeLayout(false);
@@ -427,6 +426,18 @@ namespace FlacSquisher {
 	public: int getEncoder(){
 				return encoderChoice;
 			}
+	public: void setIgnored(String^ exts){
+				ignoredExt->Text = exts;
+			}
+	public: String^ getIgnored(){
+				return ignoredExt->Text;
+			}
+	public: void setCopy(bool copy){
+				copyIgnored->Checked = copy;
+			}
+	public: bool getCopy(){
+				return copyIgnored->Checked;
+			}
     private: System::Void okButton_Click(System::Object^  sender, System::EventArgs^  e) {
                  this->Close();
              }
@@ -455,6 +466,7 @@ namespace FlacSquisher {
                  oggLocation->Text = System::IO::Path::GetDirectoryName(Application::ExecutablePath) + "\\oggenc.exe";
                  flacLocation->Text = System::IO::Path::GetDirectoryName(Application::ExecutablePath) + "\\flac.exe";
                  lameLocation->Text = System::IO::Path::GetDirectoryName(Application::ExecutablePath) + "\\lame.exe";
+				 ignoredExt->Text = "txt jpg log pdf";
              }
     private: System::Void encOptsButton_Click(System::Object^  sender, System::EventArgs^  e) {
                  EncoderOptions^ eo = gcnew EncoderOptions();
