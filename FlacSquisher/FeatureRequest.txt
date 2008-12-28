@@ -35,5 +35,6 @@ Changed "Online Help" and other links to go to default browser rather than IE
 ----Beta 0.3.1 released----
 Implemented version check system
 Now ignores files with certain extensions -- by default: txt, jpg, log, pdf
+Optionally copy all ignored files to the new directory without modifying them
 Set maximum number of threads to a very high value (65535), due to the increasing number of cores in modern CPUs
 Fixed a bug where opening the Options window, and not the Encoder Options window, reset the encoder and options

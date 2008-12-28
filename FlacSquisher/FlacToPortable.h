@@ -93,6 +93,10 @@ namespace FlacSquisher {
                 hidewin = true;
             }
 
+			if(ignoredExts == nullptr){
+				ignoredExts = "txt jpg log pdf";
+			}
+
             encodeStatus->Text = "Ready";
             encodeProgress->Size.Width = 0;
             encodeProgress->Visible = false;
@@ -130,6 +134,7 @@ namespace FlacSquisher {
 			 static bool copyFiles;
              static int encoderChoice;
              static System::Collections::Generic::Queue<FileInfo^> jobQueue;
+			 static System::Collections::Generic::List<String^>^ ignoreList;
              static int threadCount;
 			 static String^ debugResults;
              static ReaderWriterLock^ rwl;
@@ -730,12 +735,14 @@ namespace FlacSquisher {
                  encodeProgress->Style = ProgressBarStyle::Marquee;
                  encodeProgress->Visible = true;
 
-				 System::Collections::Generic::List<String^> ignoreList;
+				 ignoreList = gcnew System::Collections::Generic::List<String^>();
 
-				 ignoreList = ignoredExts->Split(' ');
+				 array<String^>^split = ignoredExts->Split(' ');
+
+				 ignoreList->AddRange(split);
 
                  // find files in "source" directory
-                 recurseDirs(flacDir->Text, ignoreList);
+                 recurseDirs(flacDir->Text);
 
 				 // if source directory is empty, don't bother making encoding threads
 				 if(jobQueue.Count < 1){
@@ -831,7 +838,7 @@ namespace FlacSquisher {
                  }
              }
              // recurse through the directories and add all files found to the queue
-    private: void recurseDirs(String^ rootDir, System::Collections::Generic::List<String^> ignoreList) {
+    private: void recurseDirs(String^ rootDir) {
                  DirectoryInfo^ dirinfo = gcnew DirectoryInfo(rootDir);
 				 // make sure source directory exists (most of the time, only relevant on first level of recursion)
 				 if(!dirinfo->Exists){
@@ -856,7 +863,7 @@ namespace FlacSquisher {
                  }
                  // pseudo-tail-recursive, if this compiler is helped by that at all
                  for each(DirectoryInfo^ di in dirinfo->GetDirectories()){
-                     recurseDirs(di->FullName, ignoreList);
+                     recurseDirs(di->FullName);
                  }
              }
              // take the file file passed in, and encode it using the selected encoder and options
@@ -864,6 +871,26 @@ namespace FlacSquisher {
                  // get the portion of the path that will be shared by the source and destination paths
                  String^ partialPath = fi->DirectoryName->Remove(0, flacPath->Length);
                  String^ destPath;
+
+				 // copy the ignored files, if the settings allow it
+				 if(copyFiles){
+					 for each(String^ ext in ignoreList){
+						 if(fi->Name->ToLower()->EndsWith(ext->ToLower())){
+							 destPath = outputPath + partialPath + "\\" + fi->Name;
+
+							 if(File::Exists(destPath)){
+								 return;
+							 }
+
+							 if(!Directory::Exists(outputPath + partialPath)){
+								 Directory::CreateDirectory(outputPath + partialPath);
+							 }
+
+							 File::Copy(fi->FullName, destPath);
+						 }
+					 }
+				 }
+
                  if(encoderChoice == 0){
                      destPath = outputPath + partialPath + "\\" + fi->Name->Replace(".flac", ".ogg");
                  }
