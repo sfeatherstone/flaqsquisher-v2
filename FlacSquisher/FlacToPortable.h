@@ -89,6 +89,7 @@ namespace FlacSquisher {
                 oggPath = System::IO::Path::GetDirectoryName(Application::ExecutablePath) + "\\oggenc.exe";
                 flacexe = System::IO::Path::GetDirectoryName(Application::ExecutablePath) + "\\flac.exe";
                 lamePath = System::IO::Path::GetDirectoryName(Application::ExecutablePath) + "\\lame.exe";
+				metaflacPath = System::IO::Path::GetDirectoryName(Application::ExecutablePath) + "\\metaflac.exe";
 				ignoredExts = "txt jpg log pdf";
                 hidewin = true;
             }
@@ -96,14 +97,19 @@ namespace FlacSquisher {
 			if(ignoredExts == nullptr){
 				ignoredExts = "txt jpg log pdf";
 			}
+			if(String::IsNullOrEmpty(metaflacPath)){
+				metaflacPath = System::IO::Path::GetDirectoryName(Application::ExecutablePath) + "\\metaflac.exe";
+			}
 
             encodeStatus->Text = "Ready";
             encodeProgress->Size.Width = 0;
             encodeProgress->Visible = false;
 
 			majorv = 0;
-			minorv = 3;
-			rev = 2;
+			minorv = 4;
+			rev = 0;
+
+			this->Text = "FlacSquisher v" + majorv + "." + minorv + "." + rev;
 
             //ProgressBarUpdate = gcnew ProgressBarUpdateDelegate(this, &FlacToPortable::updateProgressBar);
 
@@ -131,6 +137,7 @@ namespace FlacSquisher {
              static String^ outputPath;
              static String^ options;
 			 static String^ ignoredExts;
+			 static String^ metaflacPath;
 			 static bool copyFiles;
              static int encoderChoice;
              static System::Collections::Generic::Queue<FileInfo^> jobQueue;
@@ -617,6 +624,7 @@ namespace FlacSquisher {
                      hidewin = bool::Parse(sr->ReadLine());
 					 ignoredExts = sr->ReadLine();
 					 copyFiles = bool::Parse(sr->ReadLine());
+					 metaflacPath = sr->ReadLine();
                      sr->Close();
                      return 1;
                  }
@@ -644,7 +652,8 @@ namespace FlacSquisher {
                      sw->Write(cliParams->Text + Environment::NewLine);
 					 sw->Write(hidewin.ToString() + Environment::NewLine);
 					 sw->Write(ignoredExts->ToString() + Environment::NewLine);
-					 sw->Write(copyFiles.ToString());
+					 sw->Write(copyFiles.ToString() + Environment::NewLine);
+					 sw->Write(metaflacPath);
                      sw->Close();
                      return 1;
                  }
@@ -1002,6 +1011,7 @@ namespace FlacSquisher {
                  ow->setHide(hidewin);
 				 ow->setIgnored(ignoredExts);
 				 ow->setCopy(copyFiles);
+				 ow->setMetaflac(metaflacPath);
                  ow->ShowDialog(this);
 
                  if(ow->DialogResult == Windows::Forms::DialogResult::OK){
@@ -1012,6 +1022,7 @@ namespace FlacSquisher {
                      hidewin = ow->getHide();
 					 ignoredExts = ow->getIgnored();
 					 copyFiles = ow->getCopy();
+					 metaflacPath = ow->getMetaflac();
 					 if(ow->getEncoder() != -1){
 						 encoder->SelectedIndex = ow->getEncoder();
 					 }

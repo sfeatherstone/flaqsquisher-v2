@@ -78,6 +78,11 @@ namespace FlacSquisher {
 	private: System::Windows::Forms::Label^  ExtLabel;
 	private: System::Windows::Forms::TextBox^  ignoredExt;
 	private: System::Windows::Forms::CheckBox^  copyIgnored;
+	private: System::Windows::Forms::Label^  Metaflac;
+	private: System::Windows::Forms::Button^  metaflacButton;
+
+	private: System::Windows::Forms::TextBox^  metaflacLocation;
+
 
 
 
@@ -112,6 +117,9 @@ namespace FlacSquisher {
 			this->hideCmd = (gcnew System::Windows::Forms::CheckBox());
 			this->tableLayoutPanel1 = (gcnew System::Windows::Forms::TableLayoutPanel());
 			this->encoderBox = (gcnew System::Windows::Forms::GroupBox());
+			this->metaflacButton = (gcnew System::Windows::Forms::Button());
+			this->metaflacLocation = (gcnew System::Windows::Forms::TextBox());
+			this->Metaflac = (gcnew System::Windows::Forms::Label());
 			this->panel2 = (gcnew System::Windows::Forms::Panel());
 			this->encOptsButton = (gcnew System::Windows::Forms::Button());
 			this->panel1 = (gcnew System::Windows::Forms::Panel());
@@ -239,7 +247,7 @@ namespace FlacSquisher {
 			// resetButton
 			// 
 			this->resetButton->Anchor = System::Windows::Forms::AnchorStyles::Left;
-			this->resetButton->Location = System::Drawing::Point(3, 238);
+			this->resetButton->Location = System::Drawing::Point(3, 279);
 			this->resetButton->Name = L"resetButton";
 			this->resetButton->Size = System::Drawing::Size(75, 23);
 			this->resetButton->TabIndex = 11;
@@ -253,7 +261,7 @@ namespace FlacSquisher {
 			this->hideCmd->AutoSize = true;
 			this->hideCmd->Checked = true;
 			this->hideCmd->CheckState = System::Windows::Forms::CheckState::Checked;
-			this->hideCmd->Location = System::Drawing::Point(3, 153);
+			this->hideCmd->Location = System::Drawing::Point(3, 194);
 			this->hideCmd->Name = L"hideCmd";
 			this->hideCmd->Size = System::Drawing::Size(178, 17);
 			this->hideCmd->TabIndex = 12;
@@ -281,12 +289,15 @@ namespace FlacSquisher {
 			this->tableLayoutPanel1->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute, 36)));
 			this->tableLayoutPanel1->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute, 52)));
 			this->tableLayoutPanel1->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute, 35)));
-			this->tableLayoutPanel1->Size = System::Drawing::Size(432, 267);
+			this->tableLayoutPanel1->Size = System::Drawing::Size(432, 308);
 			this->tableLayoutPanel1->TabIndex = 13;
 			// 
 			// encoderBox
 			// 
 			this->tableLayoutPanel1->SetColumnSpan(this->encoderBox, 2);
+			this->encoderBox->Controls->Add(this->metaflacButton);
+			this->encoderBox->Controls->Add(this->metaflacLocation);
+			this->encoderBox->Controls->Add(this->Metaflac);
 			this->encoderBox->Controls->Add(this->OggencLabel);
 			this->encoderBox->Controls->Add(this->oggLocation);
 			this->encoderBox->Controls->Add(this->oggButton);
@@ -299,16 +310,42 @@ namespace FlacSquisher {
 			this->encoderBox->Dock = System::Windows::Forms::DockStyle::Fill;
 			this->encoderBox->Location = System::Drawing::Point(3, 3);
 			this->encoderBox->Name = L"encoderBox";
-			this->encoderBox->Size = System::Drawing::Size(426, 138);
+			this->encoderBox->Size = System::Drawing::Size(426, 179);
 			this->encoderBox->TabIndex = 13;
 			this->encoderBox->TabStop = false;
 			this->encoderBox->Text = L"Encoders";
+			// 
+			// metaflacButton
+			// 
+			this->metaflacButton->Location = System::Drawing::Point(345, 146);
+			this->metaflacButton->Name = L"metaflacButton";
+			this->metaflacButton->Size = System::Drawing::Size(75, 23);
+			this->metaflacButton->TabIndex = 11;
+			this->metaflacButton->Text = L"Choose...";
+			this->metaflacButton->UseVisualStyleBackColor = true;
+			this->metaflacButton->Click += gcnew System::EventHandler(this, &OptionsWindow::metaflacButton_Click);
+			// 
+			// metaflacLocation
+			// 
+			this->metaflacLocation->Location = System::Drawing::Point(7, 149);
+			this->metaflacLocation->Name = L"metaflacLocation";
+			this->metaflacLocation->Size = System::Drawing::Size(332, 20);
+			this->metaflacLocation->TabIndex = 10;
+			// 
+			// Metaflac
+			// 
+			this->Metaflac->AutoSize = true;
+			this->Metaflac->Location = System::Drawing::Point(7, 133);
+			this->Metaflac->Name = L"Metaflac";
+			this->Metaflac->Size = System::Drawing::Size(48, 13);
+			this->Metaflac->TabIndex = 9;
+			this->Metaflac->Text = L"Metaflac";
 			// 
 			// panel2
 			// 
 			this->panel2->Controls->Add(this->encOptsButton);
 			this->panel2->Dock = System::Windows::Forms::DockStyle::Fill;
-			this->panel2->Location = System::Drawing::Point(226, 147);
+			this->panel2->Location = System::Drawing::Point(226, 188);
 			this->panel2->Name = L"panel2";
 			this->panel2->Size = System::Drawing::Size(203, 30);
 			this->panel2->TabIndex = 15;
@@ -329,7 +366,7 @@ namespace FlacSquisher {
 			this->panel1->Controls->Add(this->okButton);
 			this->panel1->Controls->Add(this->cancelButton);
 			this->panel1->Dock = System::Windows::Forms::DockStyle::Fill;
-			this->panel1->Location = System::Drawing::Point(226, 235);
+			this->panel1->Location = System::Drawing::Point(226, 276);
 			this->panel1->Name = L"panel1";
 			this->panel1->Size = System::Drawing::Size(203, 29);
 			this->panel1->TabIndex = 14;
@@ -341,7 +378,7 @@ namespace FlacSquisher {
 			this->panel3->Controls->Add(this->ExtLabel);
 			this->panel3->Controls->Add(this->ignoredExt);
 			this->panel3->Dock = System::Windows::Forms::DockStyle::Fill;
-			this->panel3->Location = System::Drawing::Point(3, 183);
+			this->panel3->Location = System::Drawing::Point(3, 224);
 			this->panel3->Name = L"panel3";
 			this->panel3->Size = System::Drawing::Size(426, 46);
 			this->panel3->TabIndex = 16;
@@ -378,7 +415,7 @@ namespace FlacSquisher {
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->CancelButton = this->cancelButton;
-			this->ClientSize = System::Drawing::Size(432, 267);
+			this->ClientSize = System::Drawing::Size(432, 308);
 			this->Controls->Add(this->tableLayoutPanel1);
 			this->Name = L"OptionsWindow";
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterParent;
@@ -414,6 +451,12 @@ namespace FlacSquisher {
     public: String^ getLame(){
                 return lameLocation->Text;
             }
+	public: void setMetaflac(String^ metaflac){
+				metaflacLocation->Text = metaflac;
+			}
+	public: String^ getMetaflac(){
+				return metaflacLocation->Text;
+			}
     public: void setHide(bool hidden){
                 hideCmd->Checked = hidden;
             }
@@ -476,5 +519,12 @@ namespace FlacSquisher {
 					 encoderChoice = eo->getEncoder();
                  }
              }
-    };
+	private: System::Void metaflacButton_Click(System::Object^  sender, System::EventArgs^  e) {
+				 OpenFileDialog^ ofd = gcnew OpenFileDialog();
+                 ofd->Filter = "Executable Files (*.exe)|*.exe";
+                 if(ofd->ShowDialog() != Windows::Forms::DialogResult::Cancel){
+                     metaflacLocation->Text = ofd->FileName;
+                 }
+			 }
+};
 }
