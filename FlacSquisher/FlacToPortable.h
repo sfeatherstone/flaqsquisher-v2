@@ -91,12 +91,12 @@ namespace FlacSquisher {
                 flacexe = System::IO::Path::GetDirectoryName(Application::ExecutablePath) + "\\flac.exe";
                 lamePath = System::IO::Path::GetDirectoryName(Application::ExecutablePath) + "\\lame.exe";
 				metaflacPath = System::IO::Path::GetDirectoryName(Application::ExecutablePath) + "\\metaflac.exe";
-				ignoredExts = "txt jpg log pdf";
+				ignoredExts = "txt jpg log pdf png";
                 hidewin = true;
             }
 
 			if(ignoredExts == nullptr){
-				ignoredExts = "txt jpg log pdf";
+				ignoredExts = "txt jpg log pdf png";
 			}
 			if(String::IsNullOrEmpty(metaflacPath)){
 				metaflacPath = System::IO::Path::GetDirectoryName(Application::ExecutablePath) + "\\metaflac.exe";
@@ -589,7 +589,7 @@ namespace FlacSquisher {
 			this->Controls->Add(this->menuStrip1);
 			this->MainMenuStrip = this->menuStrip1;
 			this->Name = L"FlacToPortable";
-			this->Text = L"FlacSquisher v0.3.1";
+			this->Text = L"FlacSquisher v0.4.0";
 			this->FormClosing += gcnew System::Windows::Forms::FormClosingEventHandler(this, &FlacToPortable::FlacToPortable_FormClosing);
 			this->menuStrip1->ResumeLayout(false);
 			this->menuStrip1->PerformLayout();

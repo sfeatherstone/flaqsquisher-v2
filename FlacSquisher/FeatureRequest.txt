@@ -40,4 +40,6 @@ Fixed a bug where opening the Options window, and not the Encoder Options window
 Changed included version of LAME encoder from 3.98 to 3.98.2
 Included libsndfile 1.0.18pre22a, so future versions can go directly from FLAC to MP3
 ----Beta 0.3.2 released----
-MP3 tagging (OggEnc2 carries over FLAC tags)
+MP3 tagging (OggEnc2 already carries over FLAC tags)
+Fixed bug that caused command windows to show briefly even if "Hide command windows" option was selected
+----Beta 0.4.0 released----
