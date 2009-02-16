@@ -965,6 +965,25 @@ namespace FlacSquisher {
                      psi->Arguments = "\"" + fi->FullName + "\" -o \"" + destPath + "\" " + options;
                  }
                  else{
+					 // LAME does not automatically tag MP3s encoded from FLACs like OggEnc does, so we need to use Metaflac and LAME's tag options
+					 ProcessStartInfo^ metaflacPsi = gcnew ProcessStartInfo();
+					 metaflacPsi->FileName = metaflacPath;
+					 metaflacPsi->Arguments = "--list \"" + fi->FullName + "\"";
+					 metaflacPsi->WindowStyle = System::Diagnostics::ProcessWindowStyle::Hidden;
+					 metaflacPsi->RedirectStandardOutput = true;
+					 metaflacPsi->UseShellExecute = false;
+
+					 Process^ metaflacProcess = Process::Start(metaflacPsi);
+					 metaflacProcess->Start();
+					 StreamReader^ sOut = metaflacProcess->StandardOutput;
+
+					 String^ output = sOut->ReadToEnd();
+
+					 metaflacProcess->WaitForExit();
+
+					 sOut->Close();
+					 metaflacProcess->Close();
+
                      // LAME cannot take Flac files as input as of 3.97, so we need to decode using flac.exe first
                      psi->FileName = "cmd.exe";
                      // "/s" switch allows us to give the arguments of "/c" inside quotes
