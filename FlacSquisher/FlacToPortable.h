@@ -32,6 +32,7 @@ namespace FlacSquisher {
     using namespace System;
     using namespace System::IO;
     using namespace System::Text;
+	using namespace System::Text::RegularExpressions;
     using namespace System::ComponentModel;
     using namespace System::Collections;
     using namespace System::Windows::Forms;
@@ -970,24 +971,68 @@ namespace FlacSquisher {
 					 metaflacPsi->FileName = metaflacPath;
 					 metaflacPsi->Arguments = "--list \"" + fi->FullName + "\"";
 					 metaflacPsi->WindowStyle = System::Diagnostics::ProcessWindowStyle::Hidden;
+					 metaflacPsi->CreateNoWindow = true;
 					 metaflacPsi->RedirectStandardOutput = true;
 					 metaflacPsi->UseShellExecute = false;
 
 					 Process^ metaflacProcess = Process::Start(metaflacPsi);
 					 metaflacProcess->Start();
 					 StreamReader^ sOut = metaflacProcess->StandardOutput;
-
 					 String^ output = sOut->ReadToEnd();
 
 					 metaflacProcess->WaitForExit();
-
 					 sOut->Close();
 					 metaflacProcess->Close();
+
+					 // Use regexs to extract information from the monolithic text file
+					 // First grab the artist name
+					 Regex^ regex = gcnew Regex("comment\\[\\d+\\]: ARTIST=(.*)");
+					 Match^ match = regex->Match(output);
+					 String^ artist = "";
+					 if(match->Success){
+						 artist = match->Groups[1]->Value;
+					 }
+					 // Next grab the track title
+					 regex = gcnew Regex("comment\\[\\d+\\]: TITLE=(.*)");
+					 match = regex->Match(output);
+					 String^ title = "";
+					 if(match->Success){
+						 title = match->Groups[1]->Value;
+					 }
+					 // Next grab the album title
+					 regex = gcnew Regex("comment\\[\\d+\\]: ALBUM=(.*)");
+					 match = regex->Match(output);
+					 String^ album = "";
+					 if(match->Success){
+						 album = match->Groups[1]->Value;
+					 }
+					 regex = gcnew Regex("comment\\[\\d+\\]: DATE=(.*)");
+					 match = regex->Match(output);
+					 String^ date = "";
+					 if(match->Success){
+						 date = match->Groups[1]->Value;
+					 }
+					 regex = gcnew Regex("comment\\[\\d+\\]: TRACKNUMBER=(.*)");
+					 match = regex->Match(output);
+					 String^ tracknum = "";
+					 if(match->Success){
+						 tracknum = match->Groups[1]->Value;
+					 }
+					 regex = gcnew Regex("comment\\[\\d+\\]: GENRE=(.*)");
+					 match = regex->Match(output);
+					 String^ genre = "";
+					 if(match->Success){
+						 genre = match->Groups[1]->Value;
+					 }
+
+					 // Add the tagging options to the command line
+					 String^ lameopts = options + " --ta \"" + artist + "\" --tt \"" + title + "\" --tl \"" + album + "\" --ty \""
+						 + date + "\" --tn \"" + tracknum + "\" --tg \"" + genre + "\" --add-id3v2 --ignore-tag-errors ";
 
                      // LAME cannot take Flac files as input as of 3.97, so we need to decode using flac.exe first
                      psi->FileName = "cmd.exe";
                      // "/s" switch allows us to give the arguments of "/c" inside quotes
-                     psi->Arguments = "/s /c \"\"" + flacexe + "\" -dc \"" + fi->FullName + "\" | \"" + lamePath + "\" " + options + " --verbose - \"" + destPath + "\"\"";
+                     psi->Arguments = "/s /c \"\"" + flacexe + "\" -dc \"" + fi->FullName + "\" | \"" + lamePath + "\" " + lameopts + " --verbose - \"" + destPath + "\"\"";
                  }
 
                  //status.Text += "Calling Lame with arguments: " + psi.Arguments
@@ -996,9 +1041,11 @@ namespace FlacSquisher {
 
                  if(hidewin){
                      psi->WindowStyle = ProcessWindowStyle::Hidden;
+					 psi->CreateNoWindow = true;
                  }
                  else{
                      psi->WindowStyle = ProcessWindowStyle::Normal;
+					 psi->CreateNoWindow = false;
                  }
                  System::Diagnostics::Process^ p = System::Diagnostics::Process::Start(psi);
 

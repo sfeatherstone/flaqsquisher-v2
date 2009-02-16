@@ -1,7 +1,6 @@
 FlacSquisher Requested/Planned Features
 =============
 Single cmd window per core
-MP3 tagging (OggEnc2 carries over FLAC tags)
 Offload thread to new class
     http://msdn.microsoft.com/en-us/library/ts553s52.aspx
 Create "Console" window containing a log of activities
@@ -41,3 +40,4 @@ Fixed a bug where opening the Options window, and not the Encoder Options window
 Changed included version of LAME encoder from 3.98 to 3.98.2
 Included libsndfile 1.0.18pre22a, so future versions can go directly from FLAC to MP3
 ----Beta 0.3.2 released----
+MP3 tagging (OggEnc2 carries over FLAC tags)
