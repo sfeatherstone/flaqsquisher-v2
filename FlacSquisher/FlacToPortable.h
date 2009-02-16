@@ -751,6 +751,24 @@ namespace FlacSquisher {
 
 				 ignoreList->AddRange(split);
 
+				 // make sure source and destination directories are given
+				 if(String::IsNullOrEmpty(flacDir->Text) || String::IsNullOrEmpty(outputDir->Text)){
+					 MessageBox::Show("The Flac directory has not been specified", "Specify source directory", MessageBoxButtons::OK, MessageBoxIcon::Exclamation, MessageBoxDefaultButton::Button1, MessageBoxOptions::DefaultDesktopOnly, false);
+					 encodeStatus->Text = "Ready";
+					 encodeProgress->Visible = false;
+					 encodeButton->Enabled = true;
+					 return;
+				 }
+
+				 // make sure source directory exists
+				 if(Directory::Exists(flacDir->Text)){
+					 MessageBox::Show("The source directory does not exist.", "Non-existent source directory", MessageBoxButtons::OK, MessageBoxIcon::Exclamation, MessageBoxDefaultButton::Button1, MessageBoxOptions::DefaultDesktopOnly, false);
+					 encodeStatus->Text = "Ready";
+					 encodeProgress->Visible = false;
+					 encodeButton->Enabled = true;
+					 return;
+				 }
+
                  // find files in "source" directory
                  recurseDirs(flacDir->Text);
 
