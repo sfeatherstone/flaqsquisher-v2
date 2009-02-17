@@ -108,7 +108,7 @@ namespace FlacSquisher {
 
 			majorv = 0;
 			minorv = 4;
-			rev = 0;
+			rev = 1;
 
 			this->Text = "FlacSquisher v" + majorv + "." + minorv + "." + rev;
 
@@ -761,7 +761,7 @@ namespace FlacSquisher {
 				 }
 
 				 // make sure source directory exists
-				 if(Directory::Exists(flacDir->Text)){
+				 if(!Directory::Exists(flacDir->Text)){
 					 MessageBox::Show("The source directory does not exist.", "Non-existent source directory", MessageBoxButtons::OK, MessageBoxIcon::Exclamation, MessageBoxDefaultButton::Button1, MessageBoxOptions::DefaultDesktopOnly, false);
 					 encodeStatus->Text = "Ready";
 					 encodeProgress->Visible = false;

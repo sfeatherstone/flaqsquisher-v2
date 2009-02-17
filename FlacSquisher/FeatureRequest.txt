@@ -43,3 +43,5 @@ Included libsndfile 1.0.18pre22a, so future versions can go directly from FLAC t
 MP3 tagging (OggEnc2 already carries over FLAC tags)
 Fixed bug that caused command windows to show briefly even if "Hide command windows" option was selected
 ----Beta 0.4.0 released----
+Fixed bug that caused encoding process to not commence
+----Beta 0.4.1 released----
