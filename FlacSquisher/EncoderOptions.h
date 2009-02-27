@@ -1,5 +1,7 @@
 #pragma once
 
+#include "OptionsSet.h"
+
 using namespace System;
 using namespace System::ComponentModel;
 using namespace System::Collections;
@@ -10,7 +12,7 @@ using namespace System::Drawing;
 
 namespace FlacSquisher {
 
-	struct OptionsSet {
+	/*struct OptionsSet {
 			int encoder;
 			int target;
 			bool mono;
@@ -18,7 +20,7 @@ namespace FlacSquisher {
 			int bitrate;
 			int quality;
 			int vbrmode;
-    };
+    };*/
 
     /// <summary>
     /// Summary for EncoderOptions
@@ -665,40 +667,40 @@ namespace FlacSquisher {
 	public: void setEncoder(int choice){
 				tabControl1->SelectedIndex = choice;
 			}
-	public: OptionsSet getOptions(){
-				OptionsSet os;
-				os.encoder = tabControl1->SelectedIndex;
+	public: OptionsSet^ getOptions(){
+				OptionsSet^ os = gcnew OptionsSet();
+				os->setEncoder(tabControl1->SelectedIndex);
 				if(qualityRadio->Checked){
-					os.target = 0;
+					os->setTarget(0);
 				}
 				else{
-					os.target = 1;
+					os->setTarget(1);
 				}
-				os.mono = mono->Checked;
-				os.cbr = cbr->Checked;
-				os.bitrate = bitrateBar->Value;
-				if(os.encoder == 0){
-					os.quality = oggQual->Value;
+				os->setMono(mono->Checked);
+				os->setCbr(cbr->Checked);
+				os->setBitrate(bitrateBar->Value);
+				if(os->getEncoder() == 0){
+					os->setQuality(oggQual->Value);
 				}
 				else{
-					os.quality = qualBar->Value;
+					os->setQuality(qualBar->Value);
 				}
-				os.vbrmode = vbrMode->SelectedIndex;
+				os->setVbrmode(vbrMode->SelectedIndex);
 				return os;
 			}
-	public: void setOptions(OptionsSet os){
-				tabControl1->SelectedIndex = os.encoder;
-				qualityRadio->Checked = (os.target == 0);
-				mono->Checked = os.mono;
-				cbr->Checked = os.cbr;
-				bitrateBar->Value = os.bitrate;
-				if(os.encoder == 0){
-					oggQual->Value = os.quality;
+	public: void setOptions(OptionsSet^ os){
+				tabControl1->SelectedIndex = os->getEncoder();
+				qualityRadio->Checked = (os->getTarget() == 0);
+				mono->Checked = os->getMono();
+				cbr->Checked = os->getCbr();
+				bitrateBar->Value = os->getBitrate();
+				if(os->getEncoder() == 0){
+					oggQual->Value = os->getQuality();
 				}
 				else{
-					qualBar->Value = os.quality;
+					qualBar->Value = os->getQuality();
 				}
-				vbrMode->SelectedIndex = os.vbrmode;
+				vbrMode->SelectedIndex = os->getVbrmode();
 			}
 	public: String^ toString(){
 				String^ str;

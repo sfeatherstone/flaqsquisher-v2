@@ -509,7 +509,7 @@ namespace FlacSquisher {
                  oggLocation->Text = System::IO::Path::GetDirectoryName(Application::ExecutablePath) + "\\oggenc.exe";
                  flacLocation->Text = System::IO::Path::GetDirectoryName(Application::ExecutablePath) + "\\flac.exe";
                  lameLocation->Text = System::IO::Path::GetDirectoryName(Application::ExecutablePath) + "\\lame.exe";
-				 ignoredExt->Text = "txt jpg log pdf";
+				 ignoredExt->Text = "txt jpg log pdf png";
              }
     private: System::Void encOptsButton_Click(System::Object^  sender, System::EventArgs^  e) {
                  EncoderOptions^ eo = gcnew EncoderOptions();

@@ -18,8 +18,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#include <io.h>
-#include <windows.h>
+//#include <io.h>
+//#include <windows.h>
+//#using   <mscorlib.dll>
 #include "AboutWindow.h"
 #include "OptionsWindow.h"
 #include "UpdateResults.h"
@@ -28,6 +29,8 @@ limitations under the License.
 
 
 namespace FlacSquisher {
+
+
 
     using namespace System;
     using namespace System::IO;
@@ -58,6 +61,8 @@ namespace FlacSquisher {
     {
     public: delegate void ProgressBarUpdateDelegate();
 
+
+
     public:
         FlacToPortable(void)
         {
@@ -69,10 +74,18 @@ namespace FlacSquisher {
             // set the default (and maximum) number of threads to the
             // number of logical cores in the CPU
             // code from http://msdn.microsoft.com/en-us/library/ms724423(VS.85).aspx
-            SYSTEM_INFO siSysInfo;
-            GetSystemInfo(&siSysInfo); 
-            threadCounter->Value = (int) siSysInfo.dwNumberOfProcessors;
+            /*SYSTEM_INFO^ siSysInfo;
+            GetSystemInfo(siSysInfo);
+            threadCounter->Value = (int) siSysInfo->dwNumberOfProcessors;*/
+
+			// finally found out about Environment::ProcessorCount
+			// from http://www.albahari.com/threading/
+			// this was the last thing holding back from running /clr:safe
+			// instead of /clr:pure
+			threadCounter->Value = System::Environment::ProcessorCount;
             threadCounter->Maximum = threadCounter->Value;
+
+			
 
             // add encoder types to the drop-down box
             encoder->Items->Add("OggEnc2 (Ogg Vorbis)");
@@ -108,7 +121,7 @@ namespace FlacSquisher {
 
 			majorv = 0;
 			minorv = 4;
-			rev = 1;
+			rev = 2;
 
 			this->Text = "FlacSquisher v" + majorv + "." + minorv + "." + rev;
 
@@ -819,7 +832,7 @@ namespace FlacSquisher {
     private: void updateProgressBar(){
                  // min() included for bounds checking, lock needed to prevent count being "short"
 				 rwl->AcquireWriterLock(-1);
-                 encodeProgress->Value = min((encodeProgress->Value + 1), encodeProgress->Maximum);
+				 encodeProgress->Value = Math::Min((encodeProgress->Value + 1), encodeProgress->Maximum);
 				 rwl->ReleaseWriterLock();
 
                  // update the status text
