@@ -66,10 +66,12 @@ namespace FlacSquisher {
     public:
         FlacToPortable(void)
         {
-            Control::CheckForIllegalCrossThreadCalls = false;
+            //Control::CheckForIllegalCrossThreadCalls = false;
 
 
             InitializeComponent();
+
+			dirSeparator = gcnew String(System::IO::Path::DirectorySeparatorChar.ToString());
 
             // set the default (and maximum) number of threads to the
             // number of logical cores in the CPU
@@ -93,17 +95,17 @@ namespace FlacSquisher {
 
             findFlac->Visible = false;
 
-            settingsPath = System::IO::Path::GetDirectoryName(Application::ExecutablePath) + "\\config.cfg";
+			settingsPath = System::IO::Path::GetDirectoryName(Application::ExecutablePath) + dirSeparator + "config.cfg";
 
             // check if config file exists
             if(File::Exists(settingsPath)){
                 loadSettingsFile(settingsPath);
             }
             else{ // load defaults (in executable's directory) if config file does not exist
-                oggPath = System::IO::Path::GetDirectoryName(Application::ExecutablePath) + "\\oggenc.exe";
-                flacexe = System::IO::Path::GetDirectoryName(Application::ExecutablePath) + "\\flac.exe";
-                lamePath = System::IO::Path::GetDirectoryName(Application::ExecutablePath) + "\\lame.exe";
-				metaflacPath = System::IO::Path::GetDirectoryName(Application::ExecutablePath) + "\\metaflac.exe";
+                oggPath = System::IO::Path::GetDirectoryName(Application::ExecutablePath) + dirSeparator + "oggenc.exe";
+                flacexe = System::IO::Path::GetDirectoryName(Application::ExecutablePath) + dirSeparator + "flac.exe";
+                lamePath = System::IO::Path::GetDirectoryName(Application::ExecutablePath) + dirSeparator + "lame.exe";
+				metaflacPath = System::IO::Path::GetDirectoryName(Application::ExecutablePath) + dirSeparator + "metaflac.exe";
 				ignoredExts = "txt jpg log pdf png";
                 hidewin = true;
             }
@@ -112,7 +114,7 @@ namespace FlacSquisher {
 				ignoredExts = "txt jpg log pdf png";
 			}
 			if(String::IsNullOrEmpty(metaflacPath)){
-				metaflacPath = System::IO::Path::GetDirectoryName(Application::ExecutablePath) + "\\metaflac.exe";
+				metaflacPath = System::IO::Path::GetDirectoryName(Application::ExecutablePath) + dirSeparator + "metaflac.exe";
 			}
 
             encodeStatus->Text = "Ready";
@@ -142,6 +144,7 @@ namespace FlacSquisher {
             }
         }
 
+	public:  static String^ dirSeparator;
 
     private: static String^ oggPath;
              static String^ lamePath;
@@ -163,6 +166,7 @@ namespace FlacSquisher {
              int initSize; // size of job queue
              //ProgressBarUpdateDelegate^ ProgressBarUpdate;
              static bool hidewin;
+
 
 			 int majorv;
 			 int minorv;
@@ -738,15 +742,15 @@ namespace FlacSquisher {
                  if(encoder->SelectedIndex == 0){
                      if (String::IsNullOrEmpty(oggPath))
                      {
-                         oggPath = System::IO::Path::GetDirectoryName(Application::ExecutablePath) + "\\oggenc.exe";
+                         oggPath = System::IO::Path::GetDirectoryName(Application::ExecutablePath) + dirSeparator + "oggenc.exe";
                      }
                  }
                  else{
                      if(String::IsNullOrEmpty(lamePath)){
-                         lamePath = System::IO::Path::GetDirectoryName(Application::ExecutablePath) + "\\lame.exe";
+                         lamePath = System::IO::Path::GetDirectoryName(Application::ExecutablePath) + dirSeparator + "lame.exe";
                      }
                      if(String::IsNullOrEmpty(flacexe)){
-                         flacexe = System::IO::Path::GetDirectoryName(Application::ExecutablePath) + "\\flac.exe";
+                         flacexe = System::IO::Path::GetDirectoryName(Application::ExecutablePath) + dirSeparator + "flac.exe";
                      }
                  }
 
@@ -917,7 +921,7 @@ namespace FlacSquisher {
 				 if(copyFiles){
 					 for each(String^ ext in ignoreList){
 						 if(fi->Name->ToLower()->EndsWith(ext->ToLower())){
-							 destPath = outputPath + partialPath + "\\" + fi->Name;
+							 destPath = outputPath + partialPath + dirSeparator + fi->Name;
 
 							 if(File::Exists(destPath)){
 								 return;
@@ -933,10 +937,10 @@ namespace FlacSquisher {
 				 }
 
                  if(encoderChoice == 0){
-                     destPath = outputPath + partialPath + "\\" + fi->Name->Replace(".flac", ".ogg");
+                     destPath = outputPath + partialPath + dirSeparator + fi->Name->Replace(".flac", ".ogg");
                  }
                  else{
-                     destPath = outputPath + partialPath + "\\" + fi->Name->Replace(".flac", ".mp3");
+                     destPath = outputPath + partialPath + dirSeparator + fi->Name->Replace(".flac", ".mp3");
                  }
                  // if the resulting path exists already, we don't need to encode again
                  if(File::Exists(destPath)){

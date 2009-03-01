@@ -45,3 +45,6 @@ Fixed bug that caused command windows to show briefly even if "Hide command wind
 ----Beta 0.4.0 released----
 Fixed bug that caused encoding process to not commence
 ----Beta 0.4.1 released----
+Added png to the list of extensions ignored by default
+Made changes necessary to compile with "/clr:safe" rather than "/clr:pure"
+Changed hard-coded backslashes in path code to "DirectorySeparatorChar"
