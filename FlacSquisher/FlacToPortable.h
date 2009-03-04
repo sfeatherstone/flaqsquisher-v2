@@ -66,7 +66,7 @@ namespace FlacSquisher {
     public:
         FlacToPortable(void)
         {
-            //Control::CheckForIllegalCrossThreadCalls = false;
+            Control::CheckForIllegalCrossThreadCalls = false;
 
 
             InitializeComponent();
@@ -849,7 +849,8 @@ namespace FlacSquisher {
                  try{ // exception will occur when queue is empty
                      FileInfo^ fi;
                      // goes until the queue is empty
-                     while(fi = jobQueue.Dequeue()){
+					 while(jobQueue.Count > 0){
+						 fi = jobQueue.Dequeue();
                          encodeFile(fi);
 
                          // increment "value" on the progress bar by one
@@ -858,6 +859,7 @@ namespace FlacSquisher {
                  }
 				 catch(Exception^ e){
 					 e->ToString();
+					 //MessageBox::Show(e->ToString());
 				 }
                  finally{
                      // enable the encode button only if this is the last thread executing
@@ -1026,6 +1028,7 @@ namespace FlacSquisher {
 					 String^ artist = "";
 					 if(match->Success){
 						 artist = match->Groups[1]->Value;
+						 artist = artist->Trim();
 					 }
 					 // Next grab the track title
 					 regex = gcnew Regex("comment\\[\\d+\\]: TITLE=(.*)");
@@ -1033,6 +1036,7 @@ namespace FlacSquisher {
 					 String^ title = "";
 					 if(match->Success){
 						 title = match->Groups[1]->Value;
+						 title = title->Trim();
 					 }
 					 // Next grab the album title
 					 regex = gcnew Regex("comment\\[\\d+\\]: ALBUM=(.*)");
@@ -1040,24 +1044,28 @@ namespace FlacSquisher {
 					 String^ album = "";
 					 if(match->Success){
 						 album = match->Groups[1]->Value;
+						 album = album->Trim();
 					 }
 					 regex = gcnew Regex("comment\\[\\d+\\]: DATE=(.*)");
 					 match = regex->Match(output);
 					 String^ date = "";
 					 if(match->Success){
 						 date = match->Groups[1]->Value;
+						 date = date->Trim();
 					 }
 					 regex = gcnew Regex("comment\\[\\d+\\]: TRACKNUMBER=(.*)");
 					 match = regex->Match(output);
 					 String^ tracknum = "";
 					 if(match->Success){
 						 tracknum = match->Groups[1]->Value;
+						 tracknum = tracknum->Trim();
 					 }
 					 regex = gcnew Regex("comment\\[\\d+\\]: GENRE=(.*)");
 					 match = regex->Match(output);
 					 String^ genre = "";
 					 if(match->Success){
 						 genre = match->Groups[1]->Value;
+						 genre = genre->Trim();
 					 }
 
 					 // Add the tagging options to the command line
@@ -1068,6 +1076,11 @@ namespace FlacSquisher {
                      psi->FileName = "cmd.exe";
                      // "/s" switch allows us to give the arguments of "/c" inside quotes
                      psi->Arguments = "/s /c \"\"" + flacexe + "\" -dc \"" + fi->FullName + "\" | \"" + lamePath + "\" " + lameopts + " --verbose - \"" + destPath + "\"\"";
+					 //psi->FileName = "\"" + flacexe + "\"";
+					 //psi->Arguments = " -dc \"" + fi->FullName + "\" | \"" + lamePath + "\" " + lameopts
+						 //+ " --verbose - \"" + destPath + "\"";
+					 //MessageBox::Show(psi->FileName);
+					 //MessageBox::Show(psi->Arguments);
                  }
 
                  //status.Text += "Calling Lame with arguments: " + psi.Arguments
