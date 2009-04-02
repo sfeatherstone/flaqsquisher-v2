@@ -48,3 +48,5 @@ Fixed bug that caused encoding process to not commence
 Added png to the list of extensions ignored by default
 Made changes necessary to compile with "/clr:safe" rather than "/clr:pure"
 Changed hard-coded backslashes in path code to "DirectorySeparatorChar"
+----Beta 0.4.2 released----
+in case the input file is a FLAC file without an extension, add .ogg or .mp3 on the end
