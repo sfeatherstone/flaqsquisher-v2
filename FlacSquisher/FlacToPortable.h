@@ -123,7 +123,7 @@ namespace FlacSquisher {
 
 			majorv = 0;
 			minorv = 4;
-			rev = 2;
+			rev = 3;
 
 			this->Text = "FlacSquisher v" + majorv + "." + minorv + "." + rev;
 
@@ -606,7 +606,7 @@ namespace FlacSquisher {
 			this->Controls->Add(this->menuStrip1);
 			this->MainMenuStrip = this->menuStrip1;
 			this->Name = L"FlacToPortable";
-			this->Text = L"FlacSquisher v0.4.0";
+			this->Text = L"FlacSquisher";
 			this->FormClosing += gcnew System::Windows::Forms::FormClosingEventHandler(this, &FlacToPortable::FlacToPortable_FormClosing);
 			this->menuStrip1->ResumeLayout(false);
 			this->menuStrip1->PerformLayout();
@@ -770,7 +770,7 @@ namespace FlacSquisher {
 
 				 // make sure source and destination directories are given
 				 if(String::IsNullOrEmpty(flacDir->Text) || String::IsNullOrEmpty(outputDir->Text)){
-					 MessageBox::Show("The Flac directory has not been specified", "Specify source directory", MessageBoxButtons::OK, MessageBoxIcon::Exclamation, MessageBoxDefaultButton::Button1, MessageBoxOptions::DefaultDesktopOnly, false);
+					 MessageBox::Show("The Flac directory and destination directory must both be specified", "Specify directories", MessageBoxButtons::OK, MessageBoxIcon::Exclamation, MessageBoxDefaultButton::Button1, MessageBoxOptions::DefaultDesktopOnly, false);
 					 encodeStatus->Text = "Ready";
 					 encodeProgress->Visible = false;
 					 encodeButton->Enabled = true;
@@ -779,7 +779,7 @@ namespace FlacSquisher {
 
 				 // make sure source directory exists
 				 if(!Directory::Exists(flacDir->Text)){
-					 MessageBox::Show("The source directory does not exist.", "Non-existent source directory", MessageBoxButtons::OK, MessageBoxIcon::Exclamation, MessageBoxDefaultButton::Button1, MessageBoxOptions::DefaultDesktopOnly, false);
+					 MessageBox::Show("The Flac directory does not exist.", "Non-existent source directory", MessageBoxButtons::OK, MessageBoxIcon::Exclamation, MessageBoxDefaultButton::Button1, MessageBoxOptions::DefaultDesktopOnly, false);
 					 encodeStatus->Text = "Ready";
 					 encodeProgress->Visible = false;
 					 encodeButton->Enabled = true;
@@ -941,14 +941,14 @@ namespace FlacSquisher {
                  if(encoderChoice == 0){
                      destPath = outputPath + partialPath + dirSeparator + fi->Name->Replace(".flac", ".ogg");
 					 // in case the input file is a FLAC file without an extension, add .ogg on the end
-					 if(destPath->EndsWith(".ogg")){
+					 if(!destPath->EndsWith(".ogg")){
 						 destPath = destPath + ".ogg";
 					 }
                  }
                  else{
                      destPath = outputPath + partialPath + dirSeparator + fi->Name->Replace(".flac", ".mp3");
 					 // in case the input file is a FLAC file without an extension, add .mp3 on the end
-					 if(destPath->EndsWith(".mp3")){
+					 if(!destPath->EndsWith(".mp3")){
 						 destPath = destPath + ".mp3";
 					 }
                  }
