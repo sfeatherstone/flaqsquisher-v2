@@ -1,0 +1,53 @@
+FlacSquisher Requested/Planned Features
+=============
+Single cmd window per core
+Offload thread to new class
+    http://msdn.microsoft.com/en-us/library/ts553s52.aspx
+Create "Console" window containing a log of activities
+Use Win32 API instead of VC++ runtimes
+Add icons
+Set "Encoder Options" settings based on current selected encoder and CLI options
+
+Done
+=============
+Ogg Vorbis encoding using OggEnc2
+Multi-threaded/multi-process encoding
+MP3 encoding using LAME
+Load configuration from file
+----Alpha 0.0.0.1 released----
+Put encoder selection in Options window
+Progress bar
+Main thread no longer becomes unresponsive waiting for other threads to finish (not using "join()" anymore)
+Make only the last thread finished re-enable the encode button
+----Alpha 0.0.2 released----
+Added version number to title bar
+Added option to hide command windows
+Added window to choose encoder options
+    LAME options follow official LAME UI Guidelines
+    http://lame.sourceforge.net/lame_ui_example.php
+Added thread lock on file count (fixes lower-than-expected count)
+Changed included version of LAME encoder from 3.97 to 3.98
+----Beta 0.0.3 released----
+Updated error message when config file isn't properly loaded on startup to be more user-friendly
+Fixed crash when source directory does not exist
+Changed "Online Help" and other links to go to default browser rather than IE
+----Beta 0.3.1 released----
+Implemented version check system
+Now ignores files with certain extensions -- by default: txt, jpg, log, pdf
+Optionally copy all ignored files to the new directory without modifying them
+Set maximum number of threads to a very high value (65535), due to the increasing number of cores in modern CPUs
+Fixed a bug where opening the Options window, and not the Encoder Options window, reset the encoder and options
+Changed included version of LAME encoder from 3.98 to 3.98.2
+Included libsndfile 1.0.18pre22a, so future versions can go directly from FLAC to MP3
+----Beta 0.3.2 released----
+MP3 tagging (OggEnc2 already carries over FLAC tags)
+Fixed bug that caused command windows to show briefly even if "Hide command windows" option was selected
+----Beta 0.4.0 released----
+Fixed bug that caused encoding process to not commence
+----Beta 0.4.1 released----
+Added png to the list of extensions ignored by default
+Made changes necessary to compile with "/clr:safe" rather than "/clr:pure"
+Changed hard-coded backslashes in path code to "DirectorySeparatorChar"
+----Beta 0.4.2 released----
+In case the input file is a FLAC file without an extension, add .ogg or .mp3 on the end
+Clarified empty directory error messages
