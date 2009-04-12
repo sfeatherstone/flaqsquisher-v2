@@ -52,6 +52,7 @@ namespace FlacSquisher {
 		int rev;
 
 		ReaderWriterLock rwl = new ReaderWriterLock();
+		List<String> ignoreList;
 
 		public FlacSquisher() {
 			InitializeComponent();
@@ -215,7 +216,7 @@ namespace FlacSquisher {
 			encodeProgress.Style = ProgressBarStyle.Marquee;
 			encodeProgress.Visible = true;
 
-			List<String> ignoreList = new List<String>();
+			ignoreList = new List<String>();
 
 			String[] split = ignoredExts.Split(' ');
 
@@ -241,14 +242,14 @@ namespace FlacSquisher {
 
 			FolderRecurser recurser = new FolderRecurser(flacDir.Text, ignoreList.ToArray(), copyFiles, rwl);
 
-			Thread recurserThread = new Thread(new ThreadStart(recurser.recurseDirs));
-			recurserThread.IsBackground = false;
-			recurserThread.Start();
+			this.backgroundWorker1.RunWorkerAsync(recurser);
 
-			Thread.Sleep(50);
-
-			rwl.AcquireWriterLock(-1);
-			rwl.ReleaseLock();
+			while(this.backgroundWorker1.IsBusy) {
+				if(this.backgroundWorker1.CancellationPending) {
+					break;
+				}
+				Thread.Sleep(50);
+			}
 
 			// find files in "source" directory
 			Queue<FileInfo> jobQueue = recurser.getJobQueue();
@@ -276,7 +277,7 @@ namespace FlacSquisher {
 
 			// set up encoder
 			Encoder encoderManager = new Encoder(flacDir.Text, outputDir.Text,
-				encoder.SelectedIndex, cliParams.Text, threads, this);
+				encoder.SelectedIndex, cliParams.Text, threads, this, rwl, jobQueue);
 			
 			
 
@@ -319,6 +320,28 @@ namespace FlacSquisher {
 			encodeButton.Enabled = true;
 		}
 
+		private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e) {
+			/*FolderRecurser recurser = new FolderRecurser(flacDir.Text, ignoreList.ToArray(), copyFiles, rwl);
+
+			Thread recurserThread = new Thread(new ThreadStart(recurser.recurseDirs));
+			recurserThread.IsBackground = false;
+			recurserThread.Start();
+
+			while(recurserThread.IsAlive) {
+			}
+			recurserThread.Join();*/
+
+			BackgroundWorker bw = sender as BackgroundWorker;
+
+			FolderRecurser recurser = (FolderRecurser)e.Argument;
+
+			recurser.recurseDirs();
+
+			e.Result = recurser.getJobQueue();
+
+			bw.WorkerSupportsCancellation = true;
+			bw.CancelAsync();
+		}
 
 	}
 }

@@ -54,6 +54,7 @@
 			this.statusStrip = new System.Windows.Forms.StatusStrip();
 			this.encodeProgress = new System.Windows.Forms.ToolStripProgressBar();
 			this.encodeStatus = new System.Windows.Forms.ToolStripStatusLabel();
+			this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
 			this.menuStrip1.SuspendLayout();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
@@ -374,6 +375,10 @@
 			this.encodeStatus.Size = new System.Drawing.Size(38, 17);
 			this.encodeStatus.Text = "Ready";
 			// 
+			// backgroundWorker1
+			// 
+			this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
+			// 
 			// FlacSquisher
 			// 
 			this.AcceptButton = this.encodeButton;
@@ -446,6 +451,7 @@
 
 
 		private System.Windows.Forms.ToolStripStatusLabel encodeStatus;
+		private System.ComponentModel.BackgroundWorker backgroundWorker1;
 
 	}
 }

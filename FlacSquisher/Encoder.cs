@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
+using System.Threading;
+using System.ComponentModel;
 
 namespace FlacSquisher {
-	class Encoder {
+	class Encoder : BackgroundWorker {
 
 		string flacPath;
 		string outputPath;
@@ -12,17 +14,21 @@ namespace FlacSquisher {
 		string options;
 		int threadCount;
 		FlacSquisher flacsquisher;
+		ReaderWriterLock rwl;
+		Queue<FileInfo> jobQueue;
 
 		public Encoder() {
 		}
 
-		public Encoder(string flacdir, string outputdir, int encoder, string cmdopts, int threads, FlacSquisher fs) {
+		public Encoder(string flacdir, string outputdir, int encoder, string cmdopts, int threads, FlacSquisher fs, ReaderWriterLock rwlock, Queue<FileInfo> jq) {
 			flacPath = flacdir;
 			outputPath = outputdir;
 			encoderChoice = encoder;
 			options = cmdopts;
 			threadCount = threads;
 			flacsquisher = fs;
+			rwl = rwlock;
+			jobQueue = jq;
 		}
 
 		public void encoderThread() {
