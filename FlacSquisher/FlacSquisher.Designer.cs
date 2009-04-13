@@ -54,7 +54,8 @@
 			this.statusStrip = new System.Windows.Forms.StatusStrip();
 			this.encodeProgress = new System.Windows.Forms.ToolStripProgressBar();
 			this.encodeStatus = new System.Windows.Forms.ToolStripStatusLabel();
-			this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+			this.recursingBackgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+			this.encodingBackgroundWorker2 = new System.ComponentModel.BackgroundWorker();
 			this.menuStrip1.SuspendLayout();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
@@ -375,9 +376,15 @@
 			this.encodeStatus.Size = new System.Drawing.Size(38, 17);
 			this.encodeStatus.Text = "Ready";
 			// 
-			// backgroundWorker1
+			// recursingBackgroundWorker1
 			// 
-			this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
+			this.recursingBackgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.recursingBackgroundWorker1_DoWork);
+			this.recursingBackgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.recursingBackgroundWorker1_RunWorkerCompleted);
+			// 
+			// encodingBackgroundWorker2
+			// 
+			this.encodingBackgroundWorker2.WorkerReportsProgress = true;
+			this.encodingBackgroundWorker2.DoWork += new System.ComponentModel.DoWorkEventHandler(this.encodingBackgroundWorker2_DoWork);
 			// 
 			// FlacSquisher
 			// 
@@ -451,7 +458,8 @@
 
 
 		private System.Windows.Forms.ToolStripStatusLabel encodeStatus;
-		private System.ComponentModel.BackgroundWorker backgroundWorker1;
+		private System.ComponentModel.BackgroundWorker recursingBackgroundWorker1;
+		private System.ComponentModel.BackgroundWorker encodingBackgroundWorker2;
 
 	}
 }

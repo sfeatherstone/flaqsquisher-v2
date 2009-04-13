@@ -13,22 +13,22 @@ namespace FlacSquisher {
 		int encoderChoice;
 		string options;
 		int threadCount;
-		FlacSquisher flacsquisher;
 		ReaderWriterLock rwl;
 		Queue<FileInfo> jobQueue;
+		BackgroundWorker bw;
 
 		public Encoder() {
 		}
 
-		public Encoder(string flacdir, string outputdir, int encoder, string cmdopts, int threads, FlacSquisher fs, ReaderWriterLock rwlock, Queue<FileInfo> jq) {
+		public Encoder(string flacdir, string outputdir, int encoder, string cmdopts, int threads, ReaderWriterLock rwlock, Queue<FileInfo> jq, BackgroundWorker backworker) {
 			flacPath = flacdir;
 			outputPath = outputdir;
 			encoderChoice = encoder;
 			options = cmdopts;
 			threadCount = threads;
-			flacsquisher = fs;
 			rwl = rwlock;
 			jobQueue = jq;
+			bw = backworker;
 		}
 
 		public void encoderThread() {
@@ -40,7 +40,7 @@ namespace FlacSquisher {
 					encodeFile(fi);
 
 					// increment "value" on the progress bar by one
-					flacsquisher.updateProgressBar();
+					bw.ReportProgress(20, jobQueue.Count);
 				}
 			}
 			catch(Exception ex) {
@@ -59,7 +59,7 @@ namespace FlacSquisher {
 						}
 					}
 					else {
-						flacsquisher.enableEncodeButton();
+						//flacsquisher.enableEncodeButton();
 					}
 				}
 				catch(Exception ex) {
@@ -72,7 +72,7 @@ namespace FlacSquisher {
 		}
 
 		public void encodeFile(FileInfo fi) {
-
+			System.Windows.Forms.MessageBox.Show(fi.ToString());
 		}
 
 	}

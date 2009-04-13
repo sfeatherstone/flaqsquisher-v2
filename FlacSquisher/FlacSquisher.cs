@@ -242,31 +242,7 @@ namespace FlacSquisher {
 
 			FolderRecurser recurser = new FolderRecurser(flacDir.Text, ignoreList.ToArray(), copyFiles, rwl);
 
-			this.backgroundWorker1.RunWorkerAsync(recurser);
-
-			while(this.backgroundWorker1.IsBusy) {
-				if(this.backgroundWorker1.CancellationPending) {
-					break;
-				}
-				Thread.Sleep(50);
-			}
-
-			// find files in "source" directory
-			Queue<FileInfo> jobQueue = recurser.getJobQueue();
-
-			encodeStatus.Text = "Setting up threads...";
-
-			// if source directory is empty, don't bother making encoding threads
-			if(jobQueue.Count < 1) {
-				MessageBox.Show("The Flac directory is empty.", "Empty source directory", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly, false);
-				encodeStatus.Text = "Ready";
-				encodeProgress.Visible = false;
-				encodeButton.Enabled = true;
-				return;
-			}
-
 			int threads;
-
 			rwl.AcquireWriterLock(-1); // -1 == wait forever for the lock
 			try {
 				threads = (int)threadCounter.Value; // Value is a System::Decimal, hence the cast
@@ -275,32 +251,19 @@ namespace FlacSquisher {
 				rwl.ReleaseWriterLock();
 			}
 
-			// set up encoder
-			Encoder encoderManager = new Encoder(flacDir.Text, outputDir.Text,
-				encoder.SelectedIndex, cliParams.Text, threads, this, rwl, jobQueue);
+			List<object> args = new List<object>();
+
+			args.Add(recurser);
+			args.Add(flacDir.Text);
+			args.Add(outputDir.Text);
+			args.Add(encoder.SelectedIndex);
+			args.Add(cliParams.Text);
+			args.Add(threads);
+			args.Add(rwl);
+
+			this.recursingBackgroundWorker1.RunWorkerAsync(args);
+
 			
-			
-
-			// update status bar
-			encodeStatus.Text = "Starting to encode...";
-			encodeProgress.Value = 0;
-			encodeProgress.Maximum = jobQueue.Count;
-			encodeProgress.Style = ProgressBarStyle.Continuous;
-
-			List<Thread> threadList = new List<Thread>();
-
-			// set up 'n' threads for processing the queue
-			for(int i = 0; i < threadCounter.Value; i++) {
-				Thread encoderThread = new Thread(
-					new ThreadStart(encoderManager.encoderThread));
-				encoderThread.IsBackground = true;
-				threadList.Add(encoderThread);
-
-				// Start the thread.
-				encoderThread.Start();
-
-			}
-
 		}
 
 		public void updateProgressBar() {
@@ -320,7 +283,7 @@ namespace FlacSquisher {
 			encodeButton.Enabled = true;
 		}
 
-		private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e) {
+		private void recursingBackgroundWorker1_DoWork(object sender, DoWorkEventArgs e) {
 			/*FolderRecurser recurser = new FolderRecurser(flacDir.Text, ignoreList.ToArray(), copyFiles, rwl);
 
 			Thread recurserThread = new Thread(new ThreadStart(recurser.recurseDirs));
@@ -333,14 +296,46 @@ namespace FlacSquisher {
 
 			BackgroundWorker bw = sender as BackgroundWorker;
 
-			FolderRecurser recurser = (FolderRecurser)e.Argument;
+			List<object> list = (List<object>) e.Argument;
+
+			FolderRecurser recurser = (FolderRecurser)list[0];
 
 			recurser.recurseDirs();
 
 			e.Result = recurser.getJobQueue();
 
-			bw.WorkerSupportsCancellation = true;
-			bw.CancelAsync();
+			
+		}
+
+		private void recursingBackgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
+			this.encodingBackgroundWorker2.RunWorkerAsync(e.Result);
+		}
+
+		private void encodingBackgroundWorker2_DoWork(object sender, DoWorkEventArgs e) {
+			BackgroundWorker bw = sender as BackgroundWorker;
+
+			// find files in "source" directory
+			Queue<FileInfo> jobQueue = (Queue<FileInfo>)e.Argument;
+
+			encodeStatus.Text = "Setting up threads...";
+
+			// set up encoder
+			Encoder encoderManager = new Encoder(flacDir.Text, outputDir.Text,
+				encoder.SelectedIndex, cliParams.Text, threads, rwl, jobQueue, bw);
+
+			List<Thread> threadList = new List<Thread>();
+
+			// set up 'n' threads for processing the queue
+			for(int i = 0; i < threadCounter.Value; i++) {
+				Thread encoderThread = new Thread(
+					new ThreadStart(encoderManager.encoderThread));
+				encoderThread.IsBackground = true;
+				threadList.Add(encoderThread);
+
+				// Start the thread.
+				encoderThread.Start();
+
+			}
 		}
 
 	}
