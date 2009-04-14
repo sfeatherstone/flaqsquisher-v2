@@ -63,6 +63,7 @@
     <Compile Include="Encoder.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="EncoderParams.cs" />
     <Compile Include="FlacSquisher.cs">
       <SubType>Form</SubType>
     </Compile>

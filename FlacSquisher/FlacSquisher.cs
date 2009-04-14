@@ -251,19 +251,17 @@ namespace FlacSquisher {
 				rwl.ReleaseWriterLock();
 			}
 
-			List<object> args = new List<object>();
+			EncoderParams args = new EncoderParams();
 
-			args.Add(recurser);
-			args.Add(flacDir.Text);
-			args.Add(outputDir.Text);
-			args.Add(encoder.SelectedIndex);
-			args.Add(cliParams.Text);
-			args.Add(threads);
-			args.Add(rwl);
+			args.Recurser = recurser;
+			args.FlacDir = flacDir.Text;
+			args.OutputDir = outputDir.Text;
+			args.SelectedEncoder = encoder.SelectedIndex;
+			args.CliParams = cliParams.Text;
+			args.Threads = threads;
+			args.Rwl = rwl;
 
 			this.recursingBackgroundWorker1.RunWorkerAsync(args);
-
-			
 		}
 
 		public void updateProgressBar() {
@@ -302,9 +300,9 @@ namespace FlacSquisher {
 
 			recurser.recurseDirs();
 
-			e.Result = recurser.getJobQueue();
+			list.Add(recurser.getJobQueue());
 
-			
+			e.Result = list;
 		}
 
 		private void recursingBackgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
@@ -313,6 +311,8 @@ namespace FlacSquisher {
 
 		private void encodingBackgroundWorker2_DoWork(object sender, DoWorkEventArgs e) {
 			BackgroundWorker bw = sender as BackgroundWorker;
+
+			List<object> list = (List<object>) e.Argument;
 
 			// find files in "source" directory
 			Queue<FileInfo> jobQueue = (Queue<FileInfo>)e.Argument;
@@ -326,7 +326,7 @@ namespace FlacSquisher {
 			List<Thread> threadList = new List<Thread>();
 
 			// set up 'n' threads for processing the queue
-			for(int i = 0; i < threadCounter.Value; i++) {
+			for(int i = 0; i < ; i++) {
 				Thread encoderThread = new Thread(
 					new ThreadStart(encoderManager.encoderThread));
 				encoderThread.IsBackground = true;
