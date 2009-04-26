@@ -27,6 +27,8 @@ using System.Text;
 using System.Windows.Forms;
 using System.Threading;
 using System.IO;
+using System.Net;
+using System.Diagnostics;
 
 namespace FlacSquisher {
 	public partial class FlacSquisher : Form {
@@ -210,9 +212,9 @@ namespace FlacSquisher {
 
 			// set up status bar
 			encodeStatus.Text = "Recursing directories...";
-			encodeProgress.Width = 200;
+			encodeProgress.Width = 400;
 			encodeProgress.Value = 0;
-			encodeProgress.MarqueeAnimationSpeed = 35;
+			encodeProgress.MarqueeAnimationSpeed = 50;
 			encodeProgress.Style = ProgressBarStyle.Marquee;
 			encodeProgress.Visible = true;
 
@@ -260,18 +262,23 @@ namespace FlacSquisher {
 			args.CliParams = cliParams.Text;
 			args.Threads = threads;
 			args.Rwl = rwl;
+			args.CopyFiles = copyFiles;
+			args.FlacExe = flacexe;
+			args.OggPath = oggPath;
+			args.LamePath = lamePath;
+			args.MetaflacPath = metaflacPath;
+			args.Hidewin = hidewin;
+			args.IgnoreList = ignoreList;
 
 			this.recursingBackgroundWorker1.RunWorkerAsync(args);
 		}
 
 		public void updateProgressBar() {
 			// min() included for bounds checking, lock needed to prevent count being "short"
-			rwl.AcquireWriterLock(-1);
 			encodeProgress.Value = Math.Min((encodeProgress.Value + 1), encodeProgress.Maximum);
 
 			// update the status text
 			encodeStatus.Text = encodeProgress.Value + " of " + encodeProgress.Maximum + " files completed";
-			rwl.ReleaseWriterLock();
 
 			// refresh the window, just in case
 			this.Refresh();
@@ -294,15 +301,23 @@ namespace FlacSquisher {
 
 			BackgroundWorker bw = sender as BackgroundWorker;
 
-			List<object> list = (List<object>) e.Argument;
+			EncoderParams args = (EncoderParams) e.Argument;
 
-			FolderRecurser recurser = (FolderRecurser)list[0];
+			FolderRecurser recurser = args.Recurser;
 
 			recurser.recurseDirs();
 
-			list.Add(recurser.getJobQueue());
+			args.JobQueue = recurser.getJobQueue();
 
-			e.Result = list;
+			e.Result = args;
+
+			bw.ReportProgress(20, args.JobQueue.Count);
+		}
+
+		private void recursingBackgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e) {
+			encodeProgress.Style = ProgressBarStyle.Continuous;
+			encodeProgress.Value = 0;
+			encodeProgress.Maximum = (int)e.UserState;
 		}
 
 		private void recursingBackgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
@@ -312,21 +327,17 @@ namespace FlacSquisher {
 		private void encodingBackgroundWorker2_DoWork(object sender, DoWorkEventArgs e) {
 			BackgroundWorker bw = sender as BackgroundWorker;
 
-			List<object> list = (List<object>) e.Argument;
+			EncoderParams args = (EncoderParams) e.Argument;
 
-			// find files in "source" directory
-			Queue<FileInfo> jobQueue = (Queue<FileInfo>)e.Argument;
-
-			encodeStatus.Text = "Setting up threads...";
+			//encodeStatus.Text = "Setting up threads...";
 
 			// set up encoder
-			Encoder encoderManager = new Encoder(flacDir.Text, outputDir.Text,
-				encoder.SelectedIndex, cliParams.Text, threads, rwl, jobQueue, bw);
+			Encoder encoderManager = new Encoder(args, bw);
 
 			List<Thread> threadList = new List<Thread>();
 
 			// set up 'n' threads for processing the queue
-			for(int i = 0; i < ; i++) {
+			for(int i = 0; i < args.Threads; i++) {
 				Thread encoderThread = new Thread(
 					new ThreadStart(encoderManager.encoderThread));
 				encoderThread.IsBackground = true;
@@ -336,7 +347,79 @@ namespace FlacSquisher {
 				encoderThread.Start();
 
 			}
+
+			for(int i = 0; i < args.Threads; i++) {
+				threadList[i].Join();
+			}
 		}
+
+		private void encodingBackgroundWorker2_ProgressChanged(object sender, ProgressChangedEventArgs e) {
+			int queuesize = (int)e.UserState;
+			int progress = encodeProgress.Maximum - queuesize;
+
+			encodeProgress.Style = ProgressBarStyle.Continuous;
+
+			// max() included so that the progress never goes backwards
+			progress = Math.Max(encodeProgress.Value, progress);
+			// min() included for bounds checking, lock needed to prevent count being "short"
+			encodeProgress.Value = Math.Min((progress), encodeProgress.Maximum);
+
+			// update the status text
+			encodeStatus.Text = "" + encodeProgress.Value + " of " + encodeProgress.Maximum + " files completed";
+
+			// refresh the window, just in case
+			this.Refresh();
+		}
+
+		private void encodingBackgroundWorker2_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
+			encodeButton.Enabled = true;
+		}
+
+		// send them to the project forums page
+		private void onlineHelpToolStripMenuItem_Click(object sender, EventArgs e) {
+			System.Diagnostics.Process.Start("http://sourceforge.net/forum/?group_id=232925");
+		}
+
+		// this method checks with the project webserver to see if there's a newer version
+		private void checkForUpdatesToolStripMenuItem_Click(object sender, EventArgs e) {
+			try {
+				WebRequest req = WebRequest.Create("http://flacsquisher.sourceforge.net/latest.txt");
+				WebResponse resp = req.GetResponse();
+				StreamReader sr = new StreamReader(resp.GetResponseStream(), Encoding.UTF8);
+				String newest = sr.ReadLine();
+				int firstperiod = newest.IndexOf(".");
+				int lastperiod = newest.LastIndexOf(".");
+				int newmajor = int.Parse(newest.Substring(0, firstperiod));
+				int newminor = int.Parse(newest.Substring(firstperiod + 1, lastperiod - firstperiod - 1));
+				int newrev = int.Parse(newest.Substring(lastperiod + 1));
+				if(majorv < newmajor || (majorv == newmajor && minorv < newminor) || (majorv == newmajor && minorv == newminor && rev < newrev)) {
+					UpdateResults ur = new UpdateResults();
+					ur.Results = "Version " + newest + " is available." + Environment.NewLine + "Would you like to download it?";
+					ur.ShowDialog();
+					if(ur.DialogResult == DialogResult.Yes) {
+						Process.Start("http://sourceforge.net/project/showfiles.php?group_id=232925");
+					}
+				}
+				else {
+					MessageBox.Show("No newer version is available");
+				}
+			}
+			catch(Exception ex) {
+				UpdateResults ur = new UpdateResults();
+				ur.Results = "Error contacting the server to check for updates." + Environment.NewLine + "Would you like to check manually on the web?";
+				ur.ShowDialog();
+				if(ur.DialogResult == DialogResult.Yes) {
+					Process.Start("http://sourceforge.net/project/showfiles.php?group_id=232925");
+				}
+			}
+		}
+
+		private void aboutToolStripMenuItem_Click(object sender, EventArgs e) {
+			AboutWindow aw = new AboutWindow();
+			aw.ShowDialog();
+		}
+
+		
 
 	}
 }

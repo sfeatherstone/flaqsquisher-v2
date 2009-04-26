@@ -122,18 +122,21 @@
 			this.onlineHelpToolStripMenuItem.Name = "onlineHelpToolStripMenuItem";
 			this.onlineHelpToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
 			this.onlineHelpToolStripMenuItem.Text = "Online Help";
+			this.onlineHelpToolStripMenuItem.Click += new System.EventHandler(this.onlineHelpToolStripMenuItem_Click);
 			// 
 			// checkForUpdatesToolStripMenuItem
 			// 
 			this.checkForUpdatesToolStripMenuItem.Name = "checkForUpdatesToolStripMenuItem";
 			this.checkForUpdatesToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
 			this.checkForUpdatesToolStripMenuItem.Text = "Check for Updates";
+			this.checkForUpdatesToolStripMenuItem.Click += new System.EventHandler(this.checkForUpdatesToolStripMenuItem_Click);
 			// 
 			// aboutToolStripMenuItem
 			// 
 			this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
 			this.aboutToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
 			this.aboutToolStripMenuItem.Text = "About...";
+			this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
 			// 
 			// flacDirLabel
 			// 
@@ -378,13 +381,17 @@
 			// 
 			// recursingBackgroundWorker1
 			// 
+			this.recursingBackgroundWorker1.WorkerReportsProgress = true;
 			this.recursingBackgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.recursingBackgroundWorker1_DoWork);
 			this.recursingBackgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.recursingBackgroundWorker1_RunWorkerCompleted);
+			this.recursingBackgroundWorker1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.recursingBackgroundWorker1_ProgressChanged);
 			// 
 			// encodingBackgroundWorker2
 			// 
 			this.encodingBackgroundWorker2.WorkerReportsProgress = true;
 			this.encodingBackgroundWorker2.DoWork += new System.ComponentModel.DoWorkEventHandler(this.encodingBackgroundWorker2_DoWork);
+			this.encodingBackgroundWorker2.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.encodingBackgroundWorker2_RunWorkerCompleted);
+			this.encodingBackgroundWorker2.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.encodingBackgroundWorker2_ProgressChanged);
 			// 
 			// FlacSquisher
 			// 

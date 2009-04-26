@@ -71,6 +71,7 @@
       <DependentUpon>FlacSquisher.cs</DependentUpon>
     </Compile>
     <Compile Include="FolderRecurser.cs" />
+    <Compile Include="OptionsSet.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="AboutWindow.resx">
@@ -86,6 +87,10 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="UpdateResults.resx">
+      <DependentUpon>UpdateResults.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
@@ -99,6 +104,12 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="UpdateResults.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UpdateResults.Designer.cs">
+      <DependentUpon>UpdateResults.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

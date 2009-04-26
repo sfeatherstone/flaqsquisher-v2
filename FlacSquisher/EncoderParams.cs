@@ -7,9 +7,6 @@ using System.IO;
 namespace FlacSquisher {
 	class EncoderParams {
 
-		EncoderParams() {
-		}
-
 		FolderRecurser recurser;
 		public FolderRecurser Recurser {
 			get {
@@ -87,6 +84,76 @@ namespace FlacSquisher {
 			}
 			set {
 				jobQueue = value;
+			}
+		}
+
+		bool copyFiles;
+		public bool CopyFiles {
+			get {
+				return copyFiles;
+			}
+			set {
+				copyFiles = value;
+			}
+		}
+
+		string flacexe;
+		public string FlacExe {
+			get {
+				return flacexe;
+			}
+			set {
+				flacexe = value;
+			}
+		}
+
+		string oggPath;
+		public string OggPath {
+			get {
+				return oggPath;
+			}
+			set {
+				oggPath = value;
+			}
+		}
+
+		string lamePath;
+		public string LamePath {
+			get {
+				return lamePath;
+			}
+			set {
+				lamePath = value;
+			}
+		}
+
+		string metaflacPath;
+		public string MetaflacPath {
+			get {
+				return metaflacPath;
+			}
+			set {
+				metaflacPath = value;
+			}
+		}
+
+		bool hidewin;
+		public bool Hidewin {
+			get {
+				return hidewin;
+			}
+			set {
+				hidewin = value;
+			}
+		}
+
+		List<String> ignoreList;
+		public List<String> IgnoreList {
+			get {
+				return ignoreList;
+			}
+			set {
+				ignoreList = value;
 			}
 		}
 	}
