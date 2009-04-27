@@ -63,6 +63,12 @@
     <Compile Include="Encoder.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="EncoderOptions.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EncoderOptions.Designer.cs">
+      <DependentUpon>EncoderOptions.cs</DependentUpon>
+    </Compile>
     <Compile Include="EncoderParams.cs" />
     <Compile Include="FlacSquisher.cs">
       <SubType>Form</SubType>
@@ -72,14 +78,28 @@
     </Compile>
     <Compile Include="FolderRecurser.cs" />
     <Compile Include="OptionsSet.cs" />
+    <Compile Include="OptionsWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OptionsWindow.Designer.cs">
+      <DependentUpon>OptionsWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="AboutWindow.resx">
       <DependentUpon>AboutWindow.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="EncoderOptions.resx">
+      <DependentUpon>EncoderOptions.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="FlacSquisher.resx">
       <DependentUpon>FlacSquisher.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OptionsWindow.resx">
+      <DependentUpon>OptionsWindow.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">

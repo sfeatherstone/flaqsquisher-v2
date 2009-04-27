@@ -416,7 +416,12 @@ namespace FlacSquisher {
 
 		private void aboutToolStripMenuItem_Click(object sender, EventArgs e) {
 			AboutWindow aw = new AboutWindow();
-			aw.ShowDialog();
+			aw.ShowDialog(this);
+		}
+
+		private void optionsToolStripMenuItem_Click(object sender, EventArgs e) {
+			OptionsWindow ow = new OptionsWindow();
+			ow.ShowDialog(this);
 		}
 
 		
