@@ -109,7 +109,10 @@ namespace FlacSquisher {
 
 		private void encodingOptionsButton_Click(object sender, EventArgs e) {
 			EncoderOptions encoderOpts = new EncoderOptions();
-			encoderOpts.ShowDialog(this);
+			if(encoderOpts.ShowDialog(this) != DialogResult.Cancel){
+				encoderStr = encoderOpts.toString();
+				encoderChoice = encoderOpts.Encoder;
+			}
 		}
 
 		public string FileExts {
