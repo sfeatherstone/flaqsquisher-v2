@@ -329,6 +329,8 @@ namespace FlacSquisher {
 
 			EncoderParams args = (EncoderParams) e.Argument;
 
+			bw.ReportProgress(0, args.JobQueue.Count);
+
 			//encodeStatus.Text = "Setting up threads...";
 
 			// set up encoder
@@ -421,7 +423,30 @@ namespace FlacSquisher {
 
 		private void optionsToolStripMenuItem_Click(object sender, EventArgs e) {
 			OptionsWindow ow = new OptionsWindow();
+			ow.OggPath = oggPath;
+			ow.LamePath = lamePath;
+			ow.FlacPath = flacexe;
+			ow.MetaflacPath = metaflacPath;
+			ow.Hidewin = hidewin;
+			ow.FileExts = ignoredExts;
+			ow.CopyFiles = copyFiles;
 			ow.ShowDialog(this);
+
+			if(ow.DialogResult == DialogResult.OK) {
+				oggPath = ow.OggPath;
+				lamePath = ow.LamePath;
+				flacexe = ow.FlacPath;
+				metaflacPath = ow.MetaflacPath;
+				hidewin = ow.Hidewin;
+				ignoredExts = ow.FileExts;
+				copyFiles = ow.CopyFiles;
+				if(ow.EncoderChoice != -1) {
+					encoder.SelectedIndex = ow.EncoderChoice;
+				}
+				if(!String.IsNullOrEmpty(ow.EncoderStr)) {
+					cliParams.Text = ow.EncoderStr;
+				}
+			}
 		}
 
 		

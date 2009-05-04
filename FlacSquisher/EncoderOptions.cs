@@ -12,7 +12,7 @@ namespace FlacSquisher {
 			InitializeComponent();
 		}
 
-		public OptionsSet OptionsSet {
+		public OptionsSet OptionSet {
 			get {
 				OptionsSet os = new OptionsSet();
 				os.Encoder = tabControl1.SelectedIndex;
@@ -49,6 +49,61 @@ namespace FlacSquisher {
 				}
 				vbrMode.SelectedIndex = os.VbrMode;
 			}
+		}
+
+		public int Encoder {
+			get {
+				return tabControl1.SelectedIndex;
+			}
+		}
+
+		public String toString() {
+			String str;
+			if(tabControl1.SelectedIndex == 0) {
+				str = "-q " + oggQual.Value;
+			}
+			else { // using LAME
+				str = "";
+				if(qualityRadio.Checked) { // vbr
+					double qual = 10.0 - (qualBar.Value * 0.1);
+					str += "-V" + qual + " ";
+					if(vbrMode.SelectedIndex == 1) { // "standard" instead of "fast"
+						str += " --vbr-old ";
+					}
+				}
+				else {
+					if(cbr.Checked) {
+						str += " -b " + bitrateBar.Value + " ";
+					}
+					else { // abr
+						str += " --abr " + bitrateBar.Value + " ";
+					}
+				}
+				if(mono.Checked) {
+					str += " -a ";
+				}
+			}
+			return str;
+		}
+
+		private void okButton_Click(object sender, EventArgs e) {
+			this.DialogResult = DialogResult.OK;
+			this.Close();
+		}
+
+		private void EncoderOptions_Load(object sender, EventArgs e) {
+			// change MP3 options so nothing's enabled that shouldn't be
+			qualityRadio.Checked = true;
+			bitrateBox.Enabled = false;
+			vbrMode.SelectedIndex = 0;
+		}
+
+		private void bitrateRadio_CheckedChanged(object sender, EventArgs e) {
+			bitrateBox.Enabled = bitrateRadio.Checked;
+		}
+
+		private void qualityRadio_CheckedChanged(object sender, EventArgs e) {
+			lameQualBox.Enabled = qualityRadio.Checked;
 		}
 	}
 }

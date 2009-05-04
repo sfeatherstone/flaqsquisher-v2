@@ -103,6 +103,7 @@
 			this.okButton.TabIndex = 1;
 			this.okButton.Text = "OK";
 			this.okButton.UseVisualStyleBackColor = true;
+			this.okButton.Click += new System.EventHandler(this.okButton_Click);
 			// 
 			// tabControl1
 			// 
@@ -434,6 +435,7 @@
 			this.qualityRadio.TabStop = true;
 			this.qualityRadio.Text = "Quality";
 			this.qualityRadio.UseVisualStyleBackColor = true;
+			this.qualityRadio.CheckedChanged += new System.EventHandler(this.qualityRadio_CheckedChanged);
 			// 
 			// bitrateRadio
 			// 
@@ -445,9 +447,11 @@
 			this.bitrateRadio.TabStop = true;
 			this.bitrateRadio.Text = "Bitrate";
 			this.bitrateRadio.UseVisualStyleBackColor = true;
+			this.bitrateRadio.CheckedChanged += new System.EventHandler(this.bitrateRadio_CheckedChanged);
 			// 
 			// EncoderOptions
 			// 
+			this.AcceptButton = this.okButton;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.cancelButton;
@@ -455,6 +459,7 @@
 			this.Controls.Add(this.panel1);
 			this.Name = "EncoderOptions";
 			this.Text = "EncoderOptions";
+			this.Load += new System.EventHandler(this.EncoderOptions_Load);
 			this.panel1.ResumeLayout(false);
 			this.tabControl1.ResumeLayout(false);
 			this.tabPage1.ResumeLayout(false);

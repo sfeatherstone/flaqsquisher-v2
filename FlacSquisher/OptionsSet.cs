@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace FlacSquisher {
-	class OptionsSet {
+	public class OptionsSet {
 		int encoder;
 		public int Encoder {
 			get {
