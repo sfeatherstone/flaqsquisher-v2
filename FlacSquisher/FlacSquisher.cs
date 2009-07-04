@@ -94,7 +94,7 @@ namespace FlacSquisher {
 
 			majorv = 0;
 			minorv = 5;
-			rev = 0;
+			rev = 1;
 
 			this.Text = "FlacSquisher v" + majorv + "." + minorv + "." + rev;
 

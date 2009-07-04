@@ -95,6 +95,7 @@ namespace FlacSquisher {
 						}
 
 						File.Copy(fi.FullName, destPath);
+						return;
 					}
 				}
 			}
