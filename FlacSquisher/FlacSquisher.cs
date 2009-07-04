@@ -357,13 +357,15 @@ namespace FlacSquisher {
 
 		private void encodingBackgroundWorker2_ProgressChanged(object sender, ProgressChangedEventArgs e) {
 			int queuesize = (int)e.UserState;
-			int progress = encodeProgress.Maximum - queuesize;
+			// need to account for files the other threads are currently encoding
+			int otherThreads = (int)threadCounter.Value - 1;
+			int progress = encodeProgress.Maximum - (queuesize + otherThreads);
 
 			encodeProgress.Style = ProgressBarStyle.Continuous;
 
 			// max() included so that the progress never goes backwards
 			progress = Math.Max(encodeProgress.Value, progress);
-			// min() included for bounds checking, lock needed to prevent count being "short"
+			// min() included for bounds checking
 			encodeProgress.Value = Math.Min((progress), encodeProgress.Maximum);
 
 			// update the status text
@@ -374,6 +376,11 @@ namespace FlacSquisher {
 		}
 
 		private void encodingBackgroundWorker2_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
+			encodeProgress.Value = encodeProgress.Maximum;
+
+			// update the status text
+			encodeStatus.Text = "" + encodeProgress.Value + " of " + encodeProgress.Maximum + " files completed";
+			
 			encodeButton.Enabled = true;
 		}
 
