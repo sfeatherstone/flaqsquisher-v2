@@ -126,10 +126,20 @@ namespace FlacSquisher {
 
 		public bool CopyFiles {
 			get {
-				return copyFiles.Checked;
+				//return copyFiles.Checked;
+				return false;
 			}
 			set {
-				copyFiles.Checked = value;
+				//copyFiles.Checked = value;
+			}
+		}
+
+		public string CopyExts {
+			get {
+				return copyExts.Text;
+			}
+			set {
+				copyExts.Text = value;
 			}
 		}
 
@@ -137,7 +147,9 @@ namespace FlacSquisher {
 			oggLocation.Text = Path.GetDirectoryName(Application.ExecutablePath) + Path.DirectorySeparatorChar + "oggenc.exe";
 			flacLocation.Text = Path.GetDirectoryName(Application.ExecutablePath) + Path.DirectorySeparatorChar + "flac.exe";
 			lameLocation.Text = Path.GetDirectoryName(Application.ExecutablePath) + Path.DirectorySeparatorChar + "lame.exe";
-			fileExts.Text = "txt jpg log pdf png";
+			metaflacLocation.Text = Path.GetDirectoryName(Application.ExecutablePath) + Path.DirectorySeparatorChar + "metaflac.exe";
+			fileExts.Text = "txt log pdf";
+			copyExts.Text = "jpg png";
 		}
 
 		private void okButton_Click(object sender, EventArgs e) {

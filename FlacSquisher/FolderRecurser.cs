@@ -56,7 +56,7 @@ namespace FlacSquisher {
 						foundExt = true;
 					}
 				}
-				if(!foundExt || copyFiles) {
+				if(!foundExt) {
 					//if(!fi->Name->ToLower()->EndsWith("flac")){
 					//MessageBox::Show(fi->Name);
 					//}

@@ -57,5 +57,8 @@ Update threading code so it won't crash in Mono
 ----Beta 0.5.0 released----
 Fixed progress bar label showing inaccurate progress
 When copying files, don't try to encode them as well
-Updated OggEnc binary to libVorbis 1.2.2 (oggenc is still v2.85): FLAC ReplayGain values will be transferred to Ogg output files, and multichannel behavior is improved
+Updated OggEnc binary to libVorbis 1.2.2 (oggenc is still v2.85): multichannel behavior is improved
 ----Beta 0.5.1 released----
+Seperated extension ignore functionality from extension copy functionality
+Updated OggEnc binary to libVorbis 1.2.3: Fixes issue with FLAC tags not transferring to Ogg Vorbis files
+----Beta 0.5.2 released----

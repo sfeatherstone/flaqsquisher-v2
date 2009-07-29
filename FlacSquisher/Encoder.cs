@@ -20,6 +20,7 @@ namespace FlacSquisher {
 		bool copyFiles;
 		bool hidewin;
 		List<String> ignoreList;
+		List<String> copyList;
 
 		string flacexe;
 		string oggPath;
@@ -39,6 +40,7 @@ namespace FlacSquisher {
 			jobQueue = args.JobQueue;
 			copyFiles = args.CopyFiles;
 			ignoreList = args.IgnoreList;
+			copyList = args.CopyList;
 			hidewin = args.Hidewin;
 
 			flacexe = args.FlacExe;
@@ -80,23 +82,21 @@ namespace FlacSquisher {
 
 			string dirSeperator = System.IO.Path.DirectorySeparatorChar.ToString();
 
-			// copy the ignored files, if the settings allow it
-			if(copyFiles) {
-				foreach(String ext in ignoreList) {
-					if(fi.Name.ToLower().EndsWith(ext.ToLower())) {
-						destPath = outputPath + partialPath + dirSeperator + fi.Name;
+			// copy the files with the extensions that we want to copy
+			foreach(String ext in copyList) {
+				if(fi.Name.ToLower().EndsWith(ext.ToLower())) {
+					destPath = outputPath + partialPath + dirSeperator + fi.Name;
 
-						if(File.Exists(destPath)) {
-							return;
-						}
-
-						if(!Directory.Exists(outputPath + partialPath)) {
-							Directory.CreateDirectory(outputPath + partialPath);
-						}
-
-						File.Copy(fi.FullName, destPath);
+					if(File.Exists(destPath)) {
 						return;
 					}
+
+					if(!Directory.Exists(outputPath + partialPath)) {
+						Directory.CreateDirectory(outputPath + partialPath);
+					}
+
+					File.Copy(fi.FullName, destPath);
+					return;
 				}
 			}
 

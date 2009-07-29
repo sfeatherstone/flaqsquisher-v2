@@ -156,5 +156,15 @@ namespace FlacSquisher {
 				ignoreList = value;
 			}
 		}
+
+		List<String> copyList;
+		public List<String> CopyList {
+			get {
+				return copyList;
+			}
+			set {
+				copyList = value;
+			}
+		}
 	}
 }

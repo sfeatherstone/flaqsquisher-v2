@@ -41,6 +41,7 @@ namespace FlacSquisher {
 		String lamePath;
 		String metaflacPath;
 		String ignoredExts;
+		String copiedExts;
 		bool hidewin;
 
 		String flacPath;
@@ -55,6 +56,7 @@ namespace FlacSquisher {
 
 		ReaderWriterLock rwl = new ReaderWriterLock();
 		List<String> ignoreList;
+		List<String> copyList;
 
 		public FlacSquisher() {
 			InitializeComponent();
@@ -79,13 +81,17 @@ namespace FlacSquisher {
 				flacexe = System.IO.Path.GetDirectoryName(Application.ExecutablePath) + dirSeparator + "flac.exe";
 				lamePath = System.IO.Path.GetDirectoryName(Application.ExecutablePath) + dirSeparator + "lame.exe";
 				metaflacPath = System.IO.Path.GetDirectoryName(Application.ExecutablePath) + dirSeparator + "metaflac.exe";
-				ignoredExts = "txt jpg log pdf png";
+				ignoredExts = "txt log pdf";
+				copiedExts = "jpg png";
 				hidewin = true;
 			}
 
 			// needed for users who upgrade from an old version that didn't have metaflac
 			if(String.IsNullOrEmpty(metaflacPath)) {
 				metaflacPath = System.IO.Path.GetDirectoryName(Application.ExecutablePath) + dirSeparator + "metaflac.exe";
+			}
+			if(copiedExts == null) {
+				copiedExts = "";
 			}
 
 			encodeStatus.Text = "Ready";
@@ -94,7 +100,7 @@ namespace FlacSquisher {
 
 			majorv = 0;
 			minorv = 5;
-			rev = 1;
+			rev = 2;
 
 			this.Text = "FlacSquisher v" + majorv + "." + minorv + "." + rev;
 
@@ -115,6 +121,7 @@ namespace FlacSquisher {
 				ignoredExts = sr.ReadLine();
 				copyFiles = bool.Parse(sr.ReadLine());
 				metaflacPath = sr.ReadLine();
+				copiedExts = sr.ReadLine();
 				sr.Close();
 				return 1;
 			}
@@ -139,7 +146,8 @@ namespace FlacSquisher {
 				sw.Write(hidewin.ToString() + Environment.NewLine);
 				sw.Write(ignoredExts.ToString() + Environment.NewLine);
 				sw.Write(copyFiles.ToString() + Environment.NewLine);
-				sw.Write(metaflacPath);
+				sw.Write(metaflacPath + Environment.NewLine);
+				sw.Write(copiedExts.ToString());
 				sw.Close();
 				return 1;
 			}
@@ -219,10 +227,16 @@ namespace FlacSquisher {
 			encodeProgress.Visible = true;
 
 			ignoreList = new List<String>();
-
 			String[] split = ignoredExts.Split(' ');
+			if(!String.IsNullOrEmpty(ignoredExts)) {
+				ignoreList.AddRange(split);
+			}
 
-			ignoreList.AddRange(split);
+			copyList = new List<String>();
+			split = copiedExts.Split(' ');
+			if(!String.IsNullOrEmpty(copiedExts)) {
+				copyList.AddRange(split);
+			}
 
 			// make sure source and destination directories are given
 			if(String.IsNullOrEmpty(flacDir.Text) || String.IsNullOrEmpty(outputDir.Text)) {
@@ -269,6 +283,7 @@ namespace FlacSquisher {
 			args.MetaflacPath = metaflacPath;
 			args.Hidewin = hidewin;
 			args.IgnoreList = ignoreList;
+			args.CopyList = copyList;
 
 			this.recursingBackgroundWorker1.RunWorkerAsync(args);
 		}
@@ -437,6 +452,7 @@ namespace FlacSquisher {
 			ow.Hidewin = hidewin;
 			ow.FileExts = ignoredExts;
 			ow.CopyFiles = copyFiles;
+			ow.CopyExts = copiedExts;
 			ow.ShowDialog(this);
 
 			if(ow.DialogResult == DialogResult.OK) {
@@ -447,6 +463,7 @@ namespace FlacSquisher {
 				hidewin = ow.Hidewin;
 				ignoredExts = ow.FileExts;
 				copyFiles = ow.CopyFiles;
+				copiedExts = ow.CopyExts;
 				if(ow.EncoderChoice != -1) {
 					encoder.SelectedIndex = ow.EncoderChoice;
 				}
