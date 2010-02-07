@@ -62,3 +62,11 @@ Updated OggEnc binary to libVorbis 1.2.2 (oggenc is still v2.85): multichannel b
 Seperated extension ignore functionality from extension copy functionality
 Updated OggEnc binary to libVorbis 1.2.3: Fixes issue with FLAC tags not transferring to Ogg Vorbis files
 ----Beta 0.5.2 released----
+Import album artist and disc number tags during LAME encoding
+Import embedded album art during LAME encoding
+Hard-code correct information into the About window
+Add cue to the list of extensions ignored by default
+Changed OggEnc binary to generic compile; some users may be using old processors
+Updated LAME binary to version compiled with Intel Compiler 11.1.046
+Updated FLAC binary to version compiled with Intel Compiler 11.1.046
+----Beta 0.5.3 released----

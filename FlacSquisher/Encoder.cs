@@ -79,6 +79,7 @@ namespace FlacSquisher {
 			// get the portion of the path that will be shared by the source and destination paths
 			string partialPath = fi.DirectoryName.Remove(0, flacPath.Length);
 			string destPath;
+			string coverArtPath = "";
 
 			string dirSeperator = System.IO.Path.DirectorySeparatorChar.ToString();
 
@@ -150,6 +151,24 @@ namespace FlacSquisher {
 				sOut.Close();
 				metaflacProcess.Close();
 
+				// export the cover art to a randomly named file (to make sure we don't overwrite another file)
+				uint seedNum = (uint) new Random().Next();
+				coverArtPath = partialPath + dirSeperator + seedNum;
+
+				metaflacPsi = new ProcessStartInfo();
+				metaflacPsi.FileName = metaflacPath;
+				metaflacPsi.Arguments = "--no-utf8-convert --export-picture-to=\"" +
+					coverArtPath + "\" \"" + fi.FullName + "\"";
+				metaflacPsi.WindowStyle = ProcessWindowStyle.Hidden;
+				metaflacPsi.CreateNoWindow = true;
+				metaflacPsi.UseShellExecute = false;
+
+				metaflacProcess = Process.Start(metaflacPsi);
+				metaflacProcess.Start();
+				metaflacProcess.WaitForExit();
+				sOut.Close();
+				metaflacProcess.Close();
+
 				// Use regexs to extract information from the monolithic text file
 				// First grab the artist name
 				Regex regex = new Regex("comment\\[\\d+\\]: ARTIST=(.*)");
@@ -196,15 +215,40 @@ namespace FlacSquisher {
 					genre = match.Groups[1].Value;
 					genre = genre.Trim();
 				}
+				regex = new Regex("comment\\[\\d+\\]: ALBUM ARTIST=(.*)");
+				match = regex.Match(output);
+				String albumArtist = "";
+				if(match.Success) {
+					albumArtist = match.Groups[1].Value;
+					albumArtist = albumArtist.Trim();
+				}
+				regex = new Regex("comment\\[\\d+\\]: DISCNUMBER=(.*)");
+				match = regex.Match(output);
+				String discnum = "";
+				if(match.Success) {
+					discnum = match.Groups[1].Value;
+					discnum = discnum.Trim();
+				}
 
 				// Add the tagging options to the command line
 				String lameopts = options + " --ta \"" + artist + "\" --tt \"" + title + "\" --tl \"" + album + "\" --ty \""
-					+ date + "\" --tn \"" + tracknum + "\" --tg \"" + genre + "\" --add-id3v2 --ignore-tag-errors ";
+					+ date + "\" --tn \"" + tracknum + "\" --tg \"" + genre + "\" ";
+				if(albumArtist.Length > 0) {
+					lameopts += "--tv \"ALBUM ARTIST\"=\"" + albumArtist + "\" ";
+				}
+				if(discnum.Length > 0) {
+					lameopts += "--tv \"DISCNUMBER\"=\"" + discnum + "\" ";
+				}
+				if(File.Exists(coverArtPath)) {
+					lameopts += "--ti \"" + coverArtPath + "\" ";
+				}
+				lameopts += "--add-id3v2 --ignore-tag-errors ";
 
 				// LAME cannot take Flac files as input as of 3.97, so we need to decode using flac.exe first
 				psi.FileName = "cmd.exe";
 				// "/s" switch allows us to give the arguments of "/c" inside quotes
-				psi.Arguments = "/s /c \"\"" + flacexe + "\" -dc \"" + fi.FullName + "\" | \"" + lamePath + "\" " + lameopts + " --verbose - \"" + destPath + "\"\"";
+				psi.Arguments = "/s /c \"\"" + flacexe + "\" -dc \"" + fi.FullName + "\" | \"" + lamePath + "\" " +
+					lameopts + " --verbose - \"" + destPath + "\"\"";
 			}
 
 			if(hidewin) {
@@ -225,6 +269,11 @@ namespace FlacSquisher {
 
 			// close the process handle when it's exited
 			p.Close();
+
+			// if we imported the cover art, delete the temp file
+			if(File.Exists(coverArtPath)) {
+				File.Delete(coverArtPath);
+			}
 		}
 
 	}

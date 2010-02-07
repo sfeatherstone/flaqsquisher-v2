@@ -2,7 +2,7 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "FlacSquisher"
-!define PRODUCT_VERSION "0.5.2"
+!define PRODUCT_VERSION "0.5.3"
 !define PRODUCT_PUBLISHER "FlacSquisher"
 !define PRODUCT_WEB_SITE "http://sourceforge.net/projects/flacsquisher/"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\FlacSquisher.exe"
@@ -27,6 +27,14 @@
 !insertmacro MUI_PAGE_INSTFILES
 ; Finish page
 !define MUI_FINISHPAGE_RUN "$INSTDIR\FlacSquisher.exe"
+Function finishpageaction
+CreateShortcut "$DESKTOP\FlacSquisher.lnk" "$INSTDIR\FlacSquisher.exe"
+FunctionEnd
+!define MUI_FINISHPAGE_SHOWREADME ""
+!define MUI_FINISHPAGE_SHOWREADME_NOTCHECKED
+!define MUI_FINISHPAGE_SHOWREADME_TEXT "Create Desktop Shortcut"
+!define MUI_FINISHPAGE_SHOWREADME_FUNCTION finishpageaction
+
 !insertmacro MUI_PAGE_FINISH
 
 ; Uninstaller pages
@@ -49,7 +57,6 @@ Section "MainSection" SEC01
   SetOverwrite ifnewer
   CreateDirectory "$SMPROGRAMS\FlacSquisher"
   CreateShortCut "$SMPROGRAMS\FlacSquisher\FlacSquisher.lnk" "$INSTDIR\FlacSquisher.exe"
-  CreateShortCut "$DESKTOP\FlacSquisher.lnk" "$INSTDIR\FlacSquisher.exe"
   File "C:\Documents and Settings\Mike\My Documents\Visual Studio 2008\Projects\FlacSquisher\FlacSquisher\bin\Release\metaflac.exe"
   File "C:\Documents and Settings\Mike\My Documents\Visual Studio 2008\Projects\FlacSquisher\FlacSquisher\bin\Release\libsndfile-1.dll"
   File "C:\Documents and Settings\Mike\My Documents\Visual Studio 2008\Projects\FlacSquisher\FlacSquisher\bin\Release\lame.exe"
