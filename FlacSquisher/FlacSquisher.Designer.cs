@@ -104,7 +104,7 @@
 			// optionsToolStripMenuItem
 			// 
 			this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-			this.optionsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.optionsToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
 			this.optionsToolStripMenuItem.Text = "Options...";
 			this.optionsToolStripMenuItem.Click += new System.EventHandler(this.optionsToolStripMenuItem_Click);
 			// 
@@ -371,7 +371,7 @@
 			// 
 			this.encodeProgress.MarqueeAnimationSpeed = 10;
 			this.encodeProgress.Name = "encodeProgress";
-			this.encodeProgress.Size = new System.Drawing.Size(100, 16);
+			this.encodeProgress.Size = new System.Drawing.Size(175, 16);
 			this.encodeProgress.Visible = false;
 			// 
 			// encodeStatus

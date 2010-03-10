@@ -70,3 +70,7 @@ Changed OggEnc binary to generic compile; some users may be using old processors
 Updated LAME binary to version compiled with Intel Compiler 11.1.046
 Updated FLAC binary to version compiled with Intel Compiler 11.1.046
 ----Beta 0.5.3 released----
+Moved config file from the executable directory to the AppData directory, to avoid permissions issues
+Expanded the size of the progress bar
+Updated LAME binary to 3.98.3
+----Beta 0.5.4 released----

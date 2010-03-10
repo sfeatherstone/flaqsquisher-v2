@@ -36,6 +36,7 @@ namespace FlacSquisher {
 		public string dirSeparator = System.IO.Path.DirectorySeparatorChar.ToString();
 
 		String settingsPath;
+		String newSettingsPath;
 		String oggPath;
 		String flacexe;
 		String lamePath;
@@ -71,9 +72,12 @@ namespace FlacSquisher {
 			encoder.Items.Add("Lame (mp3)");
 
 			settingsPath = System.IO.Path.GetDirectoryName(Application.ExecutablePath) + dirSeparator + "config.cfg";
+			newSettingsPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + dirSeparator + "FlacSquisher" + dirSeparator + "config.cfg";
 
-			// check if config file exists
-			if(File.Exists(settingsPath)) {
+			if(File.Exists(newSettingsPath)) { // check if new config file exists
+				loadSettingsFile(newSettingsPath);
+			}
+			else if(File.Exists(settingsPath)) { // if the new file doesn't exist, we've just upgraded from an old version
 				loadSettingsFile(settingsPath);
 			}
 			else { // load defaults (in executable's directory) if config file does not exist
@@ -100,7 +104,7 @@ namespace FlacSquisher {
 
 			majorv = 0;
 			minorv = 5;
-			rev = 3;
+			rev = 4;
 
 			this.Text = "FlacSquisher v" + majorv + "." + minorv + "." + rev;
 
@@ -135,6 +139,9 @@ namespace FlacSquisher {
 		// called on formClose to save settings from this session
 		private int saveSettingsFile(String filePath) {
 			try {
+				if(!File.Exists(filePath)) { // now that we use %AppData%\FlacSquisher, make sure it exists
+					Directory.CreateDirectory(filePath.Remove(filePath.LastIndexOf("config.cfg")));
+				}
 				StreamWriter sw = new StreamWriter(filePath, false, Encoding.UTF8); // false is "Don't append"
 				sw.Write(flacDir.Text + Environment.NewLine);
 				sw.Write(outputDir.Text + Environment.NewLine);
@@ -169,7 +176,7 @@ namespace FlacSquisher {
 		}
 
 		private void FlacSquisher_FormClosed(object sender, FormClosedEventArgs e) {
-			saveSettingsFile(settingsPath);
+			saveSettingsFile(newSettingsPath);
 		}
 
 		// chooses "source" directory containing Flac files to be recoded
@@ -220,7 +227,7 @@ namespace FlacSquisher {
 
 			// set up status bar
 			encodeStatus.Text = "Recursing directories...";
-			encodeProgress.Width = 400;
+			encodeProgress.Width = 175; // this seems to change the width in Mono, but only the Designer seems to affect the width in Windows
 			encodeProgress.Value = 0;
 			encodeProgress.MarqueeAnimationSpeed = 50;
 			encodeProgress.Style = ProgressBarStyle.Marquee;
