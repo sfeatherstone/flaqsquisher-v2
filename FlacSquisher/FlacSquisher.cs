@@ -102,9 +102,15 @@ namespace FlacSquisher {
 			encodeProgress.Width = 1;
 			encodeProgress.Visible = false;
 
-			majorv = 0;
-			minorv = 5;
-			rev = 4;
+			//majorv = 0;
+			//minorv = 5;
+			//rev = 5;
+			
+			// we only use 3 fields of the version number, unlike .NET's built-in
+			// 4 fields, so for "rev" we use the "build" field
+			majorv = System.Reflection.Assembly.GetAssembly(this.GetType()).GetName().Version.Major;
+			minorv = System.Reflection.Assembly.GetAssembly(this.GetType()).GetName().Version.Minor;
+			rev = System.Reflection.Assembly.GetAssembly(this.GetType()).GetName().Version.Build;
 
 			this.Text = "FlacSquisher v" + majorv + "." + minorv + "." + rev;
 
@@ -446,7 +452,7 @@ namespace FlacSquisher {
 		}
 
 		private void aboutToolStripMenuItem_Click(object sender, EventArgs e) {
-			AboutWindow aw = new AboutWindow();
+			AboutWindow aw = new AboutWindow(String.Format("{0}.{1}.{2}", majorv, minorv, rev));
 			aw.ShowDialog(this);
 		}
 

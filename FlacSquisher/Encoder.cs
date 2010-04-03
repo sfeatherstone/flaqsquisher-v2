@@ -234,10 +234,10 @@ namespace FlacSquisher {
 				String lameopts = options + " --ta \"" + artist + "\" --tt \"" + title + "\" --tl \"" + album + "\" --ty \""
 					+ date + "\" --tn \"" + tracknum + "\" --tg \"" + genre + "\" ";
 				if(albumArtist.Length > 0) {
-					lameopts += "--tv \"ALBUM ARTIST\"=\"" + albumArtist + "\" ";
+					//lameopts += "--tv \"TXXX=ALBUM ARTIST=" + albumArtist + "\" ";
 				}
 				if(discnum.Length > 0) {
-					lameopts += "--tv \"DISCNUMBER\"=\"" + discnum + "\" ";
+					//lameopts += "--tv \"TXXX=DISCNUMBER=" + discnum + "\" ";
 				}
 				if(File.Exists(coverArtPath)) {
 					lameopts += "--ti \"" + coverArtPath + "\" ";
