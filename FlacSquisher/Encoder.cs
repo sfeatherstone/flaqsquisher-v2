@@ -245,10 +245,20 @@ namespace FlacSquisher {
 				lameopts += "--add-id3v2 --ignore-tag-errors ";
 
 				// LAME cannot take Flac files as input as of 3.97, so we need to decode using flac.exe first
-				psi.FileName = "cmd.exe";
+				//psi.FileName = "cmd.exe";
 				// "/s" switch allows us to give the arguments of "/c" inside quotes
-				psi.Arguments = "/s /c \"\"" + flacexe + "\" -dc \"" + fi.FullName + "\" | \"" + lamePath + "\" " +
-					lameopts + " --verbose - \"" + destPath + "\"\"";
+				//psi.Arguments = "/s /c \"\"" + flacexe + "\" -dc \"" + fi.FullName + "\" | \"" + lamePath + "\" " +
+				//	lameopts + " --verbose - \"" + destPath + "\"\"";
+
+				// Since FlacSquisher 0.3.2, we've included the libsndfile .dll with Lame, so we can use
+				// Flac files as input. (we didn't implement this until 0.5.6)
+				psi.FileName = lamePath;
+				// TODO: only include "--verbose" if we show the cmd windows
+				psi.Arguments = lameopts;
+				if(hidewin) {
+					psi.Arguments += " --verbose";
+				}
+				psi.Arguments += " \"" + fi.FullName + "\" \"" + destPath + "\"";
 			}
 
 			if(hidewin) {
