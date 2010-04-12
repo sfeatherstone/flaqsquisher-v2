@@ -105,7 +105,20 @@ namespace FlacSquisher {
 			//majorv = 0;
 			//minorv = 5;
 			//rev = 5;
-			
+
+			System.Reflection.Assembly assem = System.Reflection.Assembly.GetExecutingAssembly();
+			string[] resNames = assem.GetManifestResourceNames();
+
+			foreach(string assemName in resNames) {
+				if(assemName.EndsWith("ico")) {
+					Stream iconStream = assem.GetManifestResourceStream(assemName);
+					this.Icon = new Icon(iconStream);
+					iconStream.Close();
+					break;
+				}
+			}
+
+
 			// we only use 3 fields of the version number, unlike .NET's built-in
 			// 4 fields, so for "rev" we use the "build" field
 			majorv = System.Reflection.Assembly.GetAssembly(this.GetType()).GetName().Version.Major;
