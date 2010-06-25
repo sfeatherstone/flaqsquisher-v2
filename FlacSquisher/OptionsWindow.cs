@@ -107,6 +107,15 @@ namespace FlacSquisher {
 			}
 		}
 
+		public bool ThirdPartyLame {
+			get {
+				return thirdPartyLameBox.Checked;
+			}
+			set {
+				thirdPartyLameBox.Checked = value;
+			}
+		}
+
 		private void encodingOptionsButton_Click(object sender, EventArgs e) {
 			EncoderOptions encoderOpts = new EncoderOptions();
 			if(encoderOpts.ShowDialog(this) != DialogResult.Cancel){
@@ -148,7 +157,9 @@ namespace FlacSquisher {
 			flacLocation.Text = Path.GetDirectoryName(Application.ExecutablePath) + Path.DirectorySeparatorChar + "flac.exe";
 			lameLocation.Text = Path.GetDirectoryName(Application.ExecutablePath) + Path.DirectorySeparatorChar + "lame.exe";
 			metaflacLocation.Text = Path.GetDirectoryName(Application.ExecutablePath) + Path.DirectorySeparatorChar + "metaflac.exe";
-			fileExts.Text = "txt log pdf";
+			hidewin.Checked = true;
+			thirdPartyLameBox.Checked = false;
+			fileExts.Text = "txt log pdf cue";
 			copyExts.Text = "jpg png";
 		}
 

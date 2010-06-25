@@ -49,6 +49,7 @@ namespace FlacSquisher {
 		String outputPath;
 		String options;
 		bool copyFiles;
+		bool thirdPartyLame;
 		int encoderChoice;
 
 		int majorv;
@@ -88,6 +89,7 @@ namespace FlacSquisher {
 				ignoredExts = "txt log pdf cue";
 				copiedExts = "jpg png";
 				hidewin = true;
+				thirdPartyLame = false;
 			}
 
 			// needed for users who upgrade from an old version that didn't have metaflac
@@ -145,6 +147,7 @@ namespace FlacSquisher {
 				copyFiles = bool.Parse(sr.ReadLine());
 				metaflacPath = sr.ReadLine();
 				copiedExts = sr.ReadLine();
+				thirdPartyLame = bool.Parse(sr.ReadLine());
 				sr.Close();
 				return 1;
 			}
@@ -173,7 +176,8 @@ namespace FlacSquisher {
 				sw.Write(ignoredExts.ToString() + Environment.NewLine);
 				sw.Write(copyFiles.ToString() + Environment.NewLine);
 				sw.Write(metaflacPath + Environment.NewLine);
-				sw.Write(copiedExts.ToString());
+				sw.Write(copiedExts.ToString() + Environment.NewLine);
+				sw.Write(thirdPartyLame.ToString());
 				sw.Close();
 				return 1;
 			}
@@ -310,6 +314,7 @@ namespace FlacSquisher {
 			args.Hidewin = hidewin;
 			args.IgnoreList = ignoreList;
 			args.CopyList = copyList;
+			args.ThirdPartyLame = thirdPartyLame;
 
 			this.recursingBackgroundWorker1.RunWorkerAsync(args);
 		}
@@ -476,6 +481,7 @@ namespace FlacSquisher {
 			ow.FlacPath = flacexe;
 			ow.MetaflacPath = metaflacPath;
 			ow.Hidewin = hidewin;
+			ow.ThirdPartyLame = thirdPartyLame;
 			ow.FileExts = ignoredExts;
 			ow.CopyFiles = copyFiles;
 			ow.CopyExts = copiedExts;
@@ -487,6 +493,7 @@ namespace FlacSquisher {
 				flacexe = ow.FlacPath;
 				metaflacPath = ow.MetaflacPath;
 				hidewin = ow.Hidewin;
+				thirdPartyLame = ow.ThirdPartyLame;
 				ignoredExts = ow.FileExts;
 				copyFiles = ow.CopyFiles;
 				copiedExts = ow.CopyExts;

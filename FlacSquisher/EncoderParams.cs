@@ -166,5 +166,15 @@ namespace FlacSquisher {
 				copyList = value;
 			}
 		}
+
+		bool thirdPartyLame;
+		public bool ThirdPartyLame {
+			get {
+				return thirdPartyLame;
+			}
+			set {
+				thirdPartyLame = value;
+			}
+		}
 	}
 }
