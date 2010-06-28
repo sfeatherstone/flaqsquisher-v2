@@ -135,19 +135,32 @@ namespace FlacSquisher {
 		private int loadSettingsFile(String filePath) {
 			try {
 				StreamReader sr = new StreamReader(filePath, Encoding.UTF8);
+				string temp;
 				flacDir.Text = sr.ReadLine();
 				outputDir.Text = sr.ReadLine();
-				encoder.SelectedIndex = Convert.ToInt32(sr.ReadLine());
+				temp = sr.ReadLine();
+				if(!string.IsNullOrEmpty(temp)) {
+					encoder.SelectedIndex = Convert.ToInt32(temp);
+				}
 				oggPath = sr.ReadLine();
 				flacexe = sr.ReadLine();
 				lamePath = sr.ReadLine();
 				cliParams.Text = sr.ReadLine();
-				hidewin = bool.Parse(sr.ReadLine());
+				temp = sr.ReadLine();
+				if(!string.IsNullOrEmpty(temp)) {
+					hidewin = bool.Parse(temp);
+				}
 				ignoredExts = sr.ReadLine();
-				copyFiles = bool.Parse(sr.ReadLine());
+				temp = sr.ReadLine();
+				if(!string.IsNullOrEmpty(temp)) {
+					copyFiles = bool.Parse(temp);
+				}
 				metaflacPath = sr.ReadLine();
 				copiedExts = sr.ReadLine();
-				thirdPartyLame = bool.Parse(sr.ReadLine());
+				temp = sr.ReadLine();
+				if(!string.IsNullOrEmpty(temp)) {
+					thirdPartyLame = bool.Parse(sr.ReadLine());
+				}
 				sr.Close();
 				return 1;
 			}

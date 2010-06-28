@@ -236,18 +236,19 @@ namespace FlacSquisher {
 				// Add the tagging options to the command line
 				String lameopts = options + " --ta \"" + artist + "\" --tt \"" + title + "\" --tl \"" + album + "\" --ty \""
 					+ date + "\" --tn \"" + tracknum + "\" --tg \"" + genre + "\" ";
-				if(albumArtist.Length > 0) {
-					//lameopts += "--tv \"TXXX=ALBUM ARTIST=" + albumArtist + "\" ";
-				}
-				if(discnum.Length > 0) {
-					//lameopts += "--tv \"TXXX=DISCNUMBER=" + discnum + "\" ";
-				}
+
 				if(File.Exists(coverArtPath)) {
 					lameopts += "--ti \"" + coverArtPath + "\" ";
 				}
 				lameopts += "--add-id3v2 --ignore-tag-errors ";
 
 				if(thirdPartyLame) {
+					if(albumArtist.Length > 0) {
+						lameopts += "--tv \"TXXX=ALBUM ARTIST=" + albumArtist + "\" ";
+					}
+					if(discnum.Length > 0) {
+						lameopts += "--tv \"TXXX=DISCNUMBER=" + discnum + "\" ";
+					}
 					// LAME cannot take Flac files as input as of 3.97, so we need to decode using flac.exe first
 					psi.FileName = "cmd.exe";
 					// "/s" switch allows us to give the arguments of "/c" inside quotes

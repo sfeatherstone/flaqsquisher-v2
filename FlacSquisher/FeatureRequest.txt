@@ -1,15 +1,3 @@
-FlacSquisher Requested/Planned Features
-=============
-Single cmd window per core
-Offload thread to new class
-    http://msdn.microsoft.com/en-us/library/ts553s52.aspx
-Create "Console" window containing a log of activities
-Use Win32 API instead of VC++ runtimes
-Add icons
-Set "Encoder Options" settings based on current selected encoder and CLI options
-
-Done
-=============
 Ogg Vorbis encoding using OggEnc2
 Multi-threaded/multi-process encoding
 MP3 encoding using LAME
@@ -88,3 +76,7 @@ Updated icon by removing the 255x255 icons, and removing the lower bitrates, to 
 Add support for third-party lame executables by adding an option to the Options window
 Update options loaded upon pressing of the Defaults button
 Updated OggEnc binary to 2.87 using libvorbis 1.3.1
+----Beta 0.5.7 released----
+Fix settings loader to work properly with Windows Vista/Windows 7 when upgrading from a previous version
+Add Album Artist and Disc Number tags if we're using a third-party Lame executable
+----Beta 0.5.8 released----
