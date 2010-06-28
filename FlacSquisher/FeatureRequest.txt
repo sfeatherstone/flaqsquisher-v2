@@ -80,3 +80,5 @@ Updated OggEnc binary to 2.87 using libvorbis 1.3.1
 Fix settings loader to work properly with Windows Vista/Windows 7 when upgrading from a previous version
 Add Album Artist and Disc Number tags if we're using a third-party Lame executable
 ----Beta 0.5.8 released----
+Fix error on reading the configuration file
+----Beta 0.5.9 released----

@@ -159,7 +159,7 @@ namespace FlacSquisher {
 				copiedExts = sr.ReadLine();
 				temp = sr.ReadLine();
 				if(!string.IsNullOrEmpty(temp)) {
-					thirdPartyLame = bool.Parse(sr.ReadLine());
+					thirdPartyLame = bool.Parse(temp);
 				}
 				sr.Close();
 				return 1;
