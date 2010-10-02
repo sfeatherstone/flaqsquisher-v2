@@ -156,7 +156,7 @@ namespace FlacSquisher {
 
 				// export the cover art to a randomly named file (to make sure we don't overwrite another file)
 				uint seedNum = (uint) new Random().Next();
-				coverArtPath = partialPath + dirSeperator + seedNum;
+				coverArtPath = outputPath + partialPath + dirSeperator + seedNum;
 
 				metaflacPsi = new ProcessStartInfo();
 				metaflacPsi.FileName = metaflacPath;
@@ -253,7 +253,7 @@ namespace FlacSquisher {
 					psi.FileName = "cmd.exe";
 					// "/s" switch allows us to give the arguments of "/c" inside quotes
 					psi.Arguments = "/s /c \"\"" + flacexe + "\" -dc \"" + fi.FullName + "\" | \"" + lamePath + "\" " +
-						lameopts + " --verbose - \"" + destPath + "\"\"";
+						lameopts + " - \"" + destPath + "\"\"";
 				}
 				else {
 					// Since FlacSquisher 0.3.2, we've included the libsndfile .dll with Lame, so we can use
@@ -261,9 +261,6 @@ namespace FlacSquisher {
 					psi.FileName = lamePath;
 					// TODO: only include "--verbose" if we show the cmd windows
 					psi.Arguments = lameopts;
-					if(hidewin) {
-						psi.Arguments += " --verbose";
-					}
 					psi.Arguments += " \"" + fi.FullName + "\" \"" + destPath + "\"";
 				}
 			}
