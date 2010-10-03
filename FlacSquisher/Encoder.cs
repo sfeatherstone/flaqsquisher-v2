@@ -238,7 +238,12 @@ namespace FlacSquisher {
 					+ date + "\" --tn \"" + tracknum + "\" --tg \"" + genre + "\" ";
 
 				if(File.Exists(coverArtPath)) {
-					lameopts += "--ti \"" + coverArtPath + "\" ";
+					FileStream coverArtFile = File.OpenRead(coverArtPath);
+					long length = coverArtFile.Length;
+					if(length < 128 * 1024) { // LAME will fail if we attempt to give it album art larger than 128KB
+						lameopts += "--ti \"" + coverArtPath + "\" ";
+					}
+					coverArtFile.Close();
 				}
 				lameopts += "--add-id3v2 --ignore-tag-errors ";
 
@@ -280,6 +285,10 @@ namespace FlacSquisher {
 
 			// don't set a timeout, cause encoding could take a long time, depending on CPU speed, load, and file length
 			p.WaitForExit();
+
+			if(p.ExitCode != 0) {
+				// TODO: output the error text to our console window
+			}
 
 			// close the process handle when it's exited
 			p.Close();
