@@ -56,6 +56,7 @@
 			this.encodeStatus = new System.Windows.Forms.ToolStripStatusLabel();
 			this.recursingBackgroundWorker1 = new System.ComponentModel.BackgroundWorker();
 			this.encodingBackgroundWorker2 = new System.ComponentModel.BackgroundWorker();
+			this.consoleWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip1.SuspendLayout();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
@@ -96,6 +97,7 @@
 			// toolsToolStripMenuItem
 			// 
 			this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.consoleWindowToolStripMenuItem,
             this.optionsToolStripMenuItem});
 			this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
 			this.toolsToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
@@ -104,7 +106,7 @@
 			// optionsToolStripMenuItem
 			// 
 			this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-			this.optionsToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+			this.optionsToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
 			this.optionsToolStripMenuItem.Text = "Options...";
 			this.optionsToolStripMenuItem.Click += new System.EventHandler(this.optionsToolStripMenuItem_Click);
 			// 
@@ -394,6 +396,13 @@
 			this.encodingBackgroundWorker2.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.encodingBackgroundWorker2_RunWorkerCompleted);
 			this.encodingBackgroundWorker2.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.encodingBackgroundWorker2_ProgressChanged);
 			// 
+			// consoleWindowToolStripMenuItem
+			// 
+			this.consoleWindowToolStripMenuItem.Name = "consoleWindowToolStripMenuItem";
+			this.consoleWindowToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+			this.consoleWindowToolStripMenuItem.Text = "Console Window...";
+			this.consoleWindowToolStripMenuItem.Click += new System.EventHandler(this.consoleWindowToolStripMenuItem_Click);
+			// 
 			// FlacSquisher
 			// 
 			this.AcceptButton = this.encodeButton;
@@ -468,6 +477,7 @@
 		private System.Windows.Forms.ToolStripStatusLabel encodeStatus;
 		private System.ComponentModel.BackgroundWorker recursingBackgroundWorker1;
 		private System.ComponentModel.BackgroundWorker encodingBackgroundWorker2;
+		private System.Windows.Forms.ToolStripMenuItem consoleWindowToolStripMenuItem;
 
 	}
 }

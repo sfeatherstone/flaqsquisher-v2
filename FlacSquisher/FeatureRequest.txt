@@ -86,3 +86,6 @@ Fix path used for album art temporary file
 Remove --verbose from default command line options for LAME
 Make first official release of Windows 7 build
 ----Beta 0.5.10 released----
+Avoid a LAME error by refraining from passing an image file larger than 128KB to LAME
+----Beta 0.5.11 released----
+Implemented a console window to show the error messages that come from the encoders

@@ -176,5 +176,15 @@ namespace FlacSquisher {
 				thirdPartyLame = value;
 			}
 		}
+
+		string consoleText;
+		public string ConsoleText {
+			get {
+				return consoleText;
+			}
+			set {
+				consoleText = value;
+			}
+		}
 	}
 }

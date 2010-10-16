@@ -21,6 +21,7 @@ namespace FlacSquisher {
 		bool hidewin;
 		List<String> ignoreList;
 		List<String> copyList;
+		string consoleText;
 
 		string flacexe;
 		string oggPath;
@@ -28,6 +29,8 @@ namespace FlacSquisher {
 		string metaflacPath;
 
 		bool thirdPartyLame;
+
+		private static object lockObject = new object();
 
 		public Encoder() {
 		}
@@ -45,6 +48,7 @@ namespace FlacSquisher {
 			copyList = args.CopyList;
 			hidewin = args.Hidewin;
 			thirdPartyLame = args.ThirdPartyLame;
+			consoleText = args.ConsoleText;
 
 			flacexe = args.FlacExe;
 			oggPath = args.OggPath;
@@ -59,13 +63,17 @@ namespace FlacSquisher {
 				FileInfo fi;
 				// goes until the queue is empty
 				while(jobQueue.Count > 0) {
-					lock(jobQueue) {
+					//lock(jobQueue) {
+					lock(lockObject) {
 						fi = jobQueue.Dequeue();
 					}
+					consoleText = "";
 					encodeFile(fi);
 
+					EncoderResults results = new EncoderResults(consoleText, jobQueue.Count);
+
 					// increment "value" on the progress bar by one
-					bw.ReportProgress(20, jobQueue.Count);
+					bw.ReportProgress(20, results);
 				}
 			}
 			catch(Exception ex) {
@@ -279,15 +287,22 @@ namespace FlacSquisher {
 				psi.CreateNoWindow = false;
 			}
 
+			psi.RedirectStandardError = true;
+			psi.UseShellExecute = false;	
+
 			//psi.UseShellExecute = false;
 			System.Diagnostics.Process p = System.Diagnostics.Process.Start(psi);
 
+			StreamReader sError = p.StandardError;
+			String errorString = sError.ReadToEnd();
 
 			// don't set a timeout, cause encoding could take a long time, depending on CPU speed, load, and file length
 			p.WaitForExit();
 
+			sError.Close();
+
 			if(p.ExitCode != 0) {
-				// TODO: output the error text to our console window
+				consoleText = "Encoder error: " + fi.FullName + ": " + errorString + Environment.NewLine;
 			}
 
 			// close the process handle when it's exited

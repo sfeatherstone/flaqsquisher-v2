@@ -60,6 +60,8 @@ namespace FlacSquisher {
 		List<String> ignoreList;
 		List<String> copyList;
 
+		string consoleText;
+
 		public FlacSquisher() {
 			InitializeComponent();
 
@@ -328,6 +330,7 @@ namespace FlacSquisher {
 			args.IgnoreList = ignoreList;
 			args.CopyList = copyList;
 			args.ThirdPartyLame = thirdPartyLame;
+			args.ConsoleText = consoleText;
 
 			this.recursingBackgroundWorker1.RunWorkerAsync(args);
 		}
@@ -388,7 +391,8 @@ namespace FlacSquisher {
 
 			EncoderParams args = (EncoderParams) e.Argument;
 
-			bw.ReportProgress(0, args.JobQueue.Count);
+			EncoderResults results = new EncoderResults("", args.JobQueue.Count);
+			bw.ReportProgress(0, results);
 
 			//encodeStatus.Text = "Setting up threads...";
 
@@ -415,7 +419,10 @@ namespace FlacSquisher {
 		}
 
 		private void encodingBackgroundWorker2_ProgressChanged(object sender, ProgressChangedEventArgs e) {
-			int queuesize = (int)e.UserState;
+			EncoderResults results = (EncoderResults)e.UserState;
+			int queuesize = results.QueueCount;
+			consoleText += results.ConsoleText;
+
 			// need to account for files the other threads are currently encoding
 			int otherThreads = (int)threadCounter.Value - 1;
 			int progress = encodeProgress.Maximum - (queuesize + otherThreads);
@@ -441,6 +448,13 @@ namespace FlacSquisher {
 			encodeStatus.Text = "" + encodeProgress.Value + " of " + encodeProgress.Maximum + " files completed";
 			
 			encodeButton.Enabled = true;
+
+			if(!String.IsNullOrEmpty(consoleText)) {
+				ConsoleWindow consoleWin = new ConsoleWindow();
+				consoleWin.ConsoleText = consoleText;
+				consoleWin.ShowDialog(this);
+				consoleText = consoleWin.ConsoleText;
+			}
 		}
 
 		// send them to the project forums page
@@ -517,6 +531,13 @@ namespace FlacSquisher {
 					cliParams.Text = ow.EncoderStr;
 				}
 			}
+		}
+
+		private void consoleWindowToolStripMenuItem_Click(object sender, EventArgs e) {
+			ConsoleWindow consoleWin = new ConsoleWindow();
+			consoleWin.ConsoleText = consoleText;
+			consoleWin.ShowDialog(this);
+			consoleText = consoleWin.ConsoleText;
 		}
 
 		
