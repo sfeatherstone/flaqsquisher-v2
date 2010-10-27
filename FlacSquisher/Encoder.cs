@@ -92,6 +92,10 @@ namespace FlacSquisher {
 			string destPath;
 			string coverArtPath = "";
 
+			bool useTempFile = false; // temp files only used if we detect non-ASCII characters
+			string encoderSourceFile = fi.FullName;
+			string encoderDestFile;
+
 			string dirSeperator = System.IO.Path.DirectorySeparatorChar.ToString();
 
 			// copy the files with the extensions that we want to copy
@@ -134,6 +138,7 @@ namespace FlacSquisher {
 			if(!Directory.Exists(outputPath + partialPath)) {
 				Directory.CreateDirectory(outputPath + partialPath);
 			}
+			encoderDestFile = destPath;
 
 			// call different things on the command line, depending on which encoder is being used
 			ProcessStartInfo psi = new ProcessStartInfo();
@@ -144,10 +149,20 @@ namespace FlacSquisher {
 			}
 
 			else {
+				// LAME only has support for Extended ASCII, but to be safe we'll restrict it to printable ASCII
+				// If the filename contains non-printable-ASCII characters, use a temporary file
+				// http://stackoverflow.com/questions/1999566/string-filter-detect-non-ascii-signs
+				if(Regex.IsMatch(fi.FullName, @"[^\u0020-\u007E]", RegexOptions.None)) {
+					useTempFile = true;
+					encoderSourceFile = Path.GetTempFileName();
+					encoderDestFile = Path.GetTempFileName();
+					File.Copy(fi.FullName, encoderSourceFile, true);
+				}
+
 				// LAME does not automatically tag MP3s encoded from FLACs like OggEnc does, so we need to use Metaflac and LAME's tag options
 				ProcessStartInfo metaflacPsi = new ProcessStartInfo();
 				metaflacPsi.FileName = metaflacPath;
-				metaflacPsi.Arguments = "--list \"" + fi.FullName + "\"";
+				metaflacPsi.Arguments = "--list \"" + encoderSourceFile + "\"";
 				metaflacPsi.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
 				metaflacPsi.CreateNoWindow = true;
 				metaflacPsi.RedirectStandardOutput = true;
@@ -163,13 +178,14 @@ namespace FlacSquisher {
 				metaflacProcess.Close();
 
 				// export the cover art to a randomly named file (to make sure we don't overwrite another file)
-				uint seedNum = (uint) new Random().Next();
-				coverArtPath = outputPath + partialPath + dirSeperator + seedNum;
+				//uint seedNum = (uint) new Random().Next();
+				//coverArtPath = outputPath + partialPath + dirSeperator + seedNum;
+				coverArtPath = Path.GetTempFileName();
 
 				metaflacPsi = new ProcessStartInfo();
 				metaflacPsi.FileName = metaflacPath;
 				metaflacPsi.Arguments = "--no-utf8-convert --export-picture-to=\"" +
-					coverArtPath + "\" \"" + fi.FullName + "\"";
+					coverArtPath + "\" \"" + encoderSourceFile + "\"";
 				metaflacPsi.WindowStyle = ProcessWindowStyle.Hidden;
 				metaflacPsi.CreateNoWindow = true;
 				metaflacPsi.UseShellExecute = false;
@@ -248,7 +264,7 @@ namespace FlacSquisher {
 				if(File.Exists(coverArtPath)) {
 					FileStream coverArtFile = File.OpenRead(coverArtPath);
 					long length = coverArtFile.Length;
-					if(length < 128 * 1024) { // LAME will fail if we attempt to give it album art larger than 128KB
+					if(0 < length && length < 128 * 1024) { // LAME will fail if we attempt to give it album art larger than 128KB
 						lameopts += "--ti \"" + coverArtPath + "\" ";
 					}
 					coverArtFile.Close();
@@ -265,8 +281,8 @@ namespace FlacSquisher {
 					// LAME cannot take Flac files as input as of 3.97, so we need to decode using flac.exe first
 					psi.FileName = "cmd.exe";
 					// "/s" switch allows us to give the arguments of "/c" inside quotes
-					psi.Arguments = "/s /c \"\"" + flacexe + "\" -dc \"" + fi.FullName + "\" | \"" + lamePath + "\" " +
-						lameopts + " - \"" + destPath + "\"\"";
+					psi.Arguments = "/s /c \"\"" + flacexe + "\" -dc \"" + encoderSourceFile + "\" | \"" + lamePath + "\" " +
+						lameopts + " - \"" + encoderDestFile + "\"\"";
 				}
 				else {
 					// Since FlacSquisher 0.3.2, we've included the libsndfile .dll with Lame, so we can use
@@ -274,7 +290,7 @@ namespace FlacSquisher {
 					psi.FileName = lamePath;
 					// TODO: only include "--verbose" if we show the cmd windows
 					psi.Arguments = lameopts;
-					psi.Arguments += " \"" + fi.FullName + "\" \"" + destPath + "\"";
+					psi.Arguments += " \"" + encoderSourceFile + "\" \"" + encoderDestFile + "\"";
 				}
 			}
 
@@ -288,7 +304,7 @@ namespace FlacSquisher {
 			}
 
 			psi.RedirectStandardError = true;
-			psi.UseShellExecute = false;	
+			psi.UseShellExecute = false;
 
 			//psi.UseShellExecute = false;
 			System.Diagnostics.Process p = System.Diagnostics.Process.Start(psi);
@@ -311,6 +327,11 @@ namespace FlacSquisher {
 			// if we imported the cover art, delete the temp file
 			if(File.Exists(coverArtPath)) {
 				File.Delete(coverArtPath);
+			}
+
+			if(useTempFile) {
+				File.Move(encoderDestFile, destPath);
+				File.Delete(encoderSourceFile);
 			}
 		}
 
