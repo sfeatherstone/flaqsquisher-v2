@@ -3,7 +3,7 @@
 // the Flac files
 
 /*
-Copyright 2008 Michael Brown
+Copyright 2008-2010 Michael Brown
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
