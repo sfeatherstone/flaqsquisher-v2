@@ -214,7 +214,7 @@ namespace FlacSquisher {
 
 				// Use regexs to extract information from the monolithic text file
 				// First grab the artist name
-				Regex regex = new Regex("comment\\[\\d+\\]: ARTIST=(.*)");
+				Regex regex = new Regex("comment\\[\\d+\\]: ARTIST=(.*)", RegexOptions.IgnoreCase);
 				Match match = regex.Match(output);
 				String artist = "";
 				if(match.Success) {
@@ -222,7 +222,7 @@ namespace FlacSquisher {
 					artist = artist.Trim();
 				}
 				// Next grab the track title
-				regex = new Regex("comment\\[\\d+\\]: TITLE=(.*)");
+				regex = new Regex("comment\\[\\d+\\]: TITLE=(.*)", RegexOptions.IgnoreCase);
 				match = regex.Match(output);
 				String title = "";
 				if(match.Success) {
@@ -230,42 +230,42 @@ namespace FlacSquisher {
 					title = title.Trim();
 				}
 				// Next grab the album title
-				regex = new Regex("comment\\[\\d+\\]: ALBUM=(.*)");
+				regex = new Regex("comment\\[\\d+\\]: ALBUM=(.*)", RegexOptions.IgnoreCase);
 				match = regex.Match(output);
 				String album = "";
 				if(match.Success) {
 					album = match.Groups[1].Value;
 					album = album.Trim();
 				}
-				regex = new Regex("comment\\[\\d+\\]: DATE=(.*)");
+				regex = new Regex("comment\\[\\d+\\]: DATE=(.*)", RegexOptions.IgnoreCase);
 				match = regex.Match(output);
 				String date = "";
 				if(match.Success) {
 					date = match.Groups[1].Value;
 					date = date.Trim();
 				}
-				regex = new Regex("comment\\[\\d+\\]: TRACKNUMBER=(.*)");
+				regex = new Regex("comment\\[\\d+\\]: TRACKNUMBER=(.*)", RegexOptions.IgnoreCase);
 				match = regex.Match(output);
 				String tracknum = "";
 				if(match.Success) {
 					tracknum = match.Groups[1].Value;
 					tracknum = tracknum.Trim();
 				}
-				regex = new Regex("comment\\[\\d+\\]: GENRE=(.*)");
+				regex = new Regex("comment\\[\\d+\\]: GENRE=(.*)", RegexOptions.IgnoreCase);
 				match = regex.Match(output);
 				String genre = "";
 				if(match.Success) {
 					genre = match.Groups[1].Value;
 					genre = genre.Trim();
 				}
-				regex = new Regex("comment\\[\\d+\\]: ALBUM ARTIST=(.*)");
+				regex = new Regex("comment\\[\\d+\\]: ALBUM ARTIST=(.*)", RegexOptions.IgnoreCase);
 				match = regex.Match(output);
 				String albumArtist = "";
 				if(match.Success) {
 					albumArtist = match.Groups[1].Value;
 					albumArtist = albumArtist.Trim();
 				}
-				regex = new Regex("comment\\[\\d+\\]: DISCNUMBER=(.*)");
+				regex = new Regex("comment\\[\\d+\\]: DISCNUMBER=(.*)", RegexOptions.IgnoreCase);
 				match = regex.Match(output);
 				String discnum = "";
 				if(match.Success) {

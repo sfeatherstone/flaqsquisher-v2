@@ -91,3 +91,6 @@ Avoid a LAME error by refraining from passing an image file larger than 128KB to
 Implemented a console window to show the error messages that come from the encoders
 Fix a LAME encoding error that occurs when a FLAC file contains no album art
 Use temp files when we detect non-printable-ASCII filenames
+----1.0.0 released----
+Fixed a LAME tagging error caused by different-case tag labels
+Updated OggEnc binary to 2.87 using libvorbis 1.3.2
