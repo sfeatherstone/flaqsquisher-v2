@@ -306,7 +306,7 @@ namespace FlacSquisher {
 				TaskbarManager.Instance.SetProgressState(TaskbarProgressBarState.Indeterminate);
 			}
 
-			FolderRecurser recurser = new FolderRecurser(flacDir.Text, ignoreList.ToArray(), copyFiles, rwl);
+			FolderRecurser recurser = new FolderRecurser(flacDir.Text, ignoreList.ToArray(), copyList.ToArray(), copyFiles, rwl);
 
 			int threads;
 			rwl.AcquireWriterLock(-1); // -1 == wait forever for the lock

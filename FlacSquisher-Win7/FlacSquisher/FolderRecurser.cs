@@ -24,6 +24,7 @@ namespace FlacSquisher {
 	class FolderRecurser {
 		string directory;
 		string[] ignoreList;
+		string[] copyList;
 		bool copyFiles;
 
 		Queue<FileInfo> jobQueue;
@@ -33,9 +34,10 @@ namespace FlacSquisher {
 		public FolderRecurser() {
 		}
 
-		public FolderRecurser(string dir, string[] ignored, bool copy, ReaderWriterLock rwlock) {
+		public FolderRecurser(string dir, string[] ignored, string[] copied, bool copy, ReaderWriterLock rwlock) {
 			directory = dir;
 			ignoreList = ignored;
+			copyList = copied;
 			copyFiles = copy;
 			jobQueue = new Queue<FileInfo>();
 			rwl = rwlock;
@@ -70,6 +72,13 @@ namespace FlacSquisher {
 				foreach(String ext in ignoreList) {
 					if(fi.Name.ToLower().EndsWith(ext.ToLower())) {
 						foundExt = true;
+					}
+				}
+				// copy exts should override ignored exts, so people can transfer a more specific set of files
+				// (since we only check "EndsWith" instead of actually checking the true file extension)
+				foreach(String copyExt in copyList) {
+					if(fi.Name.ToLower().EndsWith(copyExt.ToLower())) {
+						foundExt = false;
 					}
 				}
 				if(!foundExt) {

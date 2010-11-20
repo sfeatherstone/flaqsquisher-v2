@@ -94,3 +94,5 @@ Use temp files when we detect non-printable-ASCII filenames
 ----1.0.0 released----
 Fixed a LAME tagging error caused by different-case tag labels
 Updated OggEnc binary to 2.87 using libvorbis 1.3.2
+----1.0.1 released----
+Changed priority order so that ignored files are trumped by copied files
