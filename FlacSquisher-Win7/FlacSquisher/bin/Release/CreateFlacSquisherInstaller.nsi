@@ -2,7 +2,7 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "FlacSquisher"
-!define PRODUCT_VERSION "1.0.2"
+!define PRODUCT_VERSION "1.0.3"
 !define PRODUCT_PUBLISHER "FlacSquisher"
 !define PRODUCT_WEB_SITE "http://sourceforge.net/projects/flacsquisher/"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\FlacSquisher.exe"
