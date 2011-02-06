@@ -61,7 +61,9 @@ namespace FlacSquisher {
 		List<String> ignoreList;
 		List<String> copyList;
 
-		string consoleText;
+		bool consoleMessagesQueued = false;
+		private static object lockObject = new object();
+		List<EncoderResults> resultsList;
 
 		public FlacSquisher() {
 			InitializeComponent();
@@ -302,11 +304,22 @@ namespace FlacSquisher {
 				return;
 			}
 
+			resultsList = new List<EncoderResults>();
+
 			if(TaskbarManager.IsPlatformSupported) {
 				TaskbarManager.Instance.SetProgressState(TaskbarProgressBarState.Indeterminate);
 			}
 
-			FolderRecurser recurser = new FolderRecurser(flacDir.Text, ignoreList.ToArray(), copyList.ToArray(), copyFiles, rwl);
+			String flacDirString = flacDir.Text;
+			if(flacDirString.EndsWith(dirSeparator)) {
+				flacDirString = flacDirString.TrimEnd(new char[1] { System.IO.Path.DirectorySeparatorChar });
+			}
+			String outputDirString = outputDir.Text;
+			if(outputDirString.EndsWith(dirSeparator)) {
+				outputDirString = outputDirString.TrimEnd(new char[1] { System.IO.Path.DirectorySeparatorChar });
+			}
+
+			FolderRecurser recurser = new FolderRecurser(flacDirString, ignoreList.ToArray(), copyList.ToArray(), copyFiles, rwl);
 
 			int threads;
 			rwl.AcquireWriterLock(-1); // -1 == wait forever for the lock
@@ -320,8 +333,8 @@ namespace FlacSquisher {
 			EncoderParams args = new EncoderParams();
 
 			args.Recurser = recurser;
-			args.FlacDir = flacDir.Text;
-			args.OutputDir = outputDir.Text;
+			args.FlacDir = flacDirString;
+			args.OutputDir = outputDirString;
 			args.SelectedEncoder = encoder.SelectedIndex;
 			args.CliParams = cliParams.Text;
 			args.Threads = threads;
@@ -335,7 +348,6 @@ namespace FlacSquisher {
 			args.IgnoreList = ignoreList;
 			args.CopyList = copyList;
 			args.ThirdPartyLame = thirdPartyLame;
-			args.ConsoleText = consoleText;
 
 			this.recursingBackgroundWorker1.RunWorkerAsync(args);
 		}
@@ -401,7 +413,7 @@ namespace FlacSquisher {
 
 			EncoderParams args = (EncoderParams) e.Argument;
 
-			EncoderResults results = new EncoderResults(consoleText, args.JobQueue.Count);
+			EncoderResults results = new EncoderResults("", "", args.JobQueue.Count);
 			bw.ReportProgress(0, results);
 
 			//encodeStatus.Text = "Setting up threads...";
@@ -431,7 +443,12 @@ namespace FlacSquisher {
 		private void encodingBackgroundWorker2_ProgressChanged(object sender, ProgressChangedEventArgs e) {
 			EncoderResults results = (EncoderResults)e.UserState;
 			int queuesize = results.QueueCount;
-			consoleText += results.ConsoleText;
+			if(!String.IsNullOrEmpty(results.ConsoleText)) {
+				consoleMessagesQueued = true;
+				lock(lockObject) {
+					resultsList.Add(results);
+				}
+			}
 
 			// need to account for files the other threads are currently encoding
 			int otherThreads = (int)threadCounter.Value - 1;
@@ -469,11 +486,10 @@ namespace FlacSquisher {
 				TaskbarManager.Instance.SetProgressValue(encodeProgress.Value, encodeProgress.Maximum);
 			}
 
-			if(!String.IsNullOrEmpty(consoleText)) {
+			if(consoleMessagesQueued) {
 				ConsoleWindow consoleWin = new ConsoleWindow();
-				consoleWin.ConsoleText = consoleText;
+				consoleWin.AddResults(resultsList);
 				consoleWin.ShowDialog(this);
-				consoleText = consoleWin.ConsoleText;
 			}
 		}
 
@@ -555,9 +571,8 @@ namespace FlacSquisher {
 
 		private void consoleWindowToolStripMenuItem_Click(object sender, EventArgs e) {
 			ConsoleWindow consoleWin = new ConsoleWindow();
-			consoleWin.ConsoleText = consoleText;
+			consoleWin.AddResults(resultsList);
 			consoleWin.ShowDialog(this);
-			consoleText = consoleWin.ConsoleText;
 		}
 
 		

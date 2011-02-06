@@ -24,36 +24,27 @@ using System.Windows.Forms;
 
 namespace FlacSquisher {
 	public partial class ConsoleWindow : Form {
-		bool messagePending = false;
 		
 		public ConsoleWindow() {
 			InitializeComponent();
 		}
 
-		private void clearButton_Click(object sender, EventArgs e) {
-			consoleTextbox.Clear();
-		}
-
-		public void AddErrorMessage(string message) {
-			consoleTextbox.AppendText(message + "\n");
-			messagePending = true;
-		}
-
-		public void ResetMessageCheck() {
-			messagePending = false;
-		}
-
-		public bool MessagePending() {
-			return messagePending;
-		}
-
-		public string ConsoleText {
-			get {
-				return consoleTextbox.Text;
+		internal void AddResults(List<EncoderResults> resultsList) {
+			if(resultsList == null) {
+				return;
 			}
-			set {
-				consoleTextbox.Text = value;
+			foreach(EncoderResults result in resultsList){
+				ListViewItem item = new ListViewItem(result.FileName);
+				item.SubItems.Add(result.ConsoleText);
+				consoleListView.Items.Add(item);
 			}
+		}
+
+		private void consoleListView_DoubleClick(object sender, EventArgs e) {
+			DetailsWindow detailsWin = new DetailsWindow();
+			detailsWin.SetTitle(consoleListView.SelectedItems[0].SubItems[0].Text);
+			detailsWin.SetBodyText(consoleListView.SelectedItems[0].SubItems[1].Text);
+			detailsWin.ShowDialog(this);
 		}
 	}
 }

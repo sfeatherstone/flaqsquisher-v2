@@ -21,14 +21,22 @@ using System.Text;
 namespace FlacSquisher {
 	class EncoderResults {
 
+		string fileName;
 		string consoleText;
 		int queueCount;
 
 		public EncoderResults() {
 		}
-		public EncoderResults(string consoleText, int queueCount) {
+		public EncoderResults(string fileName, string consoleText, int queueCount) {
+			this.fileName = fileName;
 			this.consoleText = consoleText;
 			this.queueCount = queueCount;
+		}
+
+		public string FileName {
+			get {
+				return fileName;
+			}
 		}
 
 		public string ConsoleText {

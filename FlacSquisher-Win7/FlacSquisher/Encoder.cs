@@ -86,7 +86,7 @@ namespace FlacSquisher {
 					consoleText = "";
 					encodeFile(fi);
 
-					EncoderResults results = new EncoderResults(consoleText, jobQueue.Count);
+					EncoderResults results = new EncoderResults(fi.FullName, consoleText, jobQueue.Count);
 
 					// increment "value" on the progress bar by one
 					bw.ReportProgress(20, results);
@@ -334,7 +334,7 @@ namespace FlacSquisher {
 			sError.Close();
 
 			if(p.ExitCode != 0) {
-				consoleText = "Encoder error: " + fi.FullName + ": " + errorString + Environment.NewLine;
+				consoleText = errorString;
 			}
 
 			// close the process handle when it's exited

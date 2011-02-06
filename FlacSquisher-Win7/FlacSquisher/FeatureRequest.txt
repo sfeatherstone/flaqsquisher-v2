@@ -96,3 +96,8 @@ Fixed a LAME tagging error caused by different-case tag labels
 Updated OggEnc binary to 2.87 using libvorbis 1.3.2
 ----1.0.1 released----
 Changed priority order so that ignored files are trumped by copied files
+----1.0.2 released----
+Instead of one unified text box, break up the error messages by which file produced them
+Allow the error messages to be brought up in a separate window by double-clicking that entry
+Sanitize Flac and Output directory strings when they end in a directory separator (e.g., a backslash)
+----1.0.3 released----
