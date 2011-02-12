@@ -1,5 +1,5 @@
 ﻿/*
-Copyright 2008-2010 Michael Brown
+Copyright 2008-2011 Michael Brown
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -80,16 +80,6 @@ namespace FlacSquisher {
 			}
 			set {
 				threads = value;
-			}
-		}
-
-		ReaderWriterLock rwl;
-		public ReaderWriterLock Rwl {
-			get {
-				return rwl;
-			}
-			set {
-				rwl = value;
 			}
 		}
 
@@ -190,16 +180,6 @@ namespace FlacSquisher {
 			}
 			set {
 				thirdPartyLame = value;
-			}
-		}
-
-		string consoleText;
-		public string ConsoleText {
-			get {
-				return consoleText;
-			}
-			set {
-				consoleText = value;
 			}
 		}
 	}

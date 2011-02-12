@@ -101,3 +101,5 @@ Instead of one unified text box, break up the error messages by which file produ
 Allow the error messages to be brought up in a separate window by double-clicking that entry
 Sanitize Flac and Output directory strings when they end in a directory separator (e.g., a backslash)
 ----1.0.3 released----
+Fix race condition causing mismatches with the error messages
+----1.0.4 released----

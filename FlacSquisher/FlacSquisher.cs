@@ -3,7 +3,7 @@
 // the Flac files
 
 /*
-Copyright 2008-2010 Michael Brown
+Copyright 2008-2011 Michael Brown
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -333,7 +333,6 @@ namespace FlacSquisher {
 			args.SelectedEncoder = encoder.SelectedIndex;
 			args.CliParams = cliParams.Text;
 			args.Threads = threads;
-			args.Rwl = rwl;
 			args.CopyFiles = copyFiles;
 			args.FlacExe = flacexe;
 			args.OggPath = oggPath;

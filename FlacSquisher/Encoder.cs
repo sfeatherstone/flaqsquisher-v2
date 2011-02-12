@@ -1,5 +1,5 @@
 ﻿/*
-Copyright 2008-2010 Michael Brown
+Copyright 2008-2011 Michael Brown
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -37,7 +37,6 @@ namespace FlacSquisher {
 		bool hidewin;
 		List<String> ignoreList;
 		List<String> copyList;
-		string consoleText;
 
 		string flacexe;
 		string oggPath;
@@ -64,7 +63,6 @@ namespace FlacSquisher {
 			copyList = args.CopyList;
 			hidewin = args.Hidewin;
 			thirdPartyLame = args.ThirdPartyLame;
-			consoleText = args.ConsoleText;
 
 			flacexe = args.FlacExe;
 			oggPath = args.OggPath;
@@ -83,10 +81,9 @@ namespace FlacSquisher {
 					lock(lockObject) {
 						fi = jobQueue.Dequeue();
 					}
-					consoleText = "";
-					encodeFile(fi);
+					String consoleText = encodeFile(fi);
 
-					EncoderResults results = new EncoderResults(fi.FullName, consoleText, jobQueue.Count);
+					EncoderResults results = new EncoderResults(String.Copy(fi.FullName), String.Copy(consoleText), jobQueue.Count);
 
 					// increment "value" on the progress bar by one
 					bw.ReportProgress(20, results);
@@ -102,11 +99,12 @@ namespace FlacSquisher {
 		}
 
 		// take the file file passed in, and encode it using the selected encoder and options
-		public void encodeFile(FileInfo fi) {
+		public String encodeFile(FileInfo fi) {
 			// get the portion of the path that will be shared by the source and destination paths
 			string partialPath = fi.DirectoryName.Remove(0, flacPath.Length);
 			string destPath;
 			string coverArtPath = "";
+			string consoleText = "";
 
 			bool useTempFile = false; // temp files only used if we detect non-ASCII characters
 			string encoderSourceFile = fi.FullName;
@@ -120,7 +118,7 @@ namespace FlacSquisher {
 					destPath = outputPath + partialPath + dirSeperator + fi.Name;
 
 					if(File.Exists(destPath)) {
-						return;
+						return "";
 					}
 
 					if(!Directory.Exists(outputPath + partialPath)) {
@@ -128,7 +126,7 @@ namespace FlacSquisher {
 					}
 
 					File.Copy(fi.FullName, destPath);
-					return;
+					return "";
 				}
 			}
 
@@ -148,7 +146,7 @@ namespace FlacSquisher {
 			}
 			// if the resulting path exists already, we don't need to encode again
 			if(File.Exists(destPath)) {
-				return;
+				return "";
 			}
 			// LAME doesn't like to output to non-existent directories
 			if(!Directory.Exists(outputPath + partialPath)) {
@@ -349,6 +347,8 @@ namespace FlacSquisher {
 				File.Move(encoderDestFile, destPath);
 				File.Delete(encoderSourceFile);
 			}
+
+			return consoleText;
 		}
 
 	}
