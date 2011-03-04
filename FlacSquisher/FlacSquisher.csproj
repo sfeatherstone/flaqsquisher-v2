@@ -62,6 +62,7 @@
     <Compile Include="AboutWindow.Designer.cs">
       <DependentUpon>AboutWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="BugWorkarounds.cs" />
     <Compile Include="ConsoleWindow.cs">
       <SubType>Form</SubType>
     </Compile>
