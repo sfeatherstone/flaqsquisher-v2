@@ -285,14 +285,19 @@ namespace FlacSquisher {
 				}
 				lameopts += "--add-id3v2 --ignore-tag-errors ";
 
-				if(thirdPartyLame) {
+				if(!hidewin) {
+					lameopts += "--verbose ";
+				}
+
+				if(thirdPartyLame || BugWorkarounds.LameLibsndfileReturnsZero) {
 					if(albumArtist.Length > 0) {
 						lameopts += "--tv \"TXXX=ALBUM ARTIST=" + albumArtist + "\" ";
 					}
 					if(discnum.Length > 0) {
 						lameopts += "--tv \"TXXX=DISCNUMBER=" + discnum + "\" ";
 					}
-					// LAME cannot take Flac files as input as of 3.97, so we need to decode using flac.exe first
+					// The normal compile of LAME cannot take Flac files as
+					// input, so we need to decode using flac.exe first
 					psi.FileName = "cmd.exe";
 					// "/s" switch allows us to give the arguments of "/c" inside quotes
 					psi.Arguments = "/s /c \"\"" + flacexe + "\" -dc \"" + encoderSourceFile + "\" | \"" + lamePath + "\" " +
@@ -302,7 +307,7 @@ namespace FlacSquisher {
 					// Since FlacSquisher 0.3.2, we've included the libsndfile .dll with Lame, so we can use
 					// Flac files as input. (we didn't implement this until 0.5.6)
 					psi.FileName = lamePath;
-					// TODO: only include "--verbose" if we show the cmd windows
+
 					psi.Arguments = lameopts;
 					psi.Arguments += " \"" + encoderSourceFile + "\" \"" + encoderDestFile + "\"";
 				}
@@ -320,7 +325,6 @@ namespace FlacSquisher {
 			psi.RedirectStandardError = true;
 			psi.UseShellExecute = false;
 
-			//psi.UseShellExecute = false;
 			System.Diagnostics.Process p = System.Diagnostics.Process.Start(psi);
 
 			StreamReader sError = p.StandardError;
