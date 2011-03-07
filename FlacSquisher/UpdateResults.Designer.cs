@@ -39,7 +39,7 @@
 			// 
 			// yesButton
 			// 
-			this.yesButton.Location = new System.Drawing.Point(13, 105);
+			this.yesButton.Location = new System.Drawing.Point(12, 105);
 			this.yesButton.Name = "yesButton";
 			this.yesButton.Size = new System.Drawing.Size(75, 23);
 			this.yesButton.TabIndex = 1;
@@ -49,7 +49,7 @@
 			// 
 			// cancelButton
 			// 
-			this.cancelButton.Location = new System.Drawing.Point(119, 105);
+			this.cancelButton.Location = new System.Drawing.Point(147, 105);
 			this.cancelButton.Name = "cancelButton";
 			this.cancelButton.Size = new System.Drawing.Size(75, 23);
 			this.cancelButton.TabIndex = 2;
@@ -61,14 +61,14 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(206, 140);
+			this.ClientSize = new System.Drawing.Size(234, 140);
 			this.Controls.Add(this.cancelButton);
 			this.Controls.Add(this.yesButton);
 			this.Controls.Add(this.results);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.Name = "UpdateResults";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-			this.Text = "Update Check";
+			this.Text = "FlacSquisher Update";
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

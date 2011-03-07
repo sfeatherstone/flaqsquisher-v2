@@ -35,6 +35,7 @@
 			this.fileextsLabel = new System.Windows.Forms.Label();
 			this.fileExts = new System.Windows.Forms.TextBox();
 			this.panel3 = new System.Windows.Forms.Panel();
+			this.thirdPartyLameBox = new System.Windows.Forms.CheckBox();
 			this.encodingOptionsButton = new System.Windows.Forms.Button();
 			this.hidewin = new System.Windows.Forms.CheckBox();
 			this.encoderBox = new System.Windows.Forms.GroupBox();
@@ -50,13 +51,15 @@
 			this.flacLabel = new System.Windows.Forms.Label();
 			this.oggLocation = new System.Windows.Forms.TextBox();
 			this.oggLabel = new System.Windows.Forms.Label();
-			this.thirdPartyLameBox = new System.Windows.Forms.CheckBox();
 			this.thirdPartyLameTooltip = new System.Windows.Forms.ToolTip(this.components);
+			this.panel4 = new System.Windows.Forms.Panel();
+			this.autoUpdate = new System.Windows.Forms.CheckBox();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.panel1.SuspendLayout();
 			this.panel2.SuspendLayout();
 			this.panel3.SuspendLayout();
 			this.encoderBox.SuspendLayout();
+			this.panel4.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// tableLayoutPanel1
@@ -64,19 +67,21 @@
 			this.tableLayoutPanel1.ColumnCount = 1;
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel1.Controls.Add(this.panel1, 0, 3);
 			this.tableLayoutPanel1.Controls.Add(this.panel2, 0, 2);
 			this.tableLayoutPanel1.Controls.Add(this.panel3, 0, 1);
 			this.tableLayoutPanel1.Controls.Add(this.encoderBox, 0, 0);
+			this.tableLayoutPanel1.Controls.Add(this.panel1, 0, 4);
+			this.tableLayoutPanel1.Controls.Add(this.panel4, 0, 3);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-			this.tableLayoutPanel1.RowCount = 4;
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 75.09882F));
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 24.90119F));
+			this.tableLayoutPanel1.RowCount = 5;
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 76.56904F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 23.43096F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 94F));
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 33F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(424, 381);
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 39F));
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(424, 413);
 			this.tableLayoutPanel1.TabIndex = 0;
 			// 
 			// panel1
@@ -85,9 +90,9 @@
 			this.panel1.Controls.Add(this.cancelButton);
 			this.panel1.Controls.Add(this.defaultsButton);
 			this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel1.Location = new System.Drawing.Point(3, 350);
+			this.panel1.Location = new System.Drawing.Point(3, 376);
 			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(418, 28);
+			this.panel1.Size = new System.Drawing.Size(418, 34);
 			this.panel1.TabIndex = 0;
 			// 
 			// okButton
@@ -127,7 +132,7 @@
 			this.panel2.Controls.Add(this.fileextsLabel);
 			this.panel2.Controls.Add(this.fileExts);
 			this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel2.Location = new System.Drawing.Point(3, 256);
+			this.panel2.Location = new System.Drawing.Point(3, 242);
 			this.panel2.Name = "panel2";
 			this.panel2.Size = new System.Drawing.Size(418, 88);
 			this.panel2.TabIndex = 2;
@@ -170,10 +175,21 @@
 			this.panel3.Controls.Add(this.encodingOptionsButton);
 			this.panel3.Controls.Add(this.hidewin);
 			this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel3.Location = new System.Drawing.Point(3, 193);
+			this.panel3.Location = new System.Drawing.Point(3, 186);
 			this.panel3.Name = "panel3";
-			this.panel3.Size = new System.Drawing.Size(418, 57);
+			this.panel3.Size = new System.Drawing.Size(418, 50);
 			this.panel3.TabIndex = 3;
+			// 
+			// thirdPartyLameBox
+			// 
+			this.thirdPartyLameBox.AutoSize = true;
+			this.thirdPartyLameBox.Location = new System.Drawing.Point(9, 30);
+			this.thirdPartyLameBox.Name = "thirdPartyLameBox";
+			this.thirdPartyLameBox.Size = new System.Drawing.Size(185, 17);
+			this.thirdPartyLameBox.TabIndex = 12;
+			this.thirdPartyLameBox.Text = "Using non-standard copy of Lame";
+			this.thirdPartyLameTooltip.SetToolTip(this.thirdPartyLameBox, "Check this if you downloaded Lame yourself");
+			this.thirdPartyLameBox.UseVisualStyleBackColor = true;
 			// 
 			// encodingOptionsButton
 			// 
@@ -212,7 +228,7 @@
 			this.encoderBox.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.encoderBox.Location = new System.Drawing.Point(3, 3);
 			this.encoderBox.Name = "encoderBox";
-			this.encoderBox.Size = new System.Drawing.Size(418, 184);
+			this.encoderBox.Size = new System.Drawing.Size(418, 177);
 			this.encoderBox.TabIndex = 4;
 			this.encoderBox.TabStop = false;
 			this.encoderBox.Text = "Encoders";
@@ -321,22 +337,30 @@
 			this.oggLabel.TabIndex = 0;
 			this.oggLabel.Text = "Ogg Encoder";
 			// 
-			// thirdPartyLameBox
+			// panel4
 			// 
-			this.thirdPartyLameBox.AutoSize = true;
-			this.thirdPartyLameBox.Location = new System.Drawing.Point(9, 30);
-			this.thirdPartyLameBox.Name = "thirdPartyLameBox";
-			this.thirdPartyLameBox.Size = new System.Drawing.Size(185, 17);
-			this.thirdPartyLameBox.TabIndex = 12;
-			this.thirdPartyLameBox.Text = "Using non-standard copy of Lame";
-			this.thirdPartyLameTooltip.SetToolTip(this.thirdPartyLameBox, "Check this if you downloaded Lame yourself");
-			this.thirdPartyLameBox.UseVisualStyleBackColor = true;
+			this.panel4.Controls.Add(this.autoUpdate);
+			this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.panel4.Location = new System.Drawing.Point(3, 336);
+			this.panel4.Name = "panel4";
+			this.panel4.Size = new System.Drawing.Size(418, 34);
+			this.panel4.TabIndex = 5;
+			// 
+			// autoUpdate
+			// 
+			this.autoUpdate.AutoSize = true;
+			this.autoUpdate.Location = new System.Drawing.Point(9, 3);
+			this.autoUpdate.Name = "autoUpdate";
+			this.autoUpdate.Size = new System.Drawing.Size(163, 17);
+			this.autoUpdate.TabIndex = 0;
+			this.autoUpdate.Text = "Check for updates on startup";
+			this.autoUpdate.UseVisualStyleBackColor = true;
 			// 
 			// OptionsWindow
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(424, 381);
+			this.ClientSize = new System.Drawing.Size(424, 413);
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.Name = "OptionsWindow";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
@@ -349,6 +373,8 @@
 			this.panel3.PerformLayout();
 			this.encoderBox.ResumeLayout(false);
 			this.encoderBox.PerformLayout();
+			this.panel4.ResumeLayout(false);
+			this.panel4.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -383,5 +409,7 @@
 		private System.Windows.Forms.Label copyExtsLabel;
 		private System.Windows.Forms.CheckBox thirdPartyLameBox;
 		private System.Windows.Forms.ToolTip thirdPartyLameTooltip;
+		private System.Windows.Forms.Panel panel4;
+		private System.Windows.Forms.CheckBox autoUpdate;
 	}
 }

@@ -149,6 +149,9 @@ namespace FlacSquisher {
 			}
 		}
 
+		/// <summary>
+		/// No longer used, since we have two different boxes for copied and ignored extensions
+		/// </summary>
 		public bool CopyFiles {
 			get {
 				//return copyFiles.Checked;
@@ -168,6 +171,15 @@ namespace FlacSquisher {
 			}
 		}
 
+		public bool AutoUpdate {
+			get {
+				return autoUpdate.Checked;
+			}
+			set {
+				autoUpdate.Checked = value;
+			}
+		}
+
 		private void defaultsButton_Click(object sender, EventArgs e) {
 			oggLocation.Text = Path.GetDirectoryName(Application.ExecutablePath) + Path.DirectorySeparatorChar + "oggenc.exe";
 			flacLocation.Text = Path.GetDirectoryName(Application.ExecutablePath) + Path.DirectorySeparatorChar + "flac.exe";
@@ -177,6 +189,7 @@ namespace FlacSquisher {
 			thirdPartyLameBox.Checked = false;
 			fileExts.Text = "txt log pdf cue";
 			copyExts.Text = "jpg png";
+			autoUpdate.Checked = false;
 		}
 
 		private void okButton_Click(object sender, EventArgs e) {

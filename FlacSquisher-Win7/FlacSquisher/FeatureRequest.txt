@@ -105,3 +105,4 @@ Fix race condition causing mismatches with the error messages
 ----1.0.4 released----
 Added bug workaround based on the copy of Lame compiled with libsndfile not properly returning an error code
 ----1.0.5 released----
+Added option to check for updates at startup

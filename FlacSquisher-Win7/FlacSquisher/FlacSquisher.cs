@@ -52,6 +52,7 @@ namespace FlacSquisher {
 		bool copyFiles;
 		bool thirdPartyLame;
 		int encoderChoice;
+		bool autoUpdate;
 
 		int majorv;
 		int minorv;
@@ -95,6 +96,7 @@ namespace FlacSquisher {
 				copiedExts = "jpg png";
 				hidewin = true;
 				thirdPartyLame = false;
+				autoUpdate = false;
 			}
 
 			// needed for users who upgrade from an old version that didn't have metaflac
@@ -105,7 +107,8 @@ namespace FlacSquisher {
 				copiedExts = "";
 			}
 
-			encodeStatus.Text = "Ready";
+			// if we aren't checking for updates, then it's unlikely this will show on-screen at all
+			encodeStatus.Text = "Checking for updates...";
 			encodeProgress.Width = 1;
 			encodeProgress.Visible = false;
 
@@ -132,11 +135,23 @@ namespace FlacSquisher {
 			minorv = System.Reflection.Assembly.GetAssembly(this.GetType()).GetName().Version.Minor;
 			rev = System.Reflection.Assembly.GetAssembly(this.GetType()).GetName().Version.Build;
 
+			majorv = 0;
+			minorv = 5;
+			rev = 5;
+
 			this.Text = "FlacSquisher v" + majorv + "." + minorv + "." + rev;
 
+			if(autoUpdate) {
+				checkForUpdates(false);
+			}
+			encodeStatus.Text = "Ready";
 		}
 
-		// called on initialization to restore the settings from the last session (called only if the config file exists)
+		/// <summary>
+		/// called on initialization to restore the settings from the last session (called only if the config file exists)
+		/// </summary>
+		/// <param name="filePath"></param>
+		/// <returns></returns>
 		private int loadSettingsFile(String filePath) {
 			try {
 				StreamReader sr = new StreamReader(filePath, Encoding.UTF8);
@@ -165,6 +180,10 @@ namespace FlacSquisher {
 				temp = sr.ReadLine();
 				if(!string.IsNullOrEmpty(temp)) {
 					thirdPartyLame = bool.Parse(temp);
+				}
+				temp = sr.ReadLine();
+				if(!string.IsNullOrEmpty(temp)) {
+					autoUpdate = bool.Parse(temp);
 				}
 				sr.Close();
 				return 1;
@@ -195,7 +214,8 @@ namespace FlacSquisher {
 				sw.Write(copyFiles.ToString() + Environment.NewLine);
 				sw.Write(metaflacPath + Environment.NewLine);
 				sw.Write(copiedExts.ToString() + Environment.NewLine);
-				sw.Write(thirdPartyLame.ToString());
+				sw.Write(thirdPartyLame.ToString() + Environment.NewLine);
+				sw.Write(autoUpdate.ToString());
 				sw.Close();
 				return 1;
 			}
@@ -499,6 +519,13 @@ namespace FlacSquisher {
 
 		// this method checks with the project webserver to see if there's a newer version
 		private void checkForUpdatesToolStripMenuItem_Click(object sender, EventArgs e) {
+			checkForUpdates(true);
+		}
+
+		/// <summary>
+		/// Checks with the project webserver to see if there's a newer version available
+		/// </summary>
+		private void checkForUpdates(bool reportOnNoNewVersion) {
 			try {
 				WebRequest req = WebRequest.Create("http://flacsquisher.sourceforge.net/latest.txt");
 				WebResponse resp = req.GetResponse();
@@ -518,7 +545,9 @@ namespace FlacSquisher {
 					}
 				}
 				else {
-					MessageBox.Show("No newer version is available");
+					if(reportOnNoNewVersion) {
+						MessageBox.Show("No newer version is available");
+					}
 				}
 			}
 			catch(Exception ex) {
@@ -547,6 +576,7 @@ namespace FlacSquisher {
 			ow.FileExts = ignoredExts;
 			ow.CopyFiles = copyFiles;
 			ow.CopyExts = copiedExts;
+			ow.AutoUpdate = autoUpdate;
 			ow.ShowDialog(this);
 
 			if(ow.DialogResult == DialogResult.OK) {
@@ -559,6 +589,7 @@ namespace FlacSquisher {
 				ignoredExts = ow.FileExts;
 				copyFiles = ow.CopyFiles;
 				copiedExts = ow.CopyExts;
+				autoUpdate = ow.AutoUpdate;
 				if(ow.EncoderChoice != -1) {
 					encoder.SelectedIndex = ow.EncoderChoice;
 				}
