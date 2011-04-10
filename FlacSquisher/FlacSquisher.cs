@@ -238,6 +238,11 @@ namespace FlacSquisher {
 		// chooses "source" directory containing Flac files to be recoded
 		private void flacDirButton_Click(object sender, EventArgs e) {
 			FolderBrowserDialog fbd = new FolderBrowserDialog();
+			if(Directory.Exists(flacDir.Text)) {
+				// clean up and resolve all parts of the path, such as "\..\", before passing the path
+				DirectoryInfo dirInfo = new DirectoryInfo(flacDir.Text);
+				fbd.SelectedPath = dirInfo.FullName;
+			}
 			if(fbd.ShowDialog() != System.Windows.Forms.DialogResult.Cancel) {
 				flacDir.Text = fbd.SelectedPath;
 			}
@@ -246,6 +251,11 @@ namespace FlacSquisher {
 		// chooses "destination" directory to contain files output by the recoding
 		private void outputDirButton_Click(object sender, EventArgs e) {
 			FolderBrowserDialog fbd = new FolderBrowserDialog();
+			if(Directory.Exists(outputDir.Text)) {
+				// clean up and resolve all parts of the path, such as "\..\", before passing the path
+				DirectoryInfo dirInfo = new DirectoryInfo(outputDir.Text);
+				fbd.SelectedPath = dirInfo.FullName;
+			}
 			if(fbd.ShowDialog() != System.Windows.Forms.DialogResult.Cancel) {
 				outputDir.Text = fbd.SelectedPath;
 			}

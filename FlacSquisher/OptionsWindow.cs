@@ -57,6 +57,10 @@ namespace FlacSquisher {
 
 		private void oggButton_Click(object sender, EventArgs e) {
 			OpenFileDialog ofd = new OpenFileDialog();
+			if(File.Exists(oggLocation.Text)){
+				// clean up and resolve all parts of the path, such as "\..\", before passing the path
+				ofd.InitialDirectory = new FileInfo(oggLocation.Text).DirectoryName;
+			}
 			ofd.Filter = "Executable Files (*.exe)|*.exe|All Files|*.*";
 			if(ofd.ShowDialog() != DialogResult.Cancel) {
 				oggLocation.Text = ofd.FileName;
@@ -74,6 +78,10 @@ namespace FlacSquisher {
 
 		private void flacButton_Click(object sender, EventArgs e) {
 			OpenFileDialog ofd = new OpenFileDialog();
+			if(File.Exists(flacLocation.Text)) {
+				// clean up and resolve all parts of the path, such as "\..\", before passing the path
+				ofd.InitialDirectory = new FileInfo(flacLocation.Text).DirectoryName;
+			}
 			ofd.Filter = "Executable Files (*.exe)|*.exe|All Files|*.*";
 			if(ofd.ShowDialog() != DialogResult.Cancel) {
 				flacLocation.Text = ofd.FileName;
@@ -91,6 +99,10 @@ namespace FlacSquisher {
 
 		private void lameButton_Click(object sender, EventArgs e) {
 			OpenFileDialog ofd = new OpenFileDialog();
+			if(File.Exists(lameLocation.Text)) {
+				// clean up and resolve all parts of the path, such as "\..\", before passing the path
+				ofd.InitialDirectory = new FileInfo(lameLocation.Text).DirectoryName;
+			}
 			ofd.Filter = "Executable Files (*.exe)|*.exe|All Files|*.*";
 			if(ofd.ShowDialog() != DialogResult.Cancel) {
 				lameLocation.Text = ofd.FileName;
@@ -108,6 +120,10 @@ namespace FlacSquisher {
 
 		private void metaflacButton_Click(object sender, EventArgs e) {
 			OpenFileDialog ofd = new OpenFileDialog();
+			if(File.Exists(metaflacLocation.Text)) {
+				// clean up and resolve all parts of the path, such as "\..\", before passing the path
+				ofd.InitialDirectory = new FileInfo(metaflacLocation.Text).DirectoryName;
+			}
 			ofd.Filter = "Executable Files (*.exe)|*.exe|All Files|*.*";
 			if(ofd.ShowDialog() != DialogResult.Cancel) {
 				metaflacLocation.Text = ofd.FileName;
