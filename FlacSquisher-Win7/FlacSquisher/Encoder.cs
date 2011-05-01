@@ -275,6 +275,13 @@ namespace FlacSquisher {
 				String lameopts = options + " --ta \"" + artist + "\" --tt \"" + title + "\" --tl \"" + album + "\" --ty \""
 					+ date + "\" --tn \"" + tracknum + "\" --tg \"" + genre + "\" ";
 
+				if(albumArtist.Length > 0) {
+					lameopts += "--tv \"TPE2=" + albumArtist + "\" ";
+				}
+				if(discnum.Length > 0) {
+					lameopts += "--tv \"TPOS=" + discnum + "\" ";
+				}
+
 				if(File.Exists(coverArtPath)) {
 					FileStream coverArtFile = File.OpenRead(coverArtPath);
 					long length = coverArtFile.Length;
@@ -290,12 +297,6 @@ namespace FlacSquisher {
 				}
 
 				if(thirdPartyLame || BugWorkarounds.LameLibsndfileReturnsZero) {
-					if(albumArtist.Length > 0) {
-						lameopts += "--tv \"TXXX=ALBUM ARTIST=" + albumArtist + "\" ";
-					}
-					if(discnum.Length > 0) {
-						lameopts += "--tv \"TXXX=DISCNUMBER=" + discnum + "\" ";
-					}
 					// The normal compile of LAME cannot take Flac files as
 					// input, so we need to decode using flac.exe first
 					psi.FileName = "cmd.exe";
