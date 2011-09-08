@@ -110,3 +110,5 @@ Changed directory dialog windows to default to the currently-set directory, if i
 ----1.0.6 released----
 Update Discnumber and AlbumArtist fields to match the mapping used by foobar2000 as of version 1.1.6
 ----1.0.7 released----
+Change "Encode" button to read "Stop" during the encode process
+----1.0.8 released----

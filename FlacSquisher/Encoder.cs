@@ -98,6 +98,12 @@ namespace FlacSquisher {
 			}
 		}
 
+		public static object LockObject {
+			get {
+				return lockObject;
+			}
+		}
+
 		// take the file file passed in, and encode it using the selected encoder and options
 		public String encodeFile(FileInfo fi) {
 			// get the portion of the path that will be shared by the source and destination paths

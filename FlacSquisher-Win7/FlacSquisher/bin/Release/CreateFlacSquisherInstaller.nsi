@@ -2,7 +2,7 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "FlacSquisher"
-!define PRODUCT_VERSION "1.0.7"
+!define PRODUCT_VERSION "1.0.8"
 !define PRODUCT_PUBLISHER "FlacSquisher"
 !define PRODUCT_WEB_SITE "http://sourceforge.net/projects/flacsquisher/"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\FlacSquisher.exe"
@@ -20,7 +20,7 @@
 ; Welcome page
 !insertmacro MUI_PAGE_WELCOME
 ; License page
-!insertmacro MUI_PAGE_LICENSE "C:\Documents and Settings\Mike\My Documents\Visual Studio 2008\Projects\FlacSquisher\FlacSquisher\LICENSE.txt"
+!insertmacro MUI_PAGE_LICENSE "C:\code\FlacSquisher\FlacSquisher-Win7\FlacSquisher\LICENSE.txt"
 ; Directory page
 !insertmacro MUI_PAGE_DIRECTORY
 ; Instfiles page
@@ -57,15 +57,15 @@ Section "MainSection" SEC01
   SetOverwrite ifnewer
   CreateDirectory "$SMPROGRAMS\FlacSquisher"
   CreateShortCut "$SMPROGRAMS\FlacSquisher\FlacSquisher.lnk" "$INSTDIR\FlacSquisher.exe"
-  File "C:\Documents and Settings\Mike\My Documents\Visual Studio 2008\Projects\FlacSquisher\FlacSquisher-Win7\FlacSquisher\bin\Release\metaflac.exe"
-  File "C:\Documents and Settings\Mike\My Documents\Visual Studio 2008\Projects\FlacSquisher\FlacSquisher-Win7\FlacSquisher\bin\Release\libsndfile-1.dll"
-  File "C:\Documents and Settings\Mike\My Documents\Visual Studio 2008\Projects\FlacSquisher\FlacSquisher-Win7\FlacSquisher\bin\Release\lame.exe"
-  File "C:\Documents and Settings\Mike\My Documents\Visual Studio 2008\Projects\FlacSquisher\FlacSquisher-Win7\FlacSquisher\bin\Release\flac.exe"
-  File "C:\Documents and Settings\Mike\My Documents\Visual Studio 2008\Projects\FlacSquisher\FlacSquisher-Win7\FlacSquisher\bin\Release\oggenc.exe"
-  File "C:\Documents and Settings\Mike\My Documents\Visual Studio 2008\Projects\FlacSquisher\FlacSquisher-Win7\FlacSquisher\bin\Release\Microsoft.WindowsAPICodePack.dll"
-  File "C:\Documents and Settings\Mike\My Documents\Visual Studio 2008\Projects\FlacSquisher\FlacSquisher-Win7\FlacSquisher\bin\Release\Microsoft.WindowsAPICodePack.Shell.dll"
+  File "C:\code\FlacSquisher\FlacSquisher-Win7\FlacSquisher\bin\Release\metaflac.exe"
+  File "C:\code\FlacSquisher\FlacSquisher-Win7\FlacSquisher\bin\Release\libsndfile-1.dll"
+  File "C:\code\FlacSquisher\FlacSquisher-Win7\FlacSquisher\bin\Release\lame.exe"
+  File "C:\code\FlacSquisher\FlacSquisher-Win7\FlacSquisher\bin\Release\flac.exe"
+  File "C:\code\FlacSquisher\FlacSquisher-Win7\FlacSquisher\bin\Release\oggenc.exe"
+  File "C:\code\FlacSquisher\FlacSquisher-Win7\FlacSquisher\bin\Release\Microsoft.WindowsAPICodePack.dll"
+  File "C:\code\FlacSquisher\FlacSquisher-Win7\FlacSquisher\bin\Release\Microsoft.WindowsAPICodePack.Shell.dll"
   SetOverwrite on
-  File "C:\Documents and Settings\Mike\My Documents\Visual Studio 2008\Projects\FlacSquisher\FlacSquisher-Win7\FlacSquisher\bin\Release\FlacSquisher.exe"
+  File "C:\code\FlacSquisher\FlacSquisher-Win7\FlacSquisher\bin\Release\FlacSquisher.exe"
 SectionEnd
 
 Section -AdditionalIcons

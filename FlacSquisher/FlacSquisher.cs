@@ -62,8 +62,12 @@ namespace FlacSquisher {
 		List<String> copyList;
 
 		bool consoleMessagesQueued = false;
-		private static object lockObject = new object();
 		List<EncoderResults> resultsList;
+		private static object lockObject = new object();
+		Queue<FileInfo> jobQueue;
+		bool encodeInProgress = false;
+		bool encodeAborted = false;
+		int abortedQueueSize;
 
 		public FlacSquisher() {
 			InitializeComponent();
@@ -274,8 +278,23 @@ namespace FlacSquisher {
 		// called with "Encode" button -- queues files in the "source" directory to be processed,
 		// then starts 'n' encoding threads to process the queue
 		private void encodeButton_Click(object sender, EventArgs e) {
-			// disable encodeButton until encoding is finished
+			// disable encodeButton until we finish processing the button press
 			encodeButton.Enabled = false;
+			if(encodeInProgress) {
+				encodeButton.Text = "Stopping...";
+				encodeAborted = true;
+				lock(lockObject) {
+					abortedQueueSize = jobQueue.Count;
+					jobQueue.Clear();
+				}
+			}
+			else {
+				encodeInProgress = true;
+				encode();
+			}
+		}
+
+		public void encode() {
 			// this section should be kept in case of bad config files, etc.
 			if(encoder.SelectedIndex == 0) {
 				if(String.IsNullOrEmpty(oggPath)) {
@@ -298,6 +317,8 @@ namespace FlacSquisher {
 			encodeProgress.MarqueeAnimationSpeed = 50;
 			encodeProgress.Style = ProgressBarStyle.Marquee;
 			encodeProgress.Visible = true;
+
+			encodeAborted = false;
 
 			ignoreList = new List<String>();
 			String[] split = ignoredExts.Split(' ');
@@ -407,6 +428,7 @@ namespace FlacSquisher {
 			recurser.recurseDirs();
 
 			args.JobQueue = recurser.getJobQueue();
+			jobQueue = args.JobQueue;
 
 			e.Result = args;
 
@@ -417,6 +439,9 @@ namespace FlacSquisher {
 			encodeProgress.Style = ProgressBarStyle.Continuous;
 			encodeProgress.Value = 0;
 			encodeProgress.Maximum = (int)e.UserState;
+
+			encodeButton.Text = "Stop";
+			encodeButton.Enabled = true;
 		}
 
 		private void recursingBackgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
@@ -467,7 +492,11 @@ namespace FlacSquisher {
 
 			// need to account for files the other threads are currently encoding
 			int otherThreads = (int)threadCounter.Value - 1;
-			int progress = encodeProgress.Maximum - (queuesize + otherThreads);
+			int maximum = encodeProgress.Maximum;
+			if(encodeAborted) {
+				queuesize = abortedQueueSize;
+			}
+			int progress = maximum - (queuesize + otherThreads);
 
 			encodeProgress.Style = ProgressBarStyle.Continuous;
 
@@ -484,12 +513,18 @@ namespace FlacSquisher {
 		}
 
 		private void encodingBackgroundWorker2_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
-			encodeProgress.Value = encodeProgress.Maximum;
+			int endProgress = encodeProgress.Maximum;
+			if(encodeAborted) {
+				endProgress = encodeProgress.Maximum - abortedQueueSize;
+			}
+			encodeProgress.Value = endProgress;
 
 			// update the status text
 			encodeStatus.Text = "" + encodeProgress.Value + " of " + encodeProgress.Maximum + " files completed";
-			
+
+			encodeButton.Text = "Encode!";
 			encodeButton.Enabled = true;
+			encodeInProgress = false;
 
 			if(consoleMessagesQueued) {
 				ConsoleWindow consoleWin = new ConsoleWindow();
