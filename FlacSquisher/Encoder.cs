@@ -47,6 +47,8 @@ namespace FlacSquisher {
 
 		private static object lockObject = new object();
 
+		private static Regex printableAscii = new Regex(@"[^\u0020-\u007E]", RegexOptions.Compiled);
+
 		public Encoder() {
 		}
 
@@ -172,7 +174,7 @@ namespace FlacSquisher {
 				// LAME only has support for Extended ASCII, but to be safe we'll restrict it to printable ASCII
 				// If the filename contains non-printable-ASCII characters, use a temporary file
 				// http://stackoverflow.com/questions/1999566/string-filter-detect-non-ascii-signs
-				if(Regex.IsMatch(fi.FullName, @"[^\u0020-\u007E]", RegexOptions.None)) {
+				if(printableAscii.IsMatch(fi.FullName)) {
 					useTempFile = true;
 					encoderSourceFile = Path.GetTempFileName();
 					encoderDestFile = Path.GetTempFileName();

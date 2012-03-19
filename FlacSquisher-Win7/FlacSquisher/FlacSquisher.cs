@@ -555,7 +555,7 @@ namespace FlacSquisher {
 
 		// send them to the project forums page
 		private void onlineHelpToolStripMenuItem_Click(object sender, EventArgs e) {
-			System.Diagnostics.Process.Start("http://sourceforge.net/forum/?group_id=232925");
+			System.Diagnostics.Process.Start("http://sourceforge.net/projects/flacsquisher/forums");
 		}
 
 		// this method checks with the project webserver to see if there's a newer version
@@ -582,7 +582,7 @@ namespace FlacSquisher {
 					ur.Results = "Version " + newest + " is available." + Environment.NewLine + "Would you like to download it?";
 					ur.ShowDialog();
 					if(ur.DialogResult == DialogResult.Yes) {
-						Process.Start("http://sourceforge.net/project/showfiles.php?group_id=232925");
+						Process.Start("http://sourceforge.net/projects/flacsquisher/files/");
 					}
 				}
 				else {
@@ -596,7 +596,7 @@ namespace FlacSquisher {
 				ur.Results = "Error contacting the server to check for updates." + Environment.NewLine + "Would you like to check manually on the web?";
 				ur.ShowDialog();
 				if(ur.DialogResult == DialogResult.Yes) {
-					Process.Start("http://sourceforge.net/project/showfiles.php?group_id=232925");
+					Process.Start("http://sourceforge.net/projects/flacsquisher/files/");
 				}
 			}
 		}

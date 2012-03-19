@@ -112,3 +112,7 @@ Update Discnumber and AlbumArtist fields to match the mapping used by foobar2000
 ----1.0.7 released----
 Change "Encode" button to read "Stop" during the encode process
 ----1.0.8 released----
+Compile the regular expression used in each LAME encode
+    Any speed increase is likely overshadowed by the encoding time
+Updated LAME binary to 3.99.5
+----1.0.9 released----
