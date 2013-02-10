@@ -203,7 +203,7 @@ namespace FlacSquisher {
 			metaflacLocation.Text = Path.GetDirectoryName(Application.ExecutablePath) + Path.DirectorySeparatorChar + "metaflac.exe";
 			hidewin.Checked = true;
 			thirdPartyLameBox.Checked = false;
-			fileExts.Text = "txt log pdf cue";
+			fileExts.Text = "txt log pdf cue mp3 mp4 flv";
 			copyExts.Text = "jpg png";
 			autoUpdate.Checked = false;
 		}

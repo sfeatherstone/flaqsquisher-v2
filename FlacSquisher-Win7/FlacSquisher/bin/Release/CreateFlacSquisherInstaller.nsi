@@ -2,7 +2,7 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "FlacSquisher"
-!define PRODUCT_VERSION "1.0.10"
+!define PRODUCT_VERSION "1.0.11"
 !define PRODUCT_PUBLISHER "FlacSquisher"
 !define PRODUCT_WEB_SITE "http://sourceforge.net/projects/flacsquisher/"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\FlacSquisher.exe"
@@ -46,7 +46,7 @@ FunctionEnd
 ; MUI end ------
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
-OutFile "FlacSquisher-Win7-install.exe"
+OutFile "FlacSquisher-${PRODUCT_VERSION}-Win7-Installer.exe"
 InstallDir "$PROGRAMFILES\FlacSquisher"
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
 ShowInstDetails show

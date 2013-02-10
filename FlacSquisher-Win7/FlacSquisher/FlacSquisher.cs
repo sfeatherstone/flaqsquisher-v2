@@ -96,7 +96,7 @@ namespace FlacSquisher {
 				flacexe = System.IO.Path.GetDirectoryName(Application.ExecutablePath) + dirSeparator + "flac.exe";
 				lamePath = System.IO.Path.GetDirectoryName(Application.ExecutablePath) + dirSeparator + "lame.exe";
 				metaflacPath = System.IO.Path.GetDirectoryName(Application.ExecutablePath) + dirSeparator + "metaflac.exe";
-				ignoredExts = "txt log pdf cue";
+				ignoredExts = "txt log pdf cue mp3 mp4 flv";
 				copiedExts = "jpg png";
 				hidewin = true;
 				thirdPartyLame = false;
