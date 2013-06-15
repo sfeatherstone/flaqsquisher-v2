@@ -120,3 +120,6 @@ Updated OggEnc binary to 2.87 using libvorbis 1.3.3
 ----1.0.10 released----
 Added "mp3", "mp4", and "flv" to the list of ignored extensions
 ----1.0.11 released----
+Updated FLAC and Metaflac binaries to 1.3.0
+Change Metaflac call to take advantage of the increased UTF-8 support in FLAC 1.3.0
+----1.0.12 released----

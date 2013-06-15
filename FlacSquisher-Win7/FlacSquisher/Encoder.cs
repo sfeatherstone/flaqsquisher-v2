@@ -184,11 +184,12 @@ namespace FlacSquisher {
 				// LAME does not automatically tag MP3s encoded from FLACs like OggEnc does, so we need to use Metaflac and LAME's tag options
 				ProcessStartInfo metaflacPsi = new ProcessStartInfo();
 				metaflacPsi.FileName = metaflacPath;
-				metaflacPsi.Arguments = "--list \"" + encoderSourceFile + "\"";
+				metaflacPsi.Arguments = "--no-utf8-convert --list \"" + encoderSourceFile + "\"";
 				metaflacPsi.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
 				metaflacPsi.CreateNoWindow = true;
 				metaflacPsi.RedirectStandardOutput = true;
 				metaflacPsi.UseShellExecute = false;
+				metaflacPsi.StandardOutputEncoding = Encoding.UTF8;
 
 				Process metaflacProcess = Process.Start(metaflacPsi);
 				metaflacProcess.Start();
