@@ -200,25 +200,6 @@ namespace FlacSquisher {
 				sOut.Close();
 				metaflacProcess.Close();
 
-				// export the cover art to a randomly named file (to make sure we don't overwrite another file)
-				//uint seedNum = (uint) new Random().Next();
-				//coverArtPath = outputPath + partialPath + dirSeperator + seedNum;
-				coverArtPath = Path.GetTempFileName();
-
-				metaflacPsi = new ProcessStartInfo();
-				metaflacPsi.FileName = metaflacPath;
-				metaflacPsi.Arguments = "--no-utf8-convert --export-picture-to=\"" +
-					coverArtPath + "\" \"" + encoderSourceFile + "\"";
-				metaflacPsi.WindowStyle = ProcessWindowStyle.Hidden;
-				metaflacPsi.CreateNoWindow = true;
-				metaflacPsi.UseShellExecute = false;
-
-				metaflacProcess = Process.Start(metaflacPsi);
-				metaflacProcess.Start();
-				metaflacProcess.WaitForExit();
-				sOut.Close();
-				metaflacProcess.Close();
-
 				// Use regexs to extract information from the monolithic text file
 				// First grab the artist name
 				Regex regex = new Regex("comment\\[\\d+\\]: ARTIST=(.*)", RegexOptions.IgnoreCase);
@@ -291,14 +272,36 @@ namespace FlacSquisher {
 					lameopts += "--tv \"TPOS=" + discnum + "\" ";
 				}
 
-				if(File.Exists(coverArtPath)) {
-					FileStream coverArtFile = File.OpenRead(coverArtPath);
-					long length = coverArtFile.Length;
-					if(0 < length && length < 128 * 1024) { // LAME will fail if we attempt to give it album art larger than 128KB
-						lameopts += "--ti \"" + coverArtPath + "\" ";
+				regex = new Regex("type: 6 \\(PICTURE\\)", RegexOptions.IgnoreCase);
+				match = regex.Match(output);
+				if(match.Success) {
+					// export the cover art to a randomly named file (to make sure we don't overwrite another file)
+					coverArtPath = Path.GetTempFileName();
+
+					metaflacPsi = new ProcessStartInfo();
+					metaflacPsi.FileName = metaflacPath;
+					metaflacPsi.Arguments = "--no-utf8-convert --export-picture-to=\"" +
+						coverArtPath + "\" \"" + encoderSourceFile + "\"";
+					metaflacPsi.WindowStyle = ProcessWindowStyle.Hidden;
+					metaflacPsi.CreateNoWindow = true;
+					metaflacPsi.UseShellExecute = false;
+
+					metaflacProcess = Process.Start(metaflacPsi);
+					metaflacProcess.Start();
+					metaflacProcess.WaitForExit();
+					sOut.Close();
+					metaflacProcess.Close();
+
+					if(File.Exists(coverArtPath)) {
+						FileStream coverArtFile = File.OpenRead(coverArtPath);
+						long length = coverArtFile.Length;
+						if(0 < length && length < 128 * 1024) { // LAME will fail if we attempt to give it album art larger than 128KB
+							lameopts += "--ti \"" + coverArtPath + "\" ";
+						}
+						coverArtFile.Close();
 					}
-					coverArtFile.Close();
 				}
+
 				lameopts += "--add-id3v2 --ignore-tag-errors ";
 
 				if(!hidewin) {
