@@ -26,6 +26,7 @@ using System.Text.RegularExpressions;
 namespace FlacSquisher {
 	class Encoder : BackgroundWorker {
 
+		#region Argument Copies
 		string flacPath;
 		string outputPath;
 		int encoderChoice;
@@ -44,10 +45,12 @@ namespace FlacSquisher {
 		string metaflacPath;
 
 		bool thirdPartyLame;
+		#endregion
 
-		private static object lockObject = new object();
-
+		#region Utility Variables
+		string dirSeperator = System.IO.Path.DirectorySeparatorChar.ToString();
 		private static Regex printableAscii = new Regex(@"[^\u0020-\u007E]", RegexOptions.Compiled);
+		#endregion
 
 		public Encoder() {
 		}
@@ -74,6 +77,13 @@ namespace FlacSquisher {
 			bw = backworker;
 		}
 
+		private static object lockObject = new object();
+		public static object LockObject {
+			get {
+				return lockObject;
+			}
+		}
+
 		public void encoderThread() {
 			try { // exception will occur when queue is empty
 				FileInfo fi;
@@ -92,17 +102,6 @@ namespace FlacSquisher {
 				}
 			}
 			catch(Exception ex) {
-				ex.ToString();
-				//MessageBox::Show(e->ToString());
-			}
-			finally {
-
-			}
-		}
-
-		public static object LockObject {
-			get {
-				return lockObject;
 			}
 		}
 
@@ -117,8 +116,6 @@ namespace FlacSquisher {
 			bool useTempFile = false; // temp files only used if we detect non-ASCII characters
 			string encoderSourceFile = fi.FullName;
 			string encoderDestFile;
-
-			string dirSeperator = System.IO.Path.DirectorySeparatorChar.ToString();
 
 			// copy the files with the extensions that we want to copy
 			foreach(String ext in copyList) {
