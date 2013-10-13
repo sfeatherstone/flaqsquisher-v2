@@ -107,7 +107,7 @@ namespace FlacSquisher {
 		}
 
 		// take the file file passed in, and encode it using the selected encoder and options
-		public String encodeFile(FileInfo fi) {
+		private String encodeFile(FileInfo fi) {
 			// get the portion of the path that will be shared by the source and destination paths
 			string partialPath = fi.DirectoryName.Remove(0, flacPath.Length);
 			string destPath;
