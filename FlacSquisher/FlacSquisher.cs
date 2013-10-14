@@ -187,7 +187,7 @@ namespace FlacSquisher {
 				sr.Close();
 				return 1;
 			}
-			catch(Exception ex) { // any settings loaded before the error remain -- this may or may not be desired
+			catch(Exception) { // any settings loaded before the error remain -- this may or may not be desired
 				MessageBox.Show("The configuration file was not read in properly. This sometimes happens when upgrading from an earlier version. Please ensure that your settings were imported properly.",
 						"Configuration file error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly, false);
 				return 0;
@@ -570,7 +570,7 @@ namespace FlacSquisher {
 					}
 				}
 			}
-			catch(Exception ex) {
+			catch(Exception) {
 				UpdateResults ur = new UpdateResults();
 				ur.Results = "Error contacting the server to check for updates." + Environment.NewLine + "Would you like to check manually on the web?";
 				ur.ShowDialog();

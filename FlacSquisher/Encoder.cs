@@ -85,27 +85,31 @@ namespace FlacSquisher {
 		}
 
 		public void encoderThread() {
-			try { // exception will occur when queue is empty
-				FileInfo fi;
-				// goes until the queue is empty
-				while(jobQueue.Count > 0) {
-					//lock(jobQueue) {
+			FileInfo fi = null;
+			while(jobQueue.Count > 0) {
+				try {
 					lock(lockObject) {
 						fi = jobQueue.Dequeue();
 					}
-					String consoleText = encodeFile(fi);
-
-					EncoderResults results = new EncoderResults(String.Copy(fi.FullName), String.Copy(consoleText), jobQueue.Count);
-
-					// increment "value" on the progress bar by one
-					bw.ReportProgress(20, results);
 				}
-			}
-			catch(Exception ex) {
+				// this type of exception will occur when queue is empty on dequeue -- just in case the lock
+				// isn't sufficient, we don't want that condition to be fatal
+				catch(InvalidOperationException) {
+				}
+				String consoleText = encodeFile(fi);
+
+				EncoderResults results = new EncoderResults(String.Copy(fi.FullName), String.Copy(consoleText), jobQueue.Count);
+
+				// increment "value" on the progress bar by one
+				bw.ReportProgress(20, results);
 			}
 		}
 
-		// take the file file passed in, and encode it using the selected encoder and options
+		/// <summary>
+		/// Take the file file passed in, and encode it using the selected encoder and options
+		/// </summary>
+		/// <param name="fi">The FileInfo object of the file to be encoded</param>
+		/// <returns>Empty string if successful, otherwise the console output</returns>
 		private String encodeFile(FileInfo fi) {
 			// get the portion of the path that will be shared by the source and destination paths
 			string partialPath = fi.DirectoryName.Remove(0, flacPath.Length);
