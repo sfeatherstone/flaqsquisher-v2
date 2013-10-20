@@ -139,20 +139,15 @@ namespace FlacSquisher {
 				}
 			}
 
+			string extension;
 			if(encoderChoice == 0) {
-				destPath = outputPath + partialPath + dirSeperator + fi.Name.Replace(".flac", ".ogg");
-				// in case the input file is a FLAC file without an extension, add .ogg on the end
-				if(!destPath.EndsWith(".ogg")) {
-					destPath = destPath + ".ogg";
-				}
+				extension = ".ogg";
 			}
 			else {
-				destPath = outputPath + partialPath + dirSeperator + fi.Name.Replace(".flac", ".mp3");
-				// in case the input file is a FLAC file without an extension, add .mp3 on the end
-				if(!destPath.EndsWith(".mp3")) {
-					destPath = destPath + ".mp3";
-				}
+				extension = ".mp3";
 			}
+			destPath = buildDestPath(fi, partialPath, extension);
+
 			// if the resulting path exists already, we don't need to encode again
 			if(File.Exists(destPath)) {
 				return "";
@@ -367,6 +362,16 @@ namespace FlacSquisher {
 			}
 
 			return consoleText;
+		}
+
+		private string buildDestPath(FileInfo fi, string partialPath, string extension) {
+			string destPath;
+			destPath = outputPath + partialPath + dirSeperator + fi.Name.Replace(".flac", extension);
+			// in case the input file is a FLAC file without an extension, add .ogg on the end
+			if(!destPath.EndsWith(extension)) {
+				destPath = destPath + extension;
+			}
+			return destPath;
 		}
 
 	}
