@@ -114,12 +114,7 @@ namespace FlacSquisher {
 			// get the portion of the path that will be shared by the source and destination paths
 			string partialPath = fi.DirectoryName.Remove(0, flacPath.Length);
 			string destPath;
-			string coverArtPath = "";
 			string consoleText = "";
-
-			bool useTempFile = false; // temp files only used if we detect non-ASCII characters
-			string encoderSourceFile = fi.FullName;
-			string encoderDestFile;
 
 			// copy the files with the extensions that we want to copy
 			foreach(String ext in copyList) {
@@ -156,170 +151,220 @@ namespace FlacSquisher {
 			if(!Directory.Exists(outputPath + partialPath)) {
 				Directory.CreateDirectory(outputPath + partialPath);
 			}
-			encoderDestFile = destPath;
+
+			if(encoderChoice == 0) {
+				consoleText = encodeOggFile(fi, destPath);
+			}
+			else {
+				consoleText = encodeMp3File(fi, destPath);
+			}
+
+			return consoleText;
+		}
+
+		private string encodeOggFile(FileInfo fi, string destPath) {
+			string consoleText = "";
+
+			ProcessStartInfo psi = new ProcessStartInfo();
+			
+			// oggenc can take Flac files as input, so no decoding necessary
+			psi.FileName = oggPath;
+			psi.Arguments = "\"" + fi.FullName + "\" -o \"" + destPath + "\" " + options;
+
+			if(hidewin) {
+				psi.WindowStyle = ProcessWindowStyle.Hidden;
+				psi.CreateNoWindow = true;
+			}
+			else {
+				psi.WindowStyle = ProcessWindowStyle.Normal;
+				psi.CreateNoWindow = false;
+			}
+
+			psi.RedirectStandardError = true;
+			psi.UseShellExecute = false;
+
+			System.Diagnostics.Process p = System.Diagnostics.Process.Start(psi);
+
+			StreamReader sError = p.StandardError;
+			String errorString = sError.ReadToEnd();
+
+			// don't set a timeout, cause encoding could take a long time, depending on CPU speed, load, and file length
+			p.WaitForExit();
+
+			sError.Close();
+
+			if(p.ExitCode != 0) {
+				consoleText = errorString;
+			}
+
+			// close the process handle when it's exited
+			p.Close();
+
+			return consoleText;
+		}
+
+		private string encodeMp3File(FileInfo fi, string destPath) {
+			string consoleText = "";
+			string coverArtPath = "";
+			bool useTempFile = false; // temp files only used if we detect non-ASCII characters
+			string encoderSourceFile = fi.FullName;
+			string encoderDestFile = destPath;
 
 			// call different things on the command line, depending on which encoder is being used
 			ProcessStartInfo psi = new ProcessStartInfo();
-			if(encoderChoice == 0) {
-				// oggenc can take Flac files as input, so no decoding necessary
-				psi.FileName = oggPath;
-				psi.Arguments = "\"" + fi.FullName + "\" -o \"" + destPath + "\" " + options;
+
+			// LAME only has support for Extended ASCII, but to be safe we'll restrict it to printable ASCII
+			// If the filename contains non-printable-ASCII characters, use a temporary file
+			// http://stackoverflow.com/questions/1999566/string-filter-detect-non-ascii-signs
+			if(printableAscii.IsMatch(fi.FullName)) {
+				useTempFile = true;
+				encoderSourceFile = Path.GetTempFileName();
+				encoderDestFile = Path.GetTempFileName();
+				File.Copy(fi.FullName, encoderSourceFile, true);
 			}
 
-			else {
-				// LAME only has support for Extended ASCII, but to be safe we'll restrict it to printable ASCII
-				// If the filename contains non-printable-ASCII characters, use a temporary file
-				// http://stackoverflow.com/questions/1999566/string-filter-detect-non-ascii-signs
-				if(printableAscii.IsMatch(fi.FullName)) {
-					useTempFile = true;
-					encoderSourceFile = Path.GetTempFileName();
-					encoderDestFile = Path.GetTempFileName();
-					File.Copy(fi.FullName, encoderSourceFile, true);
-				}
+			// LAME does not automatically tag MP3s encoded from FLACs like OggEnc does, so we need to use Metaflac and LAME's tag options
+			ProcessStartInfo metaflacPsi = new ProcessStartInfo();
+			metaflacPsi.FileName = metaflacPath;
+			metaflacPsi.Arguments = "--no-utf8-convert --list \"" + encoderSourceFile + "\"";
+			metaflacPsi.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+			metaflacPsi.CreateNoWindow = true;
+			metaflacPsi.RedirectStandardOutput = true;
+			metaflacPsi.UseShellExecute = false;
+			metaflacPsi.StandardOutputEncoding = Encoding.UTF8;
 
-				// LAME does not automatically tag MP3s encoded from FLACs like OggEnc does, so we need to use Metaflac and LAME's tag options
-				ProcessStartInfo metaflacPsi = new ProcessStartInfo();
+			Process metaflacProcess = Process.Start(metaflacPsi);
+			metaflacProcess.Start();
+			StreamReader sOut = metaflacProcess.StandardOutput;
+			String output = sOut.ReadToEnd();
+
+			metaflacProcess.WaitForExit();
+			sOut.Close();
+			metaflacProcess.Close();
+
+			// Use regexs to extract information from the monolithic text file
+			// First grab the artist name
+			Regex regex = new Regex("comment\\[\\d+\\]: ARTIST=(.*)", RegexOptions.IgnoreCase);
+			Match match = regex.Match(output);
+			String artist = "";
+			if(match.Success) {
+				artist = match.Groups[1].Value;
+				artist = artist.Trim();
+			}
+			// Next grab the track title
+			regex = new Regex("comment\\[\\d+\\]: TITLE=(.*)", RegexOptions.IgnoreCase);
+			match = regex.Match(output);
+			String title = "";
+			if(match.Success) {
+				title = match.Groups[1].Value;
+				title = title.Trim();
+			}
+			// Next grab the album title
+			regex = new Regex("comment\\[\\d+\\]: ALBUM=(.*)", RegexOptions.IgnoreCase);
+			match = regex.Match(output);
+			String album = "";
+			if(match.Success) {
+				album = match.Groups[1].Value;
+				album = album.Trim();
+			}
+			regex = new Regex("comment\\[\\d+\\]: DATE=(.*)", RegexOptions.IgnoreCase);
+			match = regex.Match(output);
+			String date = "";
+			if(match.Success) {
+				date = match.Groups[1].Value;
+				date = date.Trim();
+			}
+			regex = new Regex("comment\\[\\d+\\]: TRACKNUMBER=(.*)", RegexOptions.IgnoreCase);
+			match = regex.Match(output);
+			String tracknum = "";
+			if(match.Success) {
+				tracknum = match.Groups[1].Value;
+				tracknum = tracknum.Trim();
+			}
+			regex = new Regex("comment\\[\\d+\\]: GENRE=(.*)", RegexOptions.IgnoreCase);
+			match = regex.Match(output);
+			String genre = "";
+			if(match.Success) {
+				genre = match.Groups[1].Value;
+				genre = genre.Trim();
+			}
+			regex = new Regex("comment\\[\\d+\\]: ALBUM ARTIST=(.*)", RegexOptions.IgnoreCase);
+			match = regex.Match(output);
+			String albumArtist = "";
+			if(match.Success) {
+				albumArtist = match.Groups[1].Value;
+				albumArtist = albumArtist.Trim();
+			}
+			regex = new Regex("comment\\[\\d+\\]: DISCNUMBER=(.*)", RegexOptions.IgnoreCase);
+			match = regex.Match(output);
+			String discnum = "";
+			if(match.Success) {
+				discnum = match.Groups[1].Value;
+				discnum = discnum.Trim();
+			}
+
+			// Add the tagging options to the command line
+			String lameopts = options + " --ta \"" + artist + "\" --tt \"" + title + "\" --tl \"" + album + "\" --ty \""
+				+ date + "\" --tn \"" + tracknum + "\" --tg \"" + genre + "\" ";
+
+			if(albumArtist.Length > 0) {
+				lameopts += "--tv \"TPE2=" + albumArtist + "\" ";
+			}
+			if(discnum.Length > 0) {
+				lameopts += "--tv \"TPOS=" + discnum + "\" ";
+			}
+
+			regex = new Regex("type: 6 \\(PICTURE\\)", RegexOptions.IgnoreCase);
+			match = regex.Match(output);
+			if(match.Success) {
+				// export the cover art to a randomly named file (to make sure we don't overwrite another file)
+				coverArtPath = Path.GetTempFileName();
+
+				metaflacPsi = new ProcessStartInfo();
 				metaflacPsi.FileName = metaflacPath;
-				metaflacPsi.Arguments = "--no-utf8-convert --list \"" + encoderSourceFile + "\"";
-				metaflacPsi.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+				metaflacPsi.Arguments = "--no-utf8-convert --export-picture-to=\"" +
+					coverArtPath + "\" \"" + encoderSourceFile + "\"";
+				metaflacPsi.WindowStyle = ProcessWindowStyle.Hidden;
 				metaflacPsi.CreateNoWindow = true;
-				metaflacPsi.RedirectStandardOutput = true;
 				metaflacPsi.UseShellExecute = false;
-				metaflacPsi.StandardOutputEncoding = Encoding.UTF8;
 
-				Process metaflacProcess = Process.Start(metaflacPsi);
+				metaflacProcess = Process.Start(metaflacPsi);
 				metaflacProcess.Start();
-				StreamReader sOut = metaflacProcess.StandardOutput;
-				String output = sOut.ReadToEnd();
-
 				metaflacProcess.WaitForExit();
 				sOut.Close();
 				metaflacProcess.Close();
 
-				// Use regexs to extract information from the monolithic text file
-				// First grab the artist name
-				Regex regex = new Regex("comment\\[\\d+\\]: ARTIST=(.*)", RegexOptions.IgnoreCase);
-				Match match = regex.Match(output);
-				String artist = "";
-				if(match.Success) {
-					artist = match.Groups[1].Value;
-					artist = artist.Trim();
-				}
-				// Next grab the track title
-				regex = new Regex("comment\\[\\d+\\]: TITLE=(.*)", RegexOptions.IgnoreCase);
-				match = regex.Match(output);
-				String title = "";
-				if(match.Success) {
-					title = match.Groups[1].Value;
-					title = title.Trim();
-				}
-				// Next grab the album title
-				regex = new Regex("comment\\[\\d+\\]: ALBUM=(.*)", RegexOptions.IgnoreCase);
-				match = regex.Match(output);
-				String album = "";
-				if(match.Success) {
-					album = match.Groups[1].Value;
-					album = album.Trim();
-				}
-				regex = new Regex("comment\\[\\d+\\]: DATE=(.*)", RegexOptions.IgnoreCase);
-				match = regex.Match(output);
-				String date = "";
-				if(match.Success) {
-					date = match.Groups[1].Value;
-					date = date.Trim();
-				}
-				regex = new Regex("comment\\[\\d+\\]: TRACKNUMBER=(.*)", RegexOptions.IgnoreCase);
-				match = regex.Match(output);
-				String tracknum = "";
-				if(match.Success) {
-					tracknum = match.Groups[1].Value;
-					tracknum = tracknum.Trim();
-				}
-				regex = new Regex("comment\\[\\d+\\]: GENRE=(.*)", RegexOptions.IgnoreCase);
-				match = regex.Match(output);
-				String genre = "";
-				if(match.Success) {
-					genre = match.Groups[1].Value;
-					genre = genre.Trim();
-				}
-				regex = new Regex("comment\\[\\d+\\]: ALBUM ARTIST=(.*)", RegexOptions.IgnoreCase);
-				match = regex.Match(output);
-				String albumArtist = "";
-				if(match.Success) {
-					albumArtist = match.Groups[1].Value;
-					albumArtist = albumArtist.Trim();
-				}
-				regex = new Regex("comment\\[\\d+\\]: DISCNUMBER=(.*)", RegexOptions.IgnoreCase);
-				match = regex.Match(output);
-				String discnum = "";
-				if(match.Success) {
-					discnum = match.Groups[1].Value;
-					discnum = discnum.Trim();
-				}
-
-				// Add the tagging options to the command line
-				String lameopts = options + " --ta \"" + artist + "\" --tt \"" + title + "\" --tl \"" + album + "\" --ty \""
-					+ date + "\" --tn \"" + tracknum + "\" --tg \"" + genre + "\" ";
-
-				if(albumArtist.Length > 0) {
-					lameopts += "--tv \"TPE2=" + albumArtist + "\" ";
-				}
-				if(discnum.Length > 0) {
-					lameopts += "--tv \"TPOS=" + discnum + "\" ";
-				}
-
-				regex = new Regex("type: 6 \\(PICTURE\\)", RegexOptions.IgnoreCase);
-				match = regex.Match(output);
-				if(match.Success) {
-					// export the cover art to a randomly named file (to make sure we don't overwrite another file)
-					coverArtPath = Path.GetTempFileName();
-
-					metaflacPsi = new ProcessStartInfo();
-					metaflacPsi.FileName = metaflacPath;
-					metaflacPsi.Arguments = "--no-utf8-convert --export-picture-to=\"" +
-						coverArtPath + "\" \"" + encoderSourceFile + "\"";
-					metaflacPsi.WindowStyle = ProcessWindowStyle.Hidden;
-					metaflacPsi.CreateNoWindow = true;
-					metaflacPsi.UseShellExecute = false;
-
-					metaflacProcess = Process.Start(metaflacPsi);
-					metaflacProcess.Start();
-					metaflacProcess.WaitForExit();
-					sOut.Close();
-					metaflacProcess.Close();
-
-					if(File.Exists(coverArtPath)) {
-						FileStream coverArtFile = File.OpenRead(coverArtPath);
-						long length = coverArtFile.Length;
-						if(0 < length && length < 128 * 1024) { // LAME will fail if we attempt to give it album art larger than 128KB
-							lameopts += "--ti \"" + coverArtPath + "\" ";
-						}
-						coverArtFile.Close();
+				if(File.Exists(coverArtPath)) {
+					FileStream coverArtFile = File.OpenRead(coverArtPath);
+					long length = coverArtFile.Length;
+					if(0 < length && length < 128 * 1024) { // LAME will fail if we attempt to give it album art larger than 128KB
+						lameopts += "--ti \"" + coverArtPath + "\" ";
 					}
+					coverArtFile.Close();
 				}
+			}
 
-				lameopts += "--add-id3v2 --ignore-tag-errors ";
+			lameopts += "--add-id3v2 --ignore-tag-errors ";
 
-				if(!hidewin) {
-					lameopts += "--verbose ";
-				}
+			if(!hidewin) {
+				lameopts += "--verbose ";
+			}
 
-				if(thirdPartyLame || BugWorkarounds.LameLibsndfileReturnsZero) {
-					// The normal compile of LAME cannot take Flac files as
-					// input, so we need to decode using flac.exe first
-					psi.FileName = "cmd.exe";
-					// "/s" switch allows us to give the arguments of "/c" inside quotes
-					psi.Arguments = "/s /c \"\"" + flacexe + "\" -dc \"" + encoderSourceFile + "\" | \"" + lamePath + "\" " +
-						lameopts + " - \"" + encoderDestFile + "\"\"";
-				}
-				else {
-					// Since FlacSquisher 0.3.2, we've included the libsndfile .dll with Lame, so we can use
-					// Flac files as input. (we didn't implement this until 0.5.6)
-					psi.FileName = lamePath;
+			if(thirdPartyLame || BugWorkarounds.LameLibsndfileReturnsZero) {
+				// The normal compile of LAME cannot take Flac files as
+				// input, so we need to decode using flac.exe first
+				psi.FileName = "cmd.exe";
+				// "/s" switch allows us to give the arguments of "/c" inside quotes
+				psi.Arguments = "/s /c \"\"" + flacexe + "\" -dc \"" + encoderSourceFile + "\" | \"" + lamePath + "\" " +
+					lameopts + " - \"" + encoderDestFile + "\"\"";
+			}
+			else {
+				// Since FlacSquisher 0.3.2, we've included the libsndfile .dll with Lame, so we can use
+				// Flac files as input. (we didn't implement this until 0.5.6)
+				psi.FileName = lamePath;
 
-					psi.Arguments = lameopts;
-					psi.Arguments += " \"" + encoderSourceFile + "\" \"" + encoderDestFile + "\"";
-				}
+				psi.Arguments = lameopts;
+				psi.Arguments += " \"" + encoderSourceFile + "\" \"" + encoderDestFile + "\"";
 			}
 
 			if(hidewin) {
@@ -367,7 +412,7 @@ namespace FlacSquisher {
 		private string buildDestPath(FileInfo fi, string partialPath, string extension) {
 			string destPath;
 			destPath = outputPath + partialPath + dirSeperator + fi.Name.Replace(".flac", extension);
-			// in case the input file is a FLAC file without an extension, add .ogg on the end
+			// in case the input file is a FLAC file without an extension, add the extension on the end
 			if(!destPath.EndsWith(extension)) {
 				destPath = destPath + extension;
 			}
