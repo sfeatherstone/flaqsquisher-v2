@@ -206,6 +206,7 @@ namespace FlacSquisher {
 		private string encodeMp3File(FileInfo fi, string destPath) {
 			string consoleText = "";
 			string coverArtPath = "";
+			string decodedTempFile = ""; // used if we're running on Unix, because I/O piping of external processes doesn't work the same
 			bool useTempFile = false; // temp files only used if we detect non-ASCII characters
 			string encoderSourceFile = fi.FullName;
 			string encoderDestFile = destPath;
@@ -350,7 +351,38 @@ namespace FlacSquisher {
 				lameopts += "--verbose ";
 			}
 
-			if(thirdPartyLame || BugWorkarounds.LameLibsndfileReturnsZero) {
+			if(System.Environment.OSVersion.Platform == PlatformID.Unix || System.Environment.OSVersion.Platform == PlatformID.MacOSX) {
+				// Mono can't create cmd.exe, so as far as I can tell we can't do I/O piping from inside Unix environments
+				decodedTempFile = Path.GetTempFileName();
+
+				ProcessStartInfo flacPsi = new ProcessStartInfo();
+				flacPsi.FileName = flacexe;
+				flacPsi.Arguments = " -df -o \"" + decodedTempFile + "\" \"" + encoderSourceFile + "\"";
+				flacPsi.WindowStyle = ProcessWindowStyle.Hidden;
+				flacPsi.CreateNoWindow = true;
+				flacPsi.UseShellExecute = false;
+				flacPsi.RedirectStandardError = true;
+
+				Process flacProcess = Process.Start(flacPsi);
+
+				StreamReader flacError = flacProcess.StandardError;
+				String flacErrorString = flacError.ReadToEnd();
+
+				flacProcess.WaitForExit();
+				flacError.Close();
+
+				if(flacProcess.ExitCode != 0) {
+					consoleText = flacErrorString;
+				}
+
+				flacProcess.Close();
+
+				psi.FileName = lamePath;
+
+				psi.Arguments = lameopts;
+				psi.Arguments += " \"" + decodedTempFile + "\" " + lameopts + " \"" + encoderDestFile + "\"";
+			}
+			else if(thirdPartyLame || BugWorkarounds.LameLibsndfileReturnsZero) {
 				// The normal compile of LAME cannot take Flac files as
 				// input, so we need to decode using flac.exe first
 				psi.FileName = "cmd.exe";
@@ -390,7 +422,7 @@ namespace FlacSquisher {
 			sError.Close();
 
 			if(p.ExitCode != 0) {
-				consoleText = errorString;
+				consoleText += errorString;
 			}
 
 			// close the process handle when it's exited
@@ -399,6 +431,10 @@ namespace FlacSquisher {
 			// if we imported the cover art, delete the temp file
 			if(File.Exists(coverArtPath)) {
 				File.Delete(coverArtPath);
+			}
+
+			if(File.Exists(decodedTempFile)) {
+				File.Delete(decodedTempFile);
 			}
 
 			if(useTempFile) {
