@@ -336,12 +336,11 @@ namespace FlacSquisher {
 				metaflacProcess.Close();
 
 				if(File.Exists(coverArtPath)) {
-					FileStream coverArtFile = File.OpenRead(coverArtPath);
-					long length = coverArtFile.Length;
+					FileInfo coverArtInfo = new FileInfo(coverArtPath);
+					long length = coverArtInfo.Length;
 					if(0 < length && length < 128 * 1024) { // LAME will fail if we attempt to give it album art larger than 128KB
 						lameopts += "--ti \"" + coverArtPath + "\" ";
 					}
-					coverArtFile.Close();
 				}
 			}
 

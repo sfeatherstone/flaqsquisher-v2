@@ -125,3 +125,5 @@ Change Metaflac call to take advantage of the increased UTF-8 support in FLAC 1.
 ----1.0.12 released----
 Stop trying to extract album art from Flac files that don't contain any
 ----1.0.13 released----
+Call FLAC separately from LAME for Unix, since we can't do I/O piping the same way
+Fix error caused by attempting to open the temporary album art file while it was still open

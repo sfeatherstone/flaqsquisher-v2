@@ -219,7 +219,7 @@ namespace FlacSquisher {
 				sw.Close();
 				return 1;
 			}
-			catch(Exception) { // any errors are likely discovered on attempting to open the file, so most likely nothing is written
+			catch(Exception ex) { // any errors are likely discovered on attempting to open the file, so most likely nothing is written
 				MessageBox.Show("The config file was not written properly. Please report this to the application owners: " + ex.ToString());
 				return 0;
 			}
@@ -591,7 +591,7 @@ namespace FlacSquisher {
 					}
 				}
 			}
-			catch(Exception ex) {
+			catch(Exception) {
 				UpdateResults ur = new UpdateResults();
 				ur.Results = "Error contacting the server to check for updates." + Environment.NewLine + "Would you like to check manually on the web?";
 				ur.ShowDialog();
