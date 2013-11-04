@@ -404,9 +404,6 @@ namespace FlacSquisher {
 
 			// update the status text
 			encodeStatus.Text = encodeProgress.Value + " of " + encodeProgress.Maximum + " files completed";
-
-			// refresh the window, just in case
-			this.Refresh();
 		}
 
 		public void enableEncodeButton() {
