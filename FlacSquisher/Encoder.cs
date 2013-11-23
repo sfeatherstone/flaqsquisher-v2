@@ -356,12 +356,12 @@ namespace FlacSquisher {
 				lameopts += "--noreplaygain ";
 			}
 			else if(replayGainType == EncoderParams.ReplayGainType.Album) {
-				if(albumGain[0] == '-') {
+				if(albumGain.Length > 0 && albumGain[0] == '-') {
 					lameopts += "--gain " + albumGain + " ";
 				}
 			}
 			else if(replayGainType == EncoderParams.ReplayGainType.Track) {
-				if(trackGain[0] == '-') {
+				if(trackGain.Length > 0 && trackGain[0] == '-') {
 					lameopts += "--gain " + trackGain + " ";
 				}
 			}
