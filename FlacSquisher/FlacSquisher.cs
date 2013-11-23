@@ -3,7 +3,7 @@
 // the Flac files
 
 /*
-Copyright 2008-2011 Michael Brown
+Copyright 2008-2013 Michael Brown
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -389,6 +389,7 @@ namespace FlacSquisher {
 			args.IgnoreList = ignoreList;
 			args.CopyList = copyList;
 			args.ThirdPartyLame = thirdPartyLame;
+			args.GainType = EncoderParams.ReplayGainType.LameTag;
 
 			this.recursingBackgroundWorker1.RunWorkerAsync(args);
 		}

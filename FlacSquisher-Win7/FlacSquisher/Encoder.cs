@@ -1,5 +1,5 @@
 ﻿/*
-Copyright 2008-2011 Michael Brown
+Copyright 2008-2013 Michael Brown
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -45,6 +45,7 @@ namespace FlacSquisher {
 		string metaflacPath;
 
 		bool thirdPartyLame;
+		EncoderParams.ReplayGainType replayGainType;
 		#endregion
 
 		#region Utility Variables
@@ -68,6 +69,7 @@ namespace FlacSquisher {
 			copyList = args.CopyList;
 			hidewin = args.Hidewin;
 			thirdPartyLame = args.ThirdPartyLame;
+			replayGainType = args.GainType;
 
 			flacexe = args.FlacExe;
 			oggPath = args.OggPath;
@@ -303,6 +305,34 @@ namespace FlacSquisher {
 				discnum = match.Groups[1].Value;
 				discnum = discnum.Trim();
 			}
+			regex = new Regex("comment\\[\\d+\\]: replaygain_album_gain=(.*) dB", RegexOptions.IgnoreCase);
+			match = regex.Match(output);
+			String albumGain = "";
+			if(match.Success) {
+				albumGain = match.Groups[1].Value;
+				albumGain = albumGain.Trim();
+			}
+			regex = new Regex("comment\\[\\d+\\]: replaygain_album_peak=(.*)", RegexOptions.IgnoreCase);
+			match = regex.Match(output);
+			String albumPeak = "";
+			if(match.Success) {
+				albumPeak = match.Groups[1].Value;
+				albumPeak = albumPeak.Trim();
+			}
+			regex = new Regex("comment\\[\\d+\\]: replaygain_track_gain=(.*) dB", RegexOptions.IgnoreCase);
+			match = regex.Match(output);
+			String trackGain = "";
+			if(match.Success) {
+				trackGain = match.Groups[1].Value;
+				trackGain = trackGain.Trim();
+			}
+			regex = new Regex("comment\\[\\d+\\]: replaygain_track_peak=(.*)", RegexOptions.IgnoreCase);
+			match = regex.Match(output);
+			String trackPeak = "";
+			if(match.Success) {
+				trackPeak = match.Groups[1].Value;
+				trackPeak = trackPeak.Trim();
+			}
 
 			// Add the tagging options to the command line
 			String lameopts = options + " --ta \"" + artist + "\" --tt \"" + title + "\" --tl \"" + album + "\" --ty \""
@@ -313,6 +343,27 @@ namespace FlacSquisher {
 			}
 			if(discnum.Length > 0) {
 				lameopts += "--tv \"TPOS=" + discnum + "\" ";
+			}
+
+			// Lame Tag is put on by default
+			if(replayGainType == EncoderParams.ReplayGainType.ID3Tag) {
+				lameopts += "--tv \"TXXX=replaygain_album_gain=" + albumGain + " dB\" ";
+				lameopts += "--tv \"TXXX=replaygain_album_peak=" + albumPeak + "\" ";
+				lameopts += "--tv \"TXXX=replaygain_track_gain=" + trackGain + " dB\" ";
+				lameopts += "--tv \"TXXX=replaygain_track_peak=" + trackPeak + "\" ";
+			}
+			else if(replayGainType == EncoderParams.ReplayGainType.None) {
+				lameopts += "--noreplaygain ";
+			}
+			else if(replayGainType == EncoderParams.ReplayGainType.Album) {
+				if(albumGain[0] == '-') {
+					lameopts += "--gain " + albumGain + " ";
+				}
+			}
+			else if(replayGainType == EncoderParams.ReplayGainType.Track) {
+				if(trackGain[0] == '-') {
+					lameopts += "--gain " + trackGain + " ";
+				}
 			}
 
 			regex = new Regex("type: 6 \\(PICTURE\\)", RegexOptions.IgnoreCase);

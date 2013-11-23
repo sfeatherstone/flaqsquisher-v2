@@ -394,6 +394,7 @@ namespace FlacSquisher {
 			args.IgnoreList = ignoreList;
 			args.CopyList = copyList;
 			args.ThirdPartyLame = thirdPartyLame;
+			args.GainType = EncoderParams.ReplayGainType.LameTag;
 
 			this.recursingBackgroundWorker1.RunWorkerAsync(args);
 		}

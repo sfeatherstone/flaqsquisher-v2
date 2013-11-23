@@ -127,3 +127,5 @@ Stop trying to extract album art from Flac files that don't contain any
 ----1.0.13 released----
 Call FLAC separately from LAME for Unix, since we can't do I/O piping the same way
 Fix error caused by attempting to open the temporary album art file while it was still open
+----1.1.0 released----
+Remove unnecessary refresh call, letting the skipped files get passed much more quickly

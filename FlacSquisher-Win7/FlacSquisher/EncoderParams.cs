@@ -1,5 +1,5 @@
 ﻿/*
-Copyright 2008-2011 Michael Brown
+Copyright 2008-2013 Michael Brown
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -180,6 +180,23 @@ namespace FlacSquisher {
 			}
 			set {
 				thirdPartyLame = value;
+			}
+		}
+
+		public enum ReplayGainType {
+			LameTag = 0,
+			ID3Tag = 1,
+			None = 2,
+			Album = 3,
+			Track = 4
+		};
+		ReplayGainType replayGainType;
+		public ReplayGainType GainType {
+			get {
+				return replayGainType;
+			}
+			set {
+				replayGainType = value;
 			}
 		}
 	}
