@@ -156,6 +156,24 @@ namespace FlacSquisher {
 			}
 		}
 
+		EncoderParams.ReplayGainType replayGainType;
+		internal EncoderParams.ReplayGainType GainType {
+			get {
+				return replayGainType;
+			}
+			set {
+				replayGainType = value;
+			}
+		}
+
+		private void replayGainOptionsButton_Click(object sender, EventArgs e) {
+			ReplayGainOptions replayGainOptions = new ReplayGainOptions();
+			replayGainOptions.GainType = replayGainType;
+			if(replayGainOptions.ShowDialog(this) != DialogResult.Cancel) {
+				replayGainType = replayGainOptions.GainType;
+			}
+		}
+
 		public string FileExts {
 			get {
 				return fileExts.Text;

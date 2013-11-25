@@ -25,10 +25,6 @@
 		private void InitializeComponent() {
 			this.components = new System.ComponentModel.Container();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-			this.panel1 = new System.Windows.Forms.Panel();
-			this.okButton = new System.Windows.Forms.Button();
-			this.cancelButton = new System.Windows.Forms.Button();
-			this.defaultsButton = new System.Windows.Forms.Button();
 			this.panel2 = new System.Windows.Forms.Panel();
 			this.copyExts = new System.Windows.Forms.TextBox();
 			this.copyExtsLabel = new System.Windows.Forms.Label();
@@ -51,14 +47,19 @@
 			this.flacLabel = new System.Windows.Forms.Label();
 			this.oggLocation = new System.Windows.Forms.TextBox();
 			this.oggLabel = new System.Windows.Forms.Label();
-			this.thirdPartyLameTooltip = new System.Windows.Forms.ToolTip(this.components);
+			this.panel1 = new System.Windows.Forms.Panel();
+			this.okButton = new System.Windows.Forms.Button();
+			this.cancelButton = new System.Windows.Forms.Button();
+			this.defaultsButton = new System.Windows.Forms.Button();
 			this.panel4 = new System.Windows.Forms.Panel();
 			this.autoUpdate = new System.Windows.Forms.CheckBox();
+			this.thirdPartyLameTooltip = new System.Windows.Forms.ToolTip(this.components);
+			this.replayGainOptionsButton = new System.Windows.Forms.Button();
 			this.tableLayoutPanel1.SuspendLayout();
-			this.panel1.SuspendLayout();
 			this.panel2.SuspendLayout();
 			this.panel3.SuspendLayout();
 			this.encoderBox.SuspendLayout();
+			this.panel1.SuspendLayout();
 			this.panel4.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -76,54 +77,13 @@
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
 			this.tableLayoutPanel1.RowCount = 5;
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 76.56904F));
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 23.43096F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 70.18868F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 29.81132F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 94F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 39F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(424, 413);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(424, 439);
 			this.tableLayoutPanel1.TabIndex = 0;
-			// 
-			// panel1
-			// 
-			this.panel1.Controls.Add(this.okButton);
-			this.panel1.Controls.Add(this.cancelButton);
-			this.panel1.Controls.Add(this.defaultsButton);
-			this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel1.Location = new System.Drawing.Point(3, 376);
-			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(418, 34);
-			this.panel1.TabIndex = 0;
-			// 
-			// okButton
-			// 
-			this.okButton.Location = new System.Drawing.Point(259, 3);
-			this.okButton.Name = "okButton";
-			this.okButton.Size = new System.Drawing.Size(75, 23);
-			this.okButton.TabIndex = 2;
-			this.okButton.Text = "OK";
-			this.okButton.UseVisualStyleBackColor = true;
-			this.okButton.Click += new System.EventHandler(this.okButton_Click);
-			// 
-			// cancelButton
-			// 
-			this.cancelButton.Location = new System.Drawing.Point(340, 3);
-			this.cancelButton.Name = "cancelButton";
-			this.cancelButton.Size = new System.Drawing.Size(75, 23);
-			this.cancelButton.TabIndex = 1;
-			this.cancelButton.Text = "Cancel";
-			this.cancelButton.UseVisualStyleBackColor = true;
-			this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
-			// 
-			// defaultsButton
-			// 
-			this.defaultsButton.Location = new System.Drawing.Point(3, 3);
-			this.defaultsButton.Name = "defaultsButton";
-			this.defaultsButton.Size = new System.Drawing.Size(75, 23);
-			this.defaultsButton.TabIndex = 0;
-			this.defaultsButton.Text = "Defaults";
-			this.defaultsButton.UseVisualStyleBackColor = true;
-			this.defaultsButton.Click += new System.EventHandler(this.defaultsButton_Click);
 			// 
 			// panel2
 			// 
@@ -132,7 +92,7 @@
 			this.panel2.Controls.Add(this.fileextsLabel);
 			this.panel2.Controls.Add(this.fileExts);
 			this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel2.Location = new System.Drawing.Point(3, 242);
+			this.panel2.Location = new System.Drawing.Point(3, 268);
 			this.panel2.Name = "panel2";
 			this.panel2.Size = new System.Drawing.Size(418, 88);
 			this.panel2.TabIndex = 2;
@@ -171,13 +131,14 @@
 			// 
 			// panel3
 			// 
+			this.panel3.Controls.Add(this.replayGainOptionsButton);
 			this.panel3.Controls.Add(this.thirdPartyLameBox);
 			this.panel3.Controls.Add(this.encodingOptionsButton);
 			this.panel3.Controls.Add(this.hidewin);
 			this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel3.Location = new System.Drawing.Point(3, 186);
+			this.panel3.Location = new System.Drawing.Point(3, 189);
 			this.panel3.Name = "panel3";
-			this.panel3.Size = new System.Drawing.Size(418, 50);
+			this.panel3.Size = new System.Drawing.Size(418, 73);
 			this.panel3.TabIndex = 3;
 			// 
 			// thirdPartyLameBox
@@ -193,9 +154,9 @@
 			// 
 			// encodingOptionsButton
 			// 
-			this.encodingOptionsButton.Location = new System.Drawing.Point(301, 7);
+			this.encodingOptionsButton.Location = new System.Drawing.Point(291, 7);
 			this.encodingOptionsButton.Name = "encodingOptionsButton";
-			this.encodingOptionsButton.Size = new System.Drawing.Size(108, 23);
+			this.encodingOptionsButton.Size = new System.Drawing.Size(118, 23);
 			this.encodingOptionsButton.TabIndex = 1;
 			this.encodingOptionsButton.Text = "Encoding Options...";
 			this.encodingOptionsButton.UseVisualStyleBackColor = true;
@@ -228,7 +189,7 @@
 			this.encoderBox.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.encoderBox.Location = new System.Drawing.Point(3, 3);
 			this.encoderBox.Name = "encoderBox";
-			this.encoderBox.Size = new System.Drawing.Size(418, 177);
+			this.encoderBox.Size = new System.Drawing.Size(418, 180);
 			this.encoderBox.TabIndex = 4;
 			this.encoderBox.TabStop = false;
 			this.encoderBox.Text = "Encoders";
@@ -337,11 +298,52 @@
 			this.oggLabel.TabIndex = 0;
 			this.oggLabel.Text = "Ogg Encoder";
 			// 
+			// panel1
+			// 
+			this.panel1.Controls.Add(this.okButton);
+			this.panel1.Controls.Add(this.cancelButton);
+			this.panel1.Controls.Add(this.defaultsButton);
+			this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.panel1.Location = new System.Drawing.Point(3, 402);
+			this.panel1.Name = "panel1";
+			this.panel1.Size = new System.Drawing.Size(418, 34);
+			this.panel1.TabIndex = 0;
+			// 
+			// okButton
+			// 
+			this.okButton.Location = new System.Drawing.Point(259, 3);
+			this.okButton.Name = "okButton";
+			this.okButton.Size = new System.Drawing.Size(75, 23);
+			this.okButton.TabIndex = 2;
+			this.okButton.Text = "OK";
+			this.okButton.UseVisualStyleBackColor = true;
+			this.okButton.Click += new System.EventHandler(this.okButton_Click);
+			// 
+			// cancelButton
+			// 
+			this.cancelButton.Location = new System.Drawing.Point(340, 3);
+			this.cancelButton.Name = "cancelButton";
+			this.cancelButton.Size = new System.Drawing.Size(75, 23);
+			this.cancelButton.TabIndex = 1;
+			this.cancelButton.Text = "Cancel";
+			this.cancelButton.UseVisualStyleBackColor = true;
+			this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
+			// 
+			// defaultsButton
+			// 
+			this.defaultsButton.Location = new System.Drawing.Point(3, 3);
+			this.defaultsButton.Name = "defaultsButton";
+			this.defaultsButton.Size = new System.Drawing.Size(75, 23);
+			this.defaultsButton.TabIndex = 0;
+			this.defaultsButton.Text = "Defaults";
+			this.defaultsButton.UseVisualStyleBackColor = true;
+			this.defaultsButton.Click += new System.EventHandler(this.defaultsButton_Click);
+			// 
 			// panel4
 			// 
 			this.panel4.Controls.Add(this.autoUpdate);
 			this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel4.Location = new System.Drawing.Point(3, 336);
+			this.panel4.Location = new System.Drawing.Point(3, 362);
 			this.panel4.Name = "panel4";
 			this.panel4.Size = new System.Drawing.Size(418, 34);
 			this.panel4.TabIndex = 5;
@@ -356,23 +358,33 @@
 			this.autoUpdate.Text = "Check for updates on startup";
 			this.autoUpdate.UseVisualStyleBackColor = true;
 			// 
+			// replayGainOptionsButton
+			// 
+			this.replayGainOptionsButton.Location = new System.Drawing.Point(291, 37);
+			this.replayGainOptionsButton.Name = "replayGainOptionsButton";
+			this.replayGainOptionsButton.Size = new System.Drawing.Size(118, 23);
+			this.replayGainOptionsButton.TabIndex = 13;
+			this.replayGainOptionsButton.Text = "ReplayGain Options...";
+			this.replayGainOptionsButton.UseVisualStyleBackColor = true;
+			this.replayGainOptionsButton.Click += new System.EventHandler(this.replayGainOptionsButton_Click);
+			// 
 			// OptionsWindow
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(424, 413);
+			this.ClientSize = new System.Drawing.Size(424, 439);
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.Name = "OptionsWindow";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Options";
 			this.tableLayoutPanel1.ResumeLayout(false);
-			this.panel1.ResumeLayout(false);
 			this.panel2.ResumeLayout(false);
 			this.panel2.PerformLayout();
 			this.panel3.ResumeLayout(false);
 			this.panel3.PerformLayout();
 			this.encoderBox.ResumeLayout(false);
 			this.encoderBox.PerformLayout();
+			this.panel1.ResumeLayout(false);
 			this.panel4.ResumeLayout(false);
 			this.panel4.PerformLayout();
 			this.ResumeLayout(false);
@@ -411,5 +423,6 @@
 		private System.Windows.Forms.ToolTip thirdPartyLameTooltip;
 		private System.Windows.Forms.Panel panel4;
 		private System.Windows.Forms.CheckBox autoUpdate;
+		private System.Windows.Forms.Button replayGainOptionsButton;
 	}
 }

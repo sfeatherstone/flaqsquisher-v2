@@ -129,3 +129,5 @@ Call FLAC separately from LAME for Unix, since we can't do I/O piping the same w
 Fix error caused by attempting to open the temporary album art file while it was still open
 ----1.1.0 released----
 Remove unnecessary refresh call, letting the skipped files get passed much more quickly
+Add support for translation of FLAC ReplayGain into ID3 tags
+Add support for LAME's "--gain" tag, added in upcoming version 3.100

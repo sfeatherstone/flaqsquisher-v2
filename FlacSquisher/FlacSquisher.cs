@@ -52,6 +52,7 @@ namespace FlacSquisher {
 		bool thirdPartyLame;
 		int encoderChoice;
 		bool autoUpdate;
+		EncoderParams.ReplayGainType replayGainType;
 
 		int majorv;
 		int minorv;
@@ -100,6 +101,7 @@ namespace FlacSquisher {
 				hidewin = true;
 				thirdPartyLame = false;
 				autoUpdate = false;
+				replayGainType = EncoderParams.ReplayGainType.LameTag;
 			}
 
 			// needed for users who upgrade from an old version that didn't have metaflac
@@ -184,6 +186,10 @@ namespace FlacSquisher {
 				if(!string.IsNullOrEmpty(temp)) {
 					autoUpdate = bool.Parse(temp);
 				}
+				temp = sr.ReadLine();
+				if(!string.IsNullOrEmpty(temp)) {
+					replayGainType = (EncoderParams.ReplayGainType)Convert.ToInt32(temp);
+				}
 				sr.Close();
 				return 1;
 			}
@@ -214,7 +220,8 @@ namespace FlacSquisher {
 				sw.Write(metaflacPath + Environment.NewLine);
 				sw.Write(copiedExts.ToString() + Environment.NewLine);
 				sw.Write(thirdPartyLame.ToString() + Environment.NewLine);
-				sw.Write(autoUpdate.ToString());
+				sw.Write(autoUpdate.ToString() + Environment.NewLine);
+				sw.Write(((int)replayGainType).ToString());
 				sw.Close();
 				return 1;
 			}
@@ -595,6 +602,7 @@ namespace FlacSquisher {
 			ow.CopyFiles = copyFiles;
 			ow.CopyExts = copiedExts;
 			ow.AutoUpdate = autoUpdate;
+			ow.GainType = replayGainType;
 			ow.ShowDialog(this);
 
 			if(ow.DialogResult == DialogResult.OK) {
@@ -614,6 +622,7 @@ namespace FlacSquisher {
 				if(!String.IsNullOrEmpty(ow.EncoderStr)) {
 					cliParams.Text = ow.EncoderStr;
 				}
+				replayGainType = ow.GainType;
 			}
 		}
 

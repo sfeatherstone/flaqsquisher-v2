@@ -26,7 +26,7 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.1.0.0</ApplicationVersion>
+    <ApplicationVersion>1.2.0.0</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -152,6 +152,12 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="ReplayGainOptions.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ReplayGainOptions.Designer.cs">
+      <DependentUpon>ReplayGainOptions.cs</DependentUpon>
+    </Compile>
     <Compile Include="UpdateResults.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -186,6 +192,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DetailsWindow.resx">
       <DependentUpon>DetailsWindow.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ReplayGainOptions.resx">
+      <DependentUpon>ReplayGainOptions.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\FlacSquisherIcon.ico" />

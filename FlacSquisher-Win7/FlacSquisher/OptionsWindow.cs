@@ -57,7 +57,7 @@ namespace FlacSquisher {
 
 		private void oggButton_Click(object sender, EventArgs e) {
 			OpenFileDialog ofd = new OpenFileDialog();
-			if(File.Exists(oggLocation.Text)) {
+			if(File.Exists(oggLocation.Text)){
 				// clean up and resolve all parts of the path, such as "\..\", before passing the path
 				ofd.InitialDirectory = new FileInfo(oggLocation.Text).DirectoryName;
 			}
@@ -153,6 +153,24 @@ namespace FlacSquisher {
 			if(encoderOpts.ShowDialog(this) != DialogResult.Cancel){
 				encoderStr = encoderOpts.toString();
 				encoderChoice = encoderOpts.Encoder;
+			}
+		}
+
+		EncoderParams.ReplayGainType replayGainType;
+		internal EncoderParams.ReplayGainType GainType {
+			get {
+				return replayGainType;
+			}
+			set {
+				replayGainType = value;
+			}
+		}
+
+		private void replayGainOptionsButton_Click(object sender, EventArgs e) {
+			ReplayGainOptions replayGainOptions = new ReplayGainOptions();
+			replayGainOptions.GainType = replayGainType;
+			if(replayGainOptions.ShowDialog(this) != DialogResult.Cancel) {
+				replayGainType = replayGainOptions.GainType;
 			}
 		}
 
