@@ -1,5 +1,5 @@
 ﻿/*
-Copyright 2008-2013 Michael Brown
+Copyright 2008-2014 Michael Brown
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -387,9 +387,14 @@ namespace FlacSquisher {
 				metaflacProcess.Close();
 
 				if(File.Exists(coverArtPath)) {
+					// LAME used to have a limit of 128KB for embedded art; as of 3.99 it doesn't have that
+					// restriction, and seems to be able to accept much larger images. Foobar2000 will only
+					// embed up to 16MB in a Flac file, so that seems like a good cut-off point.
+					// The real problem is that the Metaflac list process will fill FlacSquisher's memory space
+					// when handling album art even larger than that (tested using 37MB jpeg).
 					FileInfo coverArtInfo = new FileInfo(coverArtPath);
 					long length = coverArtInfo.Length;
-					if(0 < length && length < 128 * 1024) { // LAME will fail if we attempt to give it album art larger than 128KB
+					if(0 < length && length < 16 * 1024 * 1024) {
 						lameopts += "--ti \"" + coverArtPath + "\" ";
 					}
 				}
