@@ -245,6 +245,12 @@ namespace FlacSquisher {
 			sOut.Close();
 			metaflacProcess.Close();
 
+			// Workaround for legacy JRiver software, which ends all Flac tags in null characters (this bug was fixed in 18.0.153)
+			// http://sourceforge.net/p/flacsquisher/discussion/841928/thread/0ee9d24e/
+			output = output.Replace("\0", "");
+			// Escape quotes in the tags, so they don't mess up the command-line
+			output = output.Replace("\"", "\\\"");
+
 			// Use regexs to extract information from the monolithic text file
 			// First grab the artist name
 			Regex regex = new Regex("comment\\[\\d+\\]: ARTIST=(.*)", RegexOptions.IgnoreCase);
