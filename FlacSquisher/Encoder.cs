@@ -199,7 +199,6 @@ namespace FlacSquisher {
 				consoleText = errorString;
 			}
 
-			// close the process handle when it's exited
 			p.Close();
 
 			return consoleText;
@@ -213,12 +212,12 @@ namespace FlacSquisher {
 			string encoderSourceFile = fi.FullName;
 			string encoderDestFile = destPath;
 
-			// call different things on the command line, depending on which encoder is being used
 			ProcessStartInfo psi = new ProcessStartInfo();
 
 			// LAME only has support for Extended ASCII, but to be safe we'll restrict it to printable ASCII
 			// If the filename contains non-printable-ASCII characters, use a temporary file
 			// http://stackoverflow.com/questions/1999566/string-filter-detect-non-ascii-signs
+			// May not be needed with the release of Lame 3.99, which added support for Unicode on Windows
 			if(printableAscii.IsMatch(fi.FullName)) {
 				useTempFile = true;
 				encoderSourceFile = Path.GetTempFileName();
@@ -251,8 +250,7 @@ namespace FlacSquisher {
 			// Escape quotes in the tags, so they don't mess up the command-line
 			output = output.Replace("\"", "\\\"");
 
-			// Use regexs to extract information from the monolithic text file
-			// First grab the artist name
+			// Use regexs to extract metadata piece-by-piece from the monolithic text output
 			Regex regex = new Regex("comment\\[\\d+\\]: ARTIST=(.*)", RegexOptions.IgnoreCase);
 			Match match = regex.Match(output);
 			String artist = "";
@@ -260,7 +258,6 @@ namespace FlacSquisher {
 				artist = match.Groups[1].Value;
 				artist = artist.Trim();
 			}
-			// Next grab the track title
 			regex = new Regex("comment\\[\\d+\\]: TITLE=(.*)", RegexOptions.IgnoreCase);
 			match = regex.Match(output);
 			String title = "";
@@ -268,7 +265,6 @@ namespace FlacSquisher {
 				title = match.Groups[1].Value;
 				title = title.Trim();
 			}
-			// Next grab the album title
 			regex = new Regex("comment\\[\\d+\\]: ALBUM=(.*)", RegexOptions.IgnoreCase);
 			match = regex.Match(output);
 			String album = "";
@@ -340,7 +336,6 @@ namespace FlacSquisher {
 				trackPeak = trackPeak.Trim();
 			}
 
-			// Add the tagging options to the command line
 			String lameopts = options + " --ta \"" + artist + "\" --tt \"" + title + "\" --tl \"" + album + "\" --ty \""
 				+ date + "\" --tn \"" + tracknum + "\" --tg \"" + genre + "\" ";
 
@@ -486,7 +481,6 @@ namespace FlacSquisher {
 				consoleText += errorString;
 			}
 
-			// close the process handle when it's exited
 			p.Close();
 
 			// if we imported the cover art, delete the temp file
