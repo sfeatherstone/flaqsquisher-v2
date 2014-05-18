@@ -134,3 +134,7 @@ Add support for LAME's "--gain" tag, added in upcoming version 3.100
 ----1.2.0 released----
 Raised album art size limit from 128KB to 16MB, due to LAME removing their limit in 3.99
 ----1.2.1 released----
+Cut out null characters from tags, to workaround older versions of JRiver software
+Backslash-escape quotes in tags, so they go through on the command-line correctly
+Updated oggenc binary to 2.87 using libvorbis 1.3.4 and libogg 1.3.1, and with the SoXR resampler library
+----1.2.2 released----
