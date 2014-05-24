@@ -17,6 +17,19 @@
 !define MUI_ICON "${NSISDIR}\Contrib\Graphics\Icons\modern-install.ico"
 !define MUI_UNICON "${NSISDIR}\Contrib\Graphics\Icons\modern-uninstall.ico"
 
+; Need to request admin permissions to install to the Program Files directory. NSIS snippet taken from:
+; https://stackoverflow.com/questions/8732019/how-do-you-request-administrator-permissions-using-nsis
+RequestExecutionLevel admin
+Function .onInit
+UserInfo::GetAccountType
+pop $0
+${If} $0 != "admin" ;Require admin rights on NT4+
+    MessageBox mb_iconstop "Administrator rights required!"
+    SetErrorLevel 740 ;ERROR_ELEVATION_REQUIRED
+    Quit
+${EndIf}
+FunctionEnd
+
 ; Welcome page
 !insertmacro MUI_PAGE_WELCOME
 ; License page
