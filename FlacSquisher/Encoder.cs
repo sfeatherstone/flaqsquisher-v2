@@ -168,6 +168,12 @@ namespace FlacSquisher {
 			string consoleText = "";
 
 			ProcessStartInfo psi = new ProcessStartInfo();
+
+			byte[] tag = new byte[3];
+			int byteCount = fi.OpenRead().Read(tag, 0, 3);
+			if(tag[0] == 'I' && tag[1] == 'D' && tag[2] == '3') {
+				return "OggEnc does not support FLAC files that contain ID3 tags.";
+			}
 			
 			// oggenc can take Flac files as input, so no decoding necessary
 			psi.FileName = oggPath;
