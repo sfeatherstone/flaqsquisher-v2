@@ -170,7 +170,12 @@ namespace FlacSquisher {
 			ProcessStartInfo psi = new ProcessStartInfo();
 
 			byte[] tag = new byte[3];
-			int byteCount = fi.OpenRead().Read(tag, 0, 3);
+			try {
+				int byteCount = fi.OpenRead().Read(tag, 0, 3);
+			}
+			catch(SystemException) { // Covers IOException and UnauthorizedAccessException
+				return "The FLAC file can't be read; please check the permissions for the file.";
+			}
 			if(tag[0] == 'I' && tag[1] == 'D' && tag[2] == '3') {
 				return "OggEnc does not support FLAC files that contain ID3 tags.";
 			}
