@@ -50,7 +50,6 @@ namespace FlacSquisher {
 
 		#region Utility Variables
 		string dirSeperator = System.IO.Path.DirectorySeparatorChar.ToString();
-		private static Regex printableAscii = new Regex(@"[^\u0020-\u007E]", RegexOptions.Compiled);
 		#endregion
 
 		public Encoder() {
@@ -219,22 +218,10 @@ namespace FlacSquisher {
 			string consoleText = "";
 			string coverArtPath = "";
 			string decodedTempFile = ""; // used if we're running on Unix, because I/O piping of external processes doesn't work the same
-			bool useTempFile = false; // temp files only used if we detect non-ASCII characters
 			string encoderSourceFile = fi.FullName;
 			string encoderDestFile = destPath;
 
 			ProcessStartInfo psi = new ProcessStartInfo();
-
-			// LAME only has support for Extended ASCII, but to be safe we'll restrict it to printable ASCII
-			// If the filename contains non-printable-ASCII characters, use a temporary file
-			// http://stackoverflow.com/questions/1999566/string-filter-detect-non-ascii-signs
-			// May not be needed with the release of Lame 3.99, which added support for Unicode on Windows
-			if(printableAscii.IsMatch(fi.FullName)) {
-				useTempFile = true;
-				encoderSourceFile = Path.GetTempFileName();
-				encoderDestFile = Path.GetTempFileName();
-				File.Copy(fi.FullName, encoderSourceFile, true);
-			}
 
 			// LAME does not automatically tag MP3s encoded from FLACs like OggEnc does, so we need to use Metaflac and LAME's tag options
 			ProcessStartInfo metaflacPsi = new ProcessStartInfo();
@@ -501,11 +488,6 @@ namespace FlacSquisher {
 
 			if(File.Exists(decodedTempFile)) {
 				File.Delete(decodedTempFile);
-			}
-
-			if(useTempFile) {
-				File.Move(encoderDestFile, destPath);
-				File.Delete(encoderSourceFile);
 			}
 
 			return consoleText;
