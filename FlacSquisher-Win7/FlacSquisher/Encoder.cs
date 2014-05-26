@@ -369,23 +369,29 @@ namespace FlacSquisher {
 			match = regex.Match(output);
 			if(match.Success) {
 				// export the cover art to a randomly named file (to make sure we don't overwrite another file)
-				coverArtPath = Path.GetTempFileName();
-
-				metaflacPsi = new ProcessStartInfo();
-				metaflacPsi.FileName = metaflacPath;
-				metaflacPsi.Arguments = "--no-utf8-convert --export-picture-to=\"" +
-					coverArtPath + "\" \"" + encoderSourceFile + "\"";
-				metaflacPsi.WindowStyle = ProcessWindowStyle.Hidden;
-				metaflacPsi.CreateNoWindow = true;
-				metaflacPsi.UseShellExecute = false;
-
-				metaflacProcess = Process.Start(metaflacPsi);
-				metaflacProcess.Start();
-				metaflacProcess.WaitForExit();
-				sOut.Close();
-				metaflacProcess.Close();
+				try {
+					coverArtPath = Path.GetTempFileName();
+				}
+				catch(IOException) { // The encoding can continue without cover art, but let the user know
+					consoleText += "FlacSquisher was unable to create a temporary file, so no cover art was carried " + 
+						"over. Deleting some files in the temporary folder may fix this.";
+				}
 
 				if(File.Exists(coverArtPath)) {
+					metaflacPsi = new ProcessStartInfo();
+					metaflacPsi.FileName = metaflacPath;
+					metaflacPsi.Arguments = "--no-utf8-convert --export-picture-to=\"" +
+						coverArtPath + "\" \"" + encoderSourceFile + "\"";
+					metaflacPsi.WindowStyle = ProcessWindowStyle.Hidden;
+					metaflacPsi.CreateNoWindow = true;
+					metaflacPsi.UseShellExecute = false;
+
+					metaflacProcess = Process.Start(metaflacPsi);
+					metaflacProcess.Start();
+					metaflacProcess.WaitForExit();
+					sOut.Close();
+					metaflacProcess.Close();
+
 					// LAME used to have a limit of 128KB for embedded art; as of 3.99 it doesn't have that
 					// restriction, and seems to be able to accept much larger images. Foobar2000 will only
 					// embed up to 16MB in a Flac file, so that seems like a good cut-off point.
@@ -407,7 +413,12 @@ namespace FlacSquisher {
 
 			if(System.Environment.OSVersion.Platform == PlatformID.Unix || System.Environment.OSVersion.Platform == PlatformID.MacOSX) {
 				// Mono can't create cmd.exe, so as far as I can tell we can't do I/O piping from inside Unix environments
-				decodedTempFile = Path.GetTempFileName();
+				try {
+					decodedTempFile = Path.GetTempFileName();
+				}
+				catch(IOException) {
+					return "FlacSquisher was unable to create a temporary file, so the encoding process failed. Deleting some files in the temporary folder may fix this.";
+				}
 
 				ProcessStartInfo flacPsi = new ProcessStartInfo();
 				flacPsi.FileName = flacexe;
