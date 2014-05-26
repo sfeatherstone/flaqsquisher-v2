@@ -138,3 +138,7 @@ Cut out null characters from tags, to workaround older versions of JRiver softwa
 Backslash-escape quotes in tags, so they go through on the command-line correctly
 Updated oggenc binary to 2.87 using libvorbis 1.3.4 and libogg 1.3.1, and with the SoXR resampler library
 ----1.2.2 released----
+Return clean error message when Flac files with ID3 tags are encountered during Ogg encoding
+Stop using temp files for non-ASCII characters, since that issue was fixed with the upgraded UTF-8 support in Flac 1.3.0
+Handle exceptions caused by failure to create temp files for album art and Linux decoded Flac files
+----1.2.3 released----
