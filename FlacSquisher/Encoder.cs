@@ -305,6 +305,13 @@ namespace FlacSquisher {
 				discnum = match.Groups[1].Value;
 				discnum = discnum.Trim();
 			}
+			regex = new Regex("comment\\[\\d+\\]: COMPOSER=(.*)", RegexOptions.IgnoreCase);
+			match = regex.Match(output);
+			String composer = "";
+			if(match.Success) {
+				composer = match.Groups[1].Value;
+				composer = composer.Trim();
+			}
 			regex = new Regex("comment\\[\\d+\\]: replaygain_album_gain=(.*) dB", RegexOptions.IgnoreCase);
 			match = regex.Match(output);
 			String albumGain = "";
@@ -342,6 +349,9 @@ namespace FlacSquisher {
 			}
 			if(discnum.Length > 0) {
 				lameopts += "--tv \"TPOS=" + discnum + "\" ";
+			}
+			if(composer.Length > 0) {
+				lameopts += "--tv \"TCOM=" + composer + "\" ";
 			}
 
 			// Lame Tag is put on by default
