@@ -1,5 +1,5 @@
 ﻿namespace FlacSquisher {
-	partial class ReplayGainOptions {
+	partial class TaggingOptions {
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -24,7 +24,7 @@
 		/// </summary>
 		private void InitializeComponent() {
 			this.components = new System.ComponentModel.Container();
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ReplayGainOptions));
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TaggingOptions));
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.replayGainBox = new System.Windows.Forms.GroupBox();
 			this.replayGainLabel = new System.Windows.Forms.Label();

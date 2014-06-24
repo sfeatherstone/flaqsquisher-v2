@@ -31,6 +31,7 @@
 			this.fileextsLabel = new System.Windows.Forms.Label();
 			this.fileExts = new System.Windows.Forms.TextBox();
 			this.panel3 = new System.Windows.Forms.Panel();
+			this.taggingOptionsButton = new System.Windows.Forms.Button();
 			this.thirdPartyLameBox = new System.Windows.Forms.CheckBox();
 			this.encodingOptionsButton = new System.Windows.Forms.Button();
 			this.hidewin = new System.Windows.Forms.CheckBox();
@@ -54,7 +55,6 @@
 			this.panel4 = new System.Windows.Forms.Panel();
 			this.autoUpdate = new System.Windows.Forms.CheckBox();
 			this.thirdPartyLameTooltip = new System.Windows.Forms.ToolTip(this.components);
-			this.replayGainOptionsButton = new System.Windows.Forms.Button();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.panel2.SuspendLayout();
 			this.panel3.SuspendLayout();
@@ -131,7 +131,7 @@
 			// 
 			// panel3
 			// 
-			this.panel3.Controls.Add(this.replayGainOptionsButton);
+			this.panel3.Controls.Add(this.taggingOptionsButton);
 			this.panel3.Controls.Add(this.thirdPartyLameBox);
 			this.panel3.Controls.Add(this.encodingOptionsButton);
 			this.panel3.Controls.Add(this.hidewin);
@@ -140,6 +140,16 @@
 			this.panel3.Name = "panel3";
 			this.panel3.Size = new System.Drawing.Size(418, 73);
 			this.panel3.TabIndex = 3;
+			// 
+			// taggingOptionsButton
+			// 
+			this.taggingOptionsButton.Location = new System.Drawing.Point(291, 37);
+			this.taggingOptionsButton.Name = "taggingOptionsButton";
+			this.taggingOptionsButton.Size = new System.Drawing.Size(118, 23);
+			this.taggingOptionsButton.TabIndex = 13;
+			this.taggingOptionsButton.Text = "Tagging Options...";
+			this.taggingOptionsButton.UseVisualStyleBackColor = true;
+			this.taggingOptionsButton.Click += new System.EventHandler(this.taggingOptionsButton_Click);
 			// 
 			// thirdPartyLameBox
 			// 
@@ -358,16 +368,6 @@
 			this.autoUpdate.Text = "Check for updates on startup";
 			this.autoUpdate.UseVisualStyleBackColor = true;
 			// 
-			// replayGainOptionsButton
-			// 
-			this.replayGainOptionsButton.Location = new System.Drawing.Point(291, 37);
-			this.replayGainOptionsButton.Name = "replayGainOptionsButton";
-			this.replayGainOptionsButton.Size = new System.Drawing.Size(118, 23);
-			this.replayGainOptionsButton.TabIndex = 13;
-			this.replayGainOptionsButton.Text = "ReplayGain Options...";
-			this.replayGainOptionsButton.UseVisualStyleBackColor = true;
-			this.replayGainOptionsButton.Click += new System.EventHandler(this.replayGainOptionsButton_Click);
-			// 
 			// OptionsWindow
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -423,6 +423,6 @@
 		private System.Windows.Forms.ToolTip thirdPartyLameTooltip;
 		private System.Windows.Forms.Panel panel4;
 		private System.Windows.Forms.CheckBox autoUpdate;
-		private System.Windows.Forms.Button replayGainOptionsButton;
+		private System.Windows.Forms.Button taggingOptionsButton;
 	}
 }

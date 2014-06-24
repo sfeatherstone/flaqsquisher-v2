@@ -23,8 +23,8 @@ using System.Text;
 using System.Windows.Forms;
 
 namespace FlacSquisher {
-	public partial class ReplayGainOptions : Form {
-		public ReplayGainOptions() {
+	public partial class TaggingOptions : Form {
+		public TaggingOptions() {
 			InitializeComponent();
 		}
 

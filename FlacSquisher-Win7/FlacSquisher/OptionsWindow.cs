@@ -166,11 +166,11 @@ namespace FlacSquisher {
 			}
 		}
 
-		private void replayGainOptionsButton_Click(object sender, EventArgs e) {
-			ReplayGainOptions replayGainOptions = new ReplayGainOptions();
-			replayGainOptions.GainType = replayGainType;
-			if(replayGainOptions.ShowDialog(this) != DialogResult.Cancel) {
-				replayGainType = replayGainOptions.GainType;
+		private void taggingOptionsButton_Click(object sender, EventArgs e) {
+			TaggingOptions taggingOptions = new TaggingOptions();
+			taggingOptions.GainType = replayGainType;
+			if(taggingOptions.ShowDialog(this) != DialogResult.Cancel) {
+				replayGainType = taggingOptions.GainType;
 			}
 		}
 
