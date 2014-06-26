@@ -54,6 +54,7 @@ namespace FlacSquisher {
 		int encoderChoice;
 		bool autoUpdate;
 		EncoderParams.ReplayGainType replayGainType;
+		int maxImageSize;
 
 		int majorv;
 		int minorv;
@@ -103,6 +104,7 @@ namespace FlacSquisher {
 				thirdPartyLame = false;
 				autoUpdate = false;
 				replayGainType = EncoderParams.ReplayGainType.LameTag;
+				maxImageSize = 512;
 			}
 
 			// needed for users who upgrade from an old version that didn't have metaflac
@@ -191,6 +193,13 @@ namespace FlacSquisher {
 				if(!string.IsNullOrEmpty(temp)) {
 					replayGainType = (EncoderParams.ReplayGainType)Convert.ToInt32(temp);
 				}
+				temp = sr.ReadLine();
+				if(!string.IsNullOrEmpty(temp)) {
+					maxImageSize = Convert.ToInt32(temp);
+				}
+				else {
+					maxImageSize = 512;
+				}
 				sr.Close();
 				return 1;
 			}
@@ -222,7 +231,8 @@ namespace FlacSquisher {
 				sw.Write(copiedExts.ToString() + Environment.NewLine);
 				sw.Write(thirdPartyLame.ToString() + Environment.NewLine);
 				sw.Write(autoUpdate.ToString() + Environment.NewLine);
-				sw.Write(((int)replayGainType).ToString());
+				sw.Write(((int)replayGainType).ToString() + Environment.NewLine);
+				sw.Write(maxImageSize);
 				sw.Close();
 				return 1;
 			}
@@ -402,6 +412,7 @@ namespace FlacSquisher {
 			args.CopyList = copyList;
 			args.ThirdPartyLame = thirdPartyLame;
 			args.GainType = EncoderParams.ReplayGainType.LameTag;
+			args.MaxImageSize = maxImageSize;
 
 			this.recursingBackgroundWorker1.RunWorkerAsync(args);
 		}
@@ -624,6 +635,7 @@ namespace FlacSquisher {
 			ow.CopyExts = copiedExts;
 			ow.AutoUpdate = autoUpdate;
 			ow.GainType = replayGainType;
+			ow.MaxImageSize = maxImageSize;
 			ow.ShowDialog(this);
 
 			if(ow.DialogResult == DialogResult.OK) {
@@ -644,6 +656,7 @@ namespace FlacSquisher {
 					cliParams.Text = ow.EncoderStr;
 				}
 				replayGainType = ow.GainType;
+				maxImageSize = ow.MaxImageSize;
 			}
 		}
 

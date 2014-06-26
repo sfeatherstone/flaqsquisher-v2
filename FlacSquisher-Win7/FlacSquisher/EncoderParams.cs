@@ -199,5 +199,15 @@ namespace FlacSquisher {
 				replayGainType = value;
 			}
 		}
+
+		int maxImageSize;
+		public int MaxImageSize {
+			get {
+				return maxImageSize;
+			}
+			set {
+				maxImageSize = value;
+			}
+		}
 	}
 }

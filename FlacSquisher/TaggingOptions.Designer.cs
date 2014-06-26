@@ -36,10 +36,16 @@
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.cancelButton = new System.Windows.Forms.Button();
 			this.okButton = new System.Windows.Forms.Button();
+			this.albumArtBox = new System.Windows.Forms.GroupBox();
+			this.kbLabel = new System.Windows.Forms.Label();
+			this.maxImageSize = new System.Windows.Forms.NumericUpDown();
+			this.artSizeLabel = new System.Windows.Forms.Label();
 			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
 			this.tableLayoutPanel1.SuspendLayout();
 			this.replayGainBox.SuspendLayout();
 			this.panel1.SuspendLayout();
+			this.albumArtBox.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.maxImageSize)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// tableLayoutPanel1
@@ -47,14 +53,16 @@
 			this.tableLayoutPanel1.ColumnCount = 1;
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this.tableLayoutPanel1.Controls.Add(this.replayGainBox, 0, 0);
-			this.tableLayoutPanel1.Controls.Add(this.panel1, 0, 1);
+			this.tableLayoutPanel1.Controls.Add(this.panel1, 0, 2);
+			this.tableLayoutPanel1.Controls.Add(this.albumArtBox, 0, 1);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-			this.tableLayoutPanel1.RowCount = 2;
+			this.tableLayoutPanel1.RowCount = 3;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(454, 242);
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 55F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 39F));
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(454, 292);
 			this.tableLayoutPanel1.TabIndex = 0;
 			// 
 			// replayGainBox
@@ -68,7 +76,7 @@
 			this.replayGainBox.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.replayGainBox.Location = new System.Drawing.Point(3, 3);
 			this.replayGainBox.Name = "replayGainBox";
-			this.replayGainBox.Size = new System.Drawing.Size(448, 196);
+			this.replayGainBox.Size = new System.Drawing.Size(448, 192);
 			this.replayGainBox.TabIndex = 0;
 			this.replayGainBox.TabStop = false;
 			this.replayGainBox.Text = "ReplayGain Type";
@@ -151,9 +159,9 @@
 			this.panel1.Controls.Add(this.cancelButton);
 			this.panel1.Controls.Add(this.okButton);
 			this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel1.Location = new System.Drawing.Point(3, 205);
+			this.panel1.Location = new System.Drawing.Point(3, 256);
 			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(448, 34);
+			this.panel1.Size = new System.Drawing.Size(448, 33);
 			this.panel1.TabIndex = 1;
 			// 
 			// cancelButton
@@ -168,7 +176,7 @@
 			// 
 			// okButton
 			// 
-			this.okButton.Location = new System.Drawing.Point(283, 3);
+			this.okButton.Location = new System.Drawing.Point(284, 3);
 			this.okButton.Name = "okButton";
 			this.okButton.Size = new System.Drawing.Size(75, 23);
 			this.okButton.TabIndex = 1;
@@ -176,19 +184,77 @@
 			this.okButton.UseVisualStyleBackColor = true;
 			this.okButton.Click += new System.EventHandler(this.okButton_Click);
 			// 
-			// ReplayGainOptions
+			// albumArtBox
+			// 
+			this.albumArtBox.Controls.Add(this.kbLabel);
+			this.albumArtBox.Controls.Add(this.maxImageSize);
+			this.albumArtBox.Controls.Add(this.artSizeLabel);
+			this.albumArtBox.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.albumArtBox.Location = new System.Drawing.Point(3, 201);
+			this.albumArtBox.Name = "albumArtBox";
+			this.albumArtBox.Size = new System.Drawing.Size(448, 49);
+			this.albumArtBox.TabIndex = 2;
+			this.albumArtBox.TabStop = false;
+			this.albumArtBox.Text = "Embedded Album Art";
+			// 
+			// kbLabel
+			// 
+			this.kbLabel.AutoSize = true;
+			this.kbLabel.Location = new System.Drawing.Point(163, 22);
+			this.kbLabel.Name = "kbLabel";
+			this.kbLabel.Size = new System.Drawing.Size(20, 13);
+			this.kbLabel.TabIndex = 2;
+			this.kbLabel.Text = "kB";
+			// 
+			// maxImageSize
+			// 
+			this.maxImageSize.Increment = new decimal(new int[] {
+            128,
+            0,
+            0,
+            0});
+			this.maxImageSize.Location = new System.Drawing.Point(87, 20);
+			this.maxImageSize.Maximum = new decimal(new int[] {
+            16384,
+            0,
+            0,
+            0});
+			this.maxImageSize.Name = "maxImageSize";
+			this.maxImageSize.Size = new System.Drawing.Size(70, 20);
+			this.maxImageSize.TabIndex = 1;
+			this.toolTip1.SetToolTip(this.maxImageSize, "Sets the maximum size of album art that will be copied over into the MP3 file. Ca" +
+					"nnot be set higher than 16384kB (16MB).");
+			this.maxImageSize.Value = new decimal(new int[] {
+            16384,
+            0,
+            0,
+            0});
+			// 
+			// artSizeLabel
+			// 
+			this.artSizeLabel.AutoSize = true;
+			this.artSizeLabel.Location = new System.Drawing.Point(6, 22);
+			this.artSizeLabel.Name = "artSizeLabel";
+			this.artSizeLabel.Size = new System.Drawing.Size(75, 13);
+			this.artSizeLabel.TabIndex = 0;
+			this.artSizeLabel.Text = "Maximum size:";
+			// 
+			// TaggingOptions
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(454, 242);
+			this.ClientSize = new System.Drawing.Size(454, 292);
 			this.Controls.Add(this.tableLayoutPanel1);
-			this.Name = "ReplayGainOptions";
+			this.Name = "TaggingOptions";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-			this.Text = "ReplayGain Options";
+			this.Text = "Tagging Options";
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.replayGainBox.ResumeLayout(false);
 			this.replayGainBox.PerformLayout();
 			this.panel1.ResumeLayout(false);
+			this.albumArtBox.ResumeLayout(false);
+			this.albumArtBox.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.maxImageSize)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -207,5 +273,9 @@
 		private System.Windows.Forms.RadioButton trackRadio;
 		private System.Windows.Forms.ToolTip toolTip1;
 		private System.Windows.Forms.Label replayGainLabel;
+		private System.Windows.Forms.GroupBox albumArtBox;
+		private System.Windows.Forms.Label kbLabel;
+		private System.Windows.Forms.NumericUpDown maxImageSize;
+		private System.Windows.Forms.Label artSizeLabel;
 	}
 }

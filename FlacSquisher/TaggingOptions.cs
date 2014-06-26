@@ -71,6 +71,15 @@ namespace FlacSquisher {
 			}
 		}
 
+		internal int MaxImageSize {
+			get {
+				return (int)maxImageSize.Value;
+			}
+			set {
+				maxImageSize.Value = value;
+			}
+		}
+
 		private void okButton_Click(object sender, EventArgs e) {
 			this.DialogResult = DialogResult.OK;
 			this.Close();

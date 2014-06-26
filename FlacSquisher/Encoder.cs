@@ -38,6 +38,7 @@ namespace FlacSquisher {
 		bool hidewin;
 		List<String> ignoreList;
 		List<String> copyList;
+		int maxImageSize;
 
 		string flacexe;
 		string oggPath;
@@ -69,6 +70,7 @@ namespace FlacSquisher {
 			hidewin = args.Hidewin;
 			thirdPartyLame = args.ThirdPartyLame;
 			replayGainType = args.GainType;
+			maxImageSize = args.MaxImageSize;
 
 			flacexe = args.FlacExe;
 			oggPath = args.OggPath;
@@ -409,7 +411,7 @@ namespace FlacSquisher {
 					// when handling album art even larger than that (tested using 37MB jpeg).
 					FileInfo coverArtInfo = new FileInfo(coverArtPath);
 					long length = coverArtInfo.Length;
-					if(0 < length && length < 16 * 1024 * 1024) {
+					if(0 < length && length < maxImageSize * 1024) {
 						lameopts += "--ti \"" + coverArtPath + "\" ";
 					}
 				}

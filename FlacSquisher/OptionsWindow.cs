@@ -166,11 +166,23 @@ namespace FlacSquisher {
 			}
 		}
 
+		int maxImageSize;
+		internal int MaxImageSize {
+			get {
+				return maxImageSize;
+			}
+			set {
+				maxImageSize = value;
+			}
+		}
+
 		private void taggingOptionsButton_Click(object sender, EventArgs e) {
 			TaggingOptions taggingOptions = new TaggingOptions();
 			taggingOptions.GainType = replayGainType;
+			taggingOptions.MaxImageSize = maxImageSize;
 			if(taggingOptions.ShowDialog(this) != DialogResult.Cancel) {
 				replayGainType = taggingOptions.GainType;
+				MaxImageSize = taggingOptions.MaxImageSize;
 			}
 		}
 
