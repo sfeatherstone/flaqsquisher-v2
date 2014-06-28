@@ -293,7 +293,7 @@ namespace FlacSquisher {
 				genre = match.Groups[1].Value;
 				genre = genre.Trim();
 			}
-			regex = new Regex("comment\\[\\d+\\]: ALBUM ARTIST=(.*)", RegexOptions.IgnoreCase);
+			regex = new Regex("comment\\[\\d+\\]: ALBUM\\s?ARTIST=(.*)", RegexOptions.IgnoreCase);
 			match = regex.Match(output);
 			String albumArtist = "";
 			if(match.Success) {
@@ -313,6 +313,20 @@ namespace FlacSquisher {
 			if(match.Success) {
 				composer = match.Groups[1].Value;
 				composer = composer.Trim();
+			}
+			regex = new Regex("comment\\[\\d+\\]: PUBLISHER=(.*)", RegexOptions.IgnoreCase);
+			match = regex.Match(output);
+			String publisher = "";
+			if(match.Success) {
+				publisher = match.Groups[1].Value;
+				publisher = publisher.Trim();
+			}
+			regex = new Regex("comment\\[\\d+\\]: COPYRIGHT=(.*)", RegexOptions.IgnoreCase);
+			match = regex.Match(output);
+			String copyright = "";
+			if(match.Success) {
+				copyright = match.Groups[1].Value;
+				copyright = copyright.Trim();
 			}
 			regex = new Regex("comment\\[\\d+\\]: replaygain_album_gain=(.*) dB", RegexOptions.IgnoreCase);
 			match = regex.Match(output);
@@ -354,6 +368,12 @@ namespace FlacSquisher {
 			}
 			if(composer.Length > 0) {
 				lameopts += "--tv \"TCOM=" + composer + "\" ";
+			}
+			if(publisher.Length > 0) {
+				lameopts += "--tv \"TPUB=" + publisher + "\" ";
+			}
+			if(copyright.Length > 0) {
+				lameopts += "--tv \"TCOP=" + copyright + "\" ";
 			}
 
 			// Lame Tag is put on by default
