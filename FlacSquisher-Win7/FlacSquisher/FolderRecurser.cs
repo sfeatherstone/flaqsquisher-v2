@@ -21,7 +21,7 @@ using System.Threading;
 using System.IO;
 
 namespace FlacSquisher {
-	class FolderRecurser {
+	public class FolderRecurser {
 		string directory;
 		string[] ignoreList;
 		string[] copyList;

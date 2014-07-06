@@ -31,7 +31,7 @@ namespace FlacSquisher {
 		public OptionsSet OptionSet {
 			get {
 				OptionsSet os = new OptionsSet();
-				os.Encoder = tabControl1.SelectedIndex;
+				os.Encoder = (EncoderParams.EncoderChoice) tabControl1.SelectedIndex;
 				if(qualityRadio.Checked) {
 					os.Target = 0;
 				}
@@ -41,7 +41,7 @@ namespace FlacSquisher {
 				os.Mono = mono.Checked;
 				os.Cbr = cbr.Checked;
 				os.Bitrate = bitrateBar.Value;
-				if(os.Encoder == 0) {
+				if(os.Encoder == EncoderParams.EncoderChoice.OggEnc) {
 					os.Quality = oggQual.Value;
 				}
 				else {
@@ -52,12 +52,12 @@ namespace FlacSquisher {
 			}
 			set {
 				OptionsSet os = value;
-				tabControl1.SelectedIndex = os.Encoder;
+				tabControl1.SelectedIndex = (int) os.Encoder;
 				qualityRadio.Checked = (os.Target == 0);
 				mono.Checked = os.Mono;
 				cbr.Checked = os.Cbr;
 				bitrateBar.Value = os.Bitrate;
-				if(os.Encoder == 0) {
+				if(os.Encoder == EncoderParams.EncoderChoice.OggEnc) {
 					oggQual.Value = os.Quality;
 				}
 				else {
@@ -67,9 +67,9 @@ namespace FlacSquisher {
 			}
 		}
 
-		public int Encoder {
+		public EncoderParams.EncoderChoice Encoder {
 			get {
-				return tabControl1.SelectedIndex;
+				return (EncoderParams.EncoderChoice) tabControl1.SelectedIndex;
 			}
 		}
 

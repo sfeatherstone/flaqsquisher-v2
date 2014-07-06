@@ -29,7 +29,7 @@ namespace FlacSquisher {
 		#region Argument Copies
 		string flacPath;
 		string outputPath;
-		int encoderChoice;
+		EncoderParams.EncoderChoice encoderChoice;
 		string options;
 		int threadCount;
 		Queue<FileInfo> jobQueue;
@@ -138,7 +138,7 @@ namespace FlacSquisher {
 			}
 
 			string extension;
-			if(encoderChoice == 0) {
+			if(encoderChoice == EncoderParams.EncoderChoice.OggEnc) {
 				extension = ".ogg";
 			}
 			else {
@@ -155,7 +155,7 @@ namespace FlacSquisher {
 				Directory.CreateDirectory(outputPath + partialPath);
 			}
 
-			if(encoderChoice == 0) {
+			if(encoderChoice == EncoderParams.EncoderChoice.OggEnc) {
 				consoleText = encodeOggFile(fi, destPath);
 			}
 			else {

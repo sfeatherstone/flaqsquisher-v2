@@ -399,7 +399,7 @@ namespace FlacSquisher {
 			args.Recurser = recurser;
 			args.FlacDir = flacDirString;
 			args.OutputDir = outputDirString;
-			args.SelectedEncoder = encoder.SelectedIndex;
+			args.SelectedEncoder = (EncoderParams.EncoderChoice) encoder.SelectedIndex;
 			args.CliParams = cliParams.Text;
 			args.Threads = threads;
 			args.CopyFiles = copyFiles;
@@ -649,8 +649,8 @@ namespace FlacSquisher {
 				copyFiles = ow.CopyFiles;
 				copiedExts = ow.CopyExts;
 				autoUpdate = ow.AutoUpdate;
-				if(ow.EncoderChoice != -1) {
-					encoder.SelectedIndex = ow.EncoderChoice;
+				if(ow.EncoderChoice != EncoderParams.EncoderChoice.Invalid) {
+					encoder.SelectedIndex = (int)ow.EncoderChoice;
 				}
 				if(!String.IsNullOrEmpty(ow.EncoderStr)) {
 					cliParams.Text = ow.EncoderStr;

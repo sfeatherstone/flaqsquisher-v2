@@ -21,7 +21,7 @@ using System.Threading;
 using System.IO;
 
 namespace FlacSquisher {
-	class EncoderParams {
+	public class EncoderParams {
 
 		FolderRecurser recurser;
 		public FolderRecurser Recurser {
@@ -53,8 +53,13 @@ namespace FlacSquisher {
 			}
 		}
 
-		int selectedEncoder;
-		public int SelectedEncoder {
+		public enum EncoderChoice {
+			Invalid = -1,
+			OggEnc = 0,
+			Lame = 1
+		};
+		EncoderChoice selectedEncoder;
+		public EncoderChoice SelectedEncoder {
 			get {
 				return selectedEncoder;
 			}

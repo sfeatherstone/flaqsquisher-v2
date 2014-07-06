@@ -32,8 +32,8 @@ namespace FlacSquisher {
 				return encoderStr;
 			}
 		}
-		int encoderChoice;
-		public int EncoderChoice {
+		EncoderParams.EncoderChoice encoderChoice;
+		public EncoderParams.EncoderChoice EncoderChoice {
 			get {
 				return encoderChoice;
 			}
@@ -43,7 +43,7 @@ namespace FlacSquisher {
 			InitializeComponent();
 
 			encoderStr = "";
-			encoderChoice = -1;
+			encoderChoice = EncoderParams.EncoderChoice.Invalid;
 		}
 
 		public string OggPath {

@@ -20,8 +20,8 @@ using System.Text;
 
 namespace FlacSquisher {
 	public class OptionsSet {
-		int encoder;
-		public int Encoder {
+		EncoderParams.EncoderChoice encoder;
+		public EncoderParams.EncoderChoice Encoder {
 			get {
 				return encoder;
 			}
