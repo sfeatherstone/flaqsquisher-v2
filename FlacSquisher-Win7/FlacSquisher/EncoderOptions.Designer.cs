@@ -58,6 +58,12 @@
 			this.targetBox = new System.Windows.Forms.GroupBox();
 			this.qualityRadio = new System.Windows.Forms.RadioButton();
 			this.bitrateRadio = new System.Windows.Forms.RadioButton();
+			this.tabPage3 = new System.Windows.Forms.TabPage();
+			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.opusBitrateSlider = new System.Windows.Forms.TrackBar();
+			this.label1 = new System.Windows.Forms.Label();
+			this.opusBitrateLabel = new System.Windows.Forms.Label();
+			this.label3 = new System.Windows.Forms.Label();
 			this.panel1.SuspendLayout();
 			this.tabControl1.SuspendLayout();
 			this.tabPage1.SuspendLayout();
@@ -72,6 +78,9 @@
 			((System.ComponentModel.ISupportInitialize)(this.bitrateBar)).BeginInit();
 			this.panel3.SuspendLayout();
 			this.targetBox.SuspendLayout();
+			this.tabPage3.SuspendLayout();
+			this.groupBox2.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.opusBitrateSlider)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// panel1
@@ -109,6 +118,7 @@
 			// 
 			this.tabControl1.Controls.Add(this.tabPage1);
 			this.tabControl1.Controls.Add(this.tabPage2);
+			this.tabControl1.Controls.Add(this.tabPage3);
 			this.tabControl1.Dock = System.Windows.Forms.DockStyle.Top;
 			this.tabControl1.Location = new System.Drawing.Point(0, 0);
 			this.tabControl1.Name = "tabControl1";
@@ -449,6 +459,70 @@
 			this.bitrateRadio.UseVisualStyleBackColor = true;
 			this.bitrateRadio.CheckedChanged += new System.EventHandler(this.bitrateRadio_CheckedChanged);
 			// 
+			// tabPage3
+			// 
+			this.tabPage3.Controls.Add(this.groupBox2);
+			this.tabPage3.Location = new System.Drawing.Point(4, 22);
+			this.tabPage3.Name = "tabPage3";
+			this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+			this.tabPage3.Size = new System.Drawing.Size(526, 365);
+			this.tabPage3.TabIndex = 2;
+			this.tabPage3.Text = "Opus";
+			this.tabPage3.UseVisualStyleBackColor = true;
+			// 
+			// groupBox2
+			// 
+			this.groupBox2.Controls.Add(this.label1);
+			this.groupBox2.Controls.Add(this.opusBitrateLabel);
+			this.groupBox2.Controls.Add(this.label3);
+			this.groupBox2.Controls.Add(this.opusBitrateSlider);
+			this.groupBox2.Dock = System.Windows.Forms.DockStyle.Top;
+			this.groupBox2.Location = new System.Drawing.Point(3, 3);
+			this.groupBox2.Name = "groupBox2";
+			this.groupBox2.Size = new System.Drawing.Size(520, 179);
+			this.groupBox2.TabIndex = 1;
+			this.groupBox2.TabStop = false;
+			this.groupBox2.Text = "Bitrate";
+			// 
+			// opusBitrateSlider
+			// 
+			this.opusBitrateSlider.LargeChange = 32;
+			this.opusBitrateSlider.Location = new System.Drawing.Point(79, 70);
+			this.opusBitrateSlider.Maximum = 510;
+			this.opusBitrateSlider.Minimum = 32;
+			this.opusBitrateSlider.Name = "opusBitrateSlider";
+			this.opusBitrateSlider.Size = new System.Drawing.Size(355, 45);
+			this.opusBitrateSlider.TabIndex = 0;
+			this.opusBitrateSlider.Value = 128;
+			this.opusBitrateSlider.Scroll += new System.EventHandler(this.opusBitrateSlider_Scroll);
+			// 
+			// label1
+			// 
+			this.label1.AutoSize = true;
+			this.label1.Location = new System.Drawing.Point(409, 54);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(25, 13);
+			this.label1.TabIndex = 3;
+			this.label1.Text = "510";
+			// 
+			// opusBitrateLabel
+			// 
+			this.opusBitrateLabel.AutoSize = true;
+			this.opusBitrateLabel.Location = new System.Drawing.Point(232, 30);
+			this.opusBitrateLabel.Name = "opusBitrateLabel";
+			this.opusBitrateLabel.Size = new System.Drawing.Size(51, 13);
+			this.opusBitrateLabel.TabIndex = 2;
+			this.opusBitrateLabel.Text = "128 kbps";
+			// 
+			// label3
+			// 
+			this.label3.AutoSize = true;
+			this.label3.Location = new System.Drawing.Point(85, 54);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(19, 13);
+			this.label3.TabIndex = 1;
+			this.label3.Text = "32";
+			// 
 			// EncoderOptions
 			// 
 			this.AcceptButton = this.okButton;
@@ -480,6 +554,10 @@
 			this.panel3.PerformLayout();
 			this.targetBox.ResumeLayout(false);
 			this.targetBox.PerformLayout();
+			this.tabPage3.ResumeLayout(false);
+			this.groupBox2.ResumeLayout(false);
+			this.groupBox2.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.opusBitrateSlider)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -521,5 +599,11 @@
 		private System.Windows.Forms.GroupBox targetBox;
 		private System.Windows.Forms.RadioButton qualityRadio;
 		private System.Windows.Forms.RadioButton bitrateRadio;
+		private System.Windows.Forms.TabPage tabPage3;
+		private System.Windows.Forms.GroupBox groupBox2;
+		private System.Windows.Forms.TrackBar opusBitrateSlider;
+		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.Label opusBitrateLabel;
+		private System.Windows.Forms.Label label3;
 	}
 }

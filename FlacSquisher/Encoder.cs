@@ -44,6 +44,7 @@ namespace FlacSquisher {
 		string oggPath;
 		string lamePath;
 		string metaflacPath;
+		string opusPath;
 
 		bool thirdPartyLame;
 		EncoderParams.ReplayGainType replayGainType;
@@ -76,6 +77,7 @@ namespace FlacSquisher {
 			oggPath = args.OggPath;
 			lamePath = args.LamePath;
 			metaflacPath = args.MetaflacPath;
+			opusPath = args.OpusPath;
 			
 			bw = backworker;
 		}
@@ -141,6 +143,9 @@ namespace FlacSquisher {
 			if(encoderChoice == EncoderParams.EncoderChoice.OggEnc) {
 				extension = ".ogg";
 			}
+			else if(encoderChoice == EncoderParams.EncoderChoice.Opus){
+				extension = ".opus";
+			}
 			else {
 				extension = ".mp3";
 			}
@@ -157,6 +162,9 @@ namespace FlacSquisher {
 
 			if(encoderChoice == EncoderParams.EncoderChoice.OggEnc) {
 				consoleText = encodeOggFile(fi, destPath);
+			}
+			else if(encoderChoice == EncoderParams.EncoderChoice.Opus){
+				consoleText = encodeOpusFile(fi, destPath);
 			}
 			else {
 				consoleText = encodeMp3File(fi, destPath);
@@ -184,6 +192,57 @@ namespace FlacSquisher {
 			// oggenc can take Flac files as input, so no decoding necessary
 			psi.FileName = oggPath;
 			psi.Arguments = "\"" + fi.FullName + "\" -o \"" + destPath + "\" " + options;
+
+			if(hidewin) {
+				psi.WindowStyle = ProcessWindowStyle.Hidden;
+				psi.CreateNoWindow = true;
+			}
+			else {
+				psi.WindowStyle = ProcessWindowStyle.Normal;
+				psi.CreateNoWindow = false;
+			}
+
+			psi.RedirectStandardError = true;
+			psi.UseShellExecute = false;
+
+			System.Diagnostics.Process p = System.Diagnostics.Process.Start(psi);
+
+			StreamReader sError = p.StandardError;
+			String errorString = sError.ReadToEnd();
+
+			// don't set a timeout, cause encoding could take a long time, depending on CPU speed, load, and file length
+			p.WaitForExit();
+
+			sError.Close();
+
+			if(p.ExitCode != 0) {
+				consoleText = errorString;
+			}
+
+			p.Close();
+
+			return consoleText;
+		}
+
+		private string encodeOpusFile(FileInfo fi, string destPath) {
+			string consoleText = "";
+
+			ProcessStartInfo psi = new ProcessStartInfo();
+
+			byte[] tag = new byte[3];
+			try {
+				int byteCount = fi.OpenRead().Read(tag, 0, 3);
+			}
+			catch(SystemException) { // Covers IOException and UnauthorizedAccessException
+				return "The FLAC file can't be read; please check the permissions for the file.";
+			}
+			if(tag[0] == 'I' && tag[1] == 'D' && tag[2] == '3') {
+				return "OpusEnc does not support FLAC files that contain ID3 tags.";
+			}
+
+			// opusenc can take Flac files as input, so no decoding necessary
+			psi.FileName = opusPath;
+			psi.Arguments = options + " \"" + fi.FullName + "\" \"" + destPath + "\" ";
 
 			if(hidewin) {
 				psi.WindowStyle = ProcessWindowStyle.Hidden;

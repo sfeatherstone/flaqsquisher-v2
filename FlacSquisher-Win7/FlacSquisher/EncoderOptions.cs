@@ -40,11 +40,16 @@ namespace FlacSquisher {
 				}
 				os.Mono = mono.Checked;
 				os.Cbr = cbr.Checked;
-				os.Bitrate = bitrateBar.Value;
 				if(os.Encoder == EncoderParams.EncoderChoice.OggEnc) {
+					os.Bitrate = 0;
 					os.Quality = oggQual.Value;
 				}
+				else if(os.Encoder == EncoderParams.EncoderChoice.Opus) {
+					os.Bitrate = opusBitrateSlider.Value;
+					os.Quality = 0;
+				}
 				else {
+					os.Bitrate = bitrateBar.Value;
 					os.Quality = qualBar.Value;
 				}
 				os.VbrMode = vbrMode.SelectedIndex;
@@ -59,6 +64,9 @@ namespace FlacSquisher {
 				bitrateBar.Value = os.Bitrate;
 				if(os.Encoder == EncoderParams.EncoderChoice.OggEnc) {
 					oggQual.Value = os.Quality;
+				}
+				else if(os.Encoder == EncoderParams.EncoderChoice.Opus) {
+					opusBitrateSlider.Value = os.Bitrate;
 				}
 				else {
 					qualBar.Value = os.Quality;
@@ -75,8 +83,11 @@ namespace FlacSquisher {
 
 		public String toString() {
 			String str;
-			if(tabControl1.SelectedIndex == 0) {
+			if(tabControl1.SelectedIndex == 0) { // using Ogg
 				str = "-q " + oggQual.Value;
+			}
+			else if(tabControl1.SelectedIndex == 2){ // using Opus
+				str = "--bitrate " + opusBitrateSlider.Value;
 			}
 			else { // using LAME
 				str = "";
@@ -120,6 +131,10 @@ namespace FlacSquisher {
 
 		private void qualityRadio_CheckedChanged(object sender, EventArgs e) {
 			lameQualBox.Enabled = qualityRadio.Checked;
+		}
+
+		private void opusBitrateSlider_Scroll(object sender, EventArgs e) {
+			opusBitrateLabel.Text = opusBitrateSlider.Value + " kbps";
 		}
 	}
 }

@@ -130,6 +130,27 @@ namespace FlacSquisher {
 			}
 		}
 
+		public string OpusPath {
+			get {
+				return opusLocation.Text;
+			}
+			set {
+				opusLocation.Text = value;
+			}
+		}
+
+		private void opusButton_Click(object sender, EventArgs e) {
+			OpenFileDialog ofd = new OpenFileDialog();
+			if(File.Exists(opusLocation.Text)) {
+				// clean up and resolve all parts of the path, such as "\..\", before passing the path
+				ofd.InitialDirectory = new FileInfo(opusLocation.Text).DirectoryName;
+			}
+			ofd.Filter = "Executable Files (*.exe)|*.exe|All Files|*.*";
+			if(ofd.ShowDialog() != DialogResult.Cancel) {
+				opusLocation.Text = ofd.FileName;
+			}
+		}
+
 		public bool Hidewin {
 			get {
 				return hidewin.Checked;
@@ -231,6 +252,7 @@ namespace FlacSquisher {
 			flacLocation.Text = Path.GetDirectoryName(Application.ExecutablePath) + Path.DirectorySeparatorChar + "flac.exe";
 			lameLocation.Text = Path.GetDirectoryName(Application.ExecutablePath) + Path.DirectorySeparatorChar + "lame.exe";
 			metaflacLocation.Text = Path.GetDirectoryName(Application.ExecutablePath) + Path.DirectorySeparatorChar + "metaflac.exe";
+			opusLocation.Text = Path.GetDirectoryName(Application.ExecutablePath) + Path.DirectorySeparatorChar + "opusenc.exe";
 			hidewin.Checked = true;
 			thirdPartyLameBox.Checked = false;
 			fileExts.Text = "txt log pdf cue mp3 mp4 flv";

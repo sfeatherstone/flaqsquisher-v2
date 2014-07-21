@@ -56,7 +56,8 @@ namespace FlacSquisher {
 		public enum EncoderChoice {
 			Invalid = -1,
 			OggEnc = 0,
-			Lame = 1
+			Lame = 1,
+			Opus = 2
 		};
 		EncoderChoice selectedEncoder;
 		public EncoderChoice SelectedEncoder {
@@ -145,6 +146,16 @@ namespace FlacSquisher {
 			}
 			set {
 				metaflacPath = value;
+			}
+		}
+
+		string opusPath;
+		public string OpusPath {
+			get {
+				return opusPath;
+			}
+			set {
+				opusPath = value;
 			}
 		}
 

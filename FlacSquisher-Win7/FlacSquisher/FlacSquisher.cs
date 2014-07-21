@@ -42,6 +42,7 @@ namespace FlacSquisher {
 		String flacexe;
 		String lamePath;
 		String metaflacPath;
+		String opusPath;
 		String ignoredExts;
 		String copiedExts;
 		bool hidewin;
@@ -83,6 +84,7 @@ namespace FlacSquisher {
 			// add encoder types to the drop-down box
 			encoder.Items.Add("OggEnc2 (Ogg Vorbis)");
 			encoder.Items.Add("Lame (mp3)");
+			encoder.Items.Add("Opus");
 
 			settingsPath = System.IO.Path.GetDirectoryName(Application.ExecutablePath) + dirSeparator + "config.cfg";
 			newSettingsPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + dirSeparator + "FlacSquisher" + dirSeparator + "config.cfg";
@@ -105,6 +107,7 @@ namespace FlacSquisher {
 				autoUpdate = false;
 				replayGainType = EncoderParams.ReplayGainType.LameTag;
 				maxImageSize = 512;
+				opusPath = System.IO.Path.GetDirectoryName(Application.ExecutablePath) + dirSeparator + "opusenc.exe";
 			}
 
 			// needed for users who upgrade from an old version that didn't have metaflac
@@ -200,6 +203,13 @@ namespace FlacSquisher {
 				else {
 					maxImageSize = 512;
 				}
+				temp = sr.ReadLine();
+				if(!string.IsNullOrEmpty(temp)) {
+					opusPath = temp;
+				}
+				else {
+					opusPath = System.IO.Path.GetDirectoryName(Application.ExecutablePath) + dirSeparator + "opusenc.exe";
+				}
 				sr.Close();
 				return 1;
 			}
@@ -232,7 +242,8 @@ namespace FlacSquisher {
 				sw.Write(thirdPartyLame.ToString() + Environment.NewLine);
 				sw.Write(autoUpdate.ToString() + Environment.NewLine);
 				sw.Write(((int)replayGainType).ToString() + Environment.NewLine);
-				sw.Write(maxImageSize);
+				sw.Write(maxImageSize + Environment.NewLine);
+				sw.Write(opusPath);
 				sw.Close();
 				return 1;
 			}
@@ -288,8 +299,11 @@ namespace FlacSquisher {
 			if(encoder.SelectedIndex == 0) {
 				cliParams.Text = "-q 6"; // oggenc options
 			}
-			else {
+			else if(encoder.SelectedIndex == 1) {
 				cliParams.Text = "-V2 --vbr-new -q0"; // lame options
+			}
+			else {
+				cliParams.Text = "--bitrate 128";
 			}
 		}
 
@@ -407,6 +421,7 @@ namespace FlacSquisher {
 			args.OggPath = oggPath;
 			args.LamePath = lamePath;
 			args.MetaflacPath = metaflacPath;
+			args.OpusPath = opusPath;
 			args.Hidewin = hidewin;
 			args.IgnoreList = ignoreList;
 			args.CopyList = copyList;
@@ -628,6 +643,7 @@ namespace FlacSquisher {
 			ow.LamePath = lamePath;
 			ow.FlacPath = flacexe;
 			ow.MetaflacPath = metaflacPath;
+			ow.OpusPath = opusPath;
 			ow.Hidewin = hidewin;
 			ow.ThirdPartyLame = thirdPartyLame;
 			ow.FileExts = ignoredExts;
@@ -643,6 +659,7 @@ namespace FlacSquisher {
 				lamePath = ow.LamePath;
 				flacexe = ow.FlacPath;
 				metaflacPath = ow.MetaflacPath;
+				opusPath = ow.OpusPath;
 				hidewin = ow.Hidewin;
 				thirdPartyLame = ow.ThirdPartyLame;
 				ignoredExts = ow.FileExts;

@@ -146,3 +146,4 @@ Add support for the composer, publisher, and copyright tags for MP3 encoding
 Properly handle Album Artist tags that don't have a space in the tag name, since both forms are generally considered acceptable for Vorbis Comments
 Implement user-configurable maximum size for embedded album art, with a default of 512kB
 ----1.2.4 released----
+Add support for encoding to Opus format
