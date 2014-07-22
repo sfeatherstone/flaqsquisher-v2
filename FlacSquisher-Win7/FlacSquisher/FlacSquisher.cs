@@ -553,9 +553,6 @@ namespace FlacSquisher {
 				TaskbarManager.Instance.SetProgressState(TaskbarProgressBarState.Normal);
 				TaskbarManager.Instance.SetProgressValue(progress, encodeProgress.Maximum);
 			}
-
-			// refresh the window, just in case
-			this.Refresh();
 		}
 
 		private void encodingBackgroundWorker2_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
