@@ -148,3 +148,5 @@ Implement user-configurable maximum size for embedded album art, with a default 
 ----1.2.4 released----
 Add support for encoding to Opus format
 Update oggenc binary using new bugfixed compile of the same version
+Remove additional unnecessary refresh call from the Win7 version
+----1.3.0 released----
