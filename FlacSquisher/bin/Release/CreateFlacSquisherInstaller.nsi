@@ -117,6 +117,7 @@ Section Uninstall
   Delete "$INSTDIR\lame.exe"
   Delete "$INSTDIR\libsndfile-1.dll"
   Delete "$INSTDIR\metaflac.exe"
+  Delete "$INSTDIR\opusenc.exe"
 
   Delete "$SMPROGRAMS\FlacSquisher\Uninstall.lnk"
   Delete "$SMPROGRAMS\FlacSquisher\Website.lnk"

@@ -119,6 +119,10 @@ Section Uninstall
   Delete "$INSTDIR\lame.exe"
   Delete "$INSTDIR\libsndfile-1.dll"
   Delete "$INSTDIR\metaflac.exe"
+  Delete "$INSTDIR\opusenc.exe"
+
+  Delete "$INSTDIR\Microsoft.WindowsAPICodePack.dll"
+  Delete "$INSTDIR\Microsoft.WindowsAPICodePack.Shell.dll"
 
   Delete "$SMPROGRAMS\FlacSquisher\Uninstall.lnk"
   Delete "$SMPROGRAMS\FlacSquisher\Website.lnk"
