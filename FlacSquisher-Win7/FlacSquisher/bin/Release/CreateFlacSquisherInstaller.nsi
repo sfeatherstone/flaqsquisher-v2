@@ -2,7 +2,7 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "FlacSquisher"
-!define PRODUCT_VERSION "1.3.0"
+!define PRODUCT_VERSION "1.3.1"
 !define PRODUCT_PUBLISHER "FlacSquisher"
 !define PRODUCT_WEB_SITE "http://sourceforge.net/projects/flacsquisher/"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\FlacSquisher.exe"
@@ -75,6 +75,7 @@ Section "MainSection" SEC01
   File "C:\code\FlacSquisher\FlacSquisher-Win7\FlacSquisher\bin\Release\lame.exe"
   File "C:\code\FlacSquisher\FlacSquisher-Win7\FlacSquisher\bin\Release\flac.exe"
   File "C:\code\FlacSquisher\FlacSquisher-Win7\FlacSquisher\bin\Release\oggenc.exe"
+  File "C:\code\FlacSquisher\FlacSquisher-Win7\FlacSquisher\bin\Release\opusenc.exe"
   File "C:\code\FlacSquisher\FlacSquisher-Win7\FlacSquisher\bin\Release\Microsoft.WindowsAPICodePack.dll"
   File "C:\code\FlacSquisher\FlacSquisher-Win7\FlacSquisher\bin\Release\Microsoft.WindowsAPICodePack.Shell.dll"
   SetOverwrite on
