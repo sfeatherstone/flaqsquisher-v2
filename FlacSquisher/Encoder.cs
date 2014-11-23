@@ -373,9 +373,19 @@ namespace FlacSquisher {
 				composer = match.Groups[1].Value;
 				composer = composer.Trim();
 			}
-			regex = new Regex("comment\\[\\d+\\]: PUBLISHER=(.*)", RegexOptions.IgnoreCase);
+			// The proposed tags for the official Vorbis Tag spec includes the Organization tag
+			// instead of the Publisher tag:
+			// https://www.xiph.org/vorbis/doc/v-comment.html
+			// If the Flac file contains both tags, we'll let the Publisher tag take precedence
+			regex = new Regex("comment\\[\\d+\\]: ORGANIZATION=(.*)", RegexOptions.IgnoreCase);
 			match = regex.Match(output);
 			String publisher = "";
+			if(match.Success) {
+				publisher = match.Groups[1].Value;
+				publisher = publisher.Trim();
+			}
+			regex = new Regex("comment\\[\\d+\\]: PUBLISHER=(.*)", RegexOptions.IgnoreCase);
+			match = regex.Match(output);
 			if(match.Success) {
 				publisher = match.Groups[1].Value;
 				publisher = publisher.Trim();
