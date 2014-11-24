@@ -27,6 +27,7 @@
 			this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.consoleWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.onlineHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -56,7 +57,6 @@
 			this.encodeStatus = new System.Windows.Forms.ToolStripStatusLabel();
 			this.recursingBackgroundWorker1 = new System.ComponentModel.BackgroundWorker();
 			this.encodingBackgroundWorker2 = new System.ComponentModel.BackgroundWorker();
-			this.consoleWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip1.SuspendLayout();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
@@ -84,7 +84,7 @@
 			this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.exitToolStripMenuItem});
 			this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-			this.fileToolStripMenuItem.Size = new System.Drawing.Size(35, 20);
+			this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
 			this.fileToolStripMenuItem.Text = "File";
 			// 
 			// exitToolStripMenuItem
@@ -100,13 +100,20 @@
             this.consoleWindowToolStripMenuItem,
             this.optionsToolStripMenuItem});
 			this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-			this.toolsToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+			this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
 			this.toolsToolStripMenuItem.Text = "Tools";
+			// 
+			// consoleWindowToolStripMenuItem
+			// 
+			this.consoleWindowToolStripMenuItem.Name = "consoleWindowToolStripMenuItem";
+			this.consoleWindowToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+			this.consoleWindowToolStripMenuItem.Text = "Console Window...";
+			this.consoleWindowToolStripMenuItem.Click += new System.EventHandler(this.consoleWindowToolStripMenuItem_Click);
 			// 
 			// optionsToolStripMenuItem
 			// 
 			this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-			this.optionsToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+			this.optionsToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
 			this.optionsToolStripMenuItem.Text = "Options...";
 			this.optionsToolStripMenuItem.Click += new System.EventHandler(this.optionsToolStripMenuItem_Click);
 			// 
@@ -117,27 +124,27 @@
             this.checkForUpdatesToolStripMenuItem,
             this.aboutToolStripMenuItem});
 			this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-			this.helpToolStripMenuItem.Size = new System.Drawing.Size(40, 20);
+			this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
 			this.helpToolStripMenuItem.Text = "Help";
 			// 
 			// onlineHelpToolStripMenuItem
 			// 
 			this.onlineHelpToolStripMenuItem.Name = "onlineHelpToolStripMenuItem";
-			this.onlineHelpToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+			this.onlineHelpToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
 			this.onlineHelpToolStripMenuItem.Text = "Online Help";
 			this.onlineHelpToolStripMenuItem.Click += new System.EventHandler(this.onlineHelpToolStripMenuItem_Click);
 			// 
 			// checkForUpdatesToolStripMenuItem
 			// 
 			this.checkForUpdatesToolStripMenuItem.Name = "checkForUpdatesToolStripMenuItem";
-			this.checkForUpdatesToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+			this.checkForUpdatesToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
 			this.checkForUpdatesToolStripMenuItem.Text = "Check for Updates";
 			this.checkForUpdatesToolStripMenuItem.Click += new System.EventHandler(this.checkForUpdatesToolStripMenuItem_Click);
 			// 
 			// aboutToolStripMenuItem
 			// 
 			this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-			this.aboutToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+			this.aboutToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
 			this.aboutToolStripMenuItem.Text = "About...";
 			this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
 			// 
@@ -152,12 +159,15 @@
 			// 
 			// flacDir
 			// 
+			this.flacDir.AllowDrop = true;
 			this.flacDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
 			this.flacDir.Location = new System.Drawing.Point(6, 32);
 			this.flacDir.Name = "flacDir";
 			this.flacDir.Size = new System.Drawing.Size(310, 20);
 			this.flacDir.TabIndex = 2;
+			this.flacDir.DragDrop += new System.Windows.Forms.DragEventHandler(this.flacDir_DragDrop);
+			this.flacDir.DragEnter += new System.Windows.Forms.DragEventHandler(this.flacDir_DragEnter);
 			// 
 			// label1
 			// 
@@ -170,12 +180,15 @@
 			// 
 			// outputDir
 			// 
+			this.outputDir.AllowDrop = true;
 			this.outputDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
 			this.outputDir.Location = new System.Drawing.Point(6, 71);
 			this.outputDir.Name = "outputDir";
 			this.outputDir.Size = new System.Drawing.Size(310, 20);
 			this.outputDir.TabIndex = 4;
+			this.outputDir.DragDrop += new System.Windows.Forms.DragEventHandler(this.outputDir_DragDrop);
+			this.outputDir.DragEnter += new System.Windows.Forms.DragEventHandler(this.outputDir_DragEnter);
 			// 
 			// flacDirButton
 			// 
@@ -379,7 +392,7 @@
 			// encodeStatus
 			// 
 			this.encodeStatus.Name = "encodeStatus";
-			this.encodeStatus.Size = new System.Drawing.Size(38, 17);
+			this.encodeStatus.Size = new System.Drawing.Size(39, 17);
 			this.encodeStatus.Text = "Ready";
 			// 
 			// recursingBackgroundWorker1
@@ -395,13 +408,6 @@
 			this.encodingBackgroundWorker2.DoWork += new System.ComponentModel.DoWorkEventHandler(this.encodingBackgroundWorker2_DoWork);
 			this.encodingBackgroundWorker2.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.encodingBackgroundWorker2_RunWorkerCompleted);
 			this.encodingBackgroundWorker2.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.encodingBackgroundWorker2_ProgressChanged);
-			// 
-			// consoleWindowToolStripMenuItem
-			// 
-			this.consoleWindowToolStripMenuItem.Name = "consoleWindowToolStripMenuItem";
-			this.consoleWindowToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
-			this.consoleWindowToolStripMenuItem.Text = "Console Window...";
-			this.consoleWindowToolStripMenuItem.Click += new System.EventHandler(this.consoleWindowToolStripMenuItem_Click);
 			// 
 			// FlacSquisher
 			// 

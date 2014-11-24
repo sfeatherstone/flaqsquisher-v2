@@ -281,6 +281,46 @@ namespace FlacSquisher {
 			}
 		}
 
+		private void flacDir_DragEnter(object sender, DragEventArgs e) {
+			if(e.Data.GetDataPresent(DataFormats.Text) || e.Data.GetDataPresent(DataFormats.FileDrop)) {
+				e.Effect = DragDropEffects.Copy;
+			}
+			else {
+				e.Effect = DragDropEffects.None;
+			}
+		}
+
+		private void flacDir_DragDrop(object sender, DragEventArgs e) {
+			if(e.Data.GetDataPresent(DataFormats.Text)){
+				flacDir.Text = e.Data.GetData(DataFormats.Text).ToString();
+			}
+			else if(e.Data.GetDataPresent(DataFormats.FileDrop)){
+				string[] fileNames;
+				fileNames = (string[])e.Data.GetData(DataFormats.FileDrop);
+				flacDir.Text = fileNames[0];
+			}
+		}
+
+		private void outputDir_DragEnter(object sender, DragEventArgs e) {
+			if(e.Data.GetDataPresent(DataFormats.Text) || e.Data.GetDataPresent(DataFormats.FileDrop)) {
+				e.Effect = DragDropEffects.Copy;
+			}
+			else {
+				e.Effect = DragDropEffects.None;
+			}
+		}
+
+		private void outputDir_DragDrop(object sender, DragEventArgs e) {
+			if(e.Data.GetDataPresent(DataFormats.Text)) {
+				outputDir.Text = e.Data.GetData(DataFormats.Text).ToString();
+			}
+			else if(e.Data.GetDataPresent(DataFormats.FileDrop)) {
+				string[] fileNames;
+				fileNames = (string[])e.Data.GetData(DataFormats.FileDrop);
+				outputDir.Text = fileNames[0];
+			}
+		}
+
 		// chooses "destination" directory to contain files output by the recoding
 		private void outputDirButton_Click(object sender, EventArgs e) {
 			FolderBrowserDialog fbd = new FolderBrowserDialog();
@@ -679,8 +719,6 @@ namespace FlacSquisher {
 			consoleWin.AddResults(resultsList);
 			consoleWin.ShowDialog(this);
 		}
-
-		
 
 	}
 }
