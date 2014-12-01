@@ -150,3 +150,10 @@ Add support for encoding to Opus format
 Update oggenc binary using new bugfixed compile of the same version
 Remove additional unnecessary refresh call from the Win7 version
 ----1.3.0 released----
+Update installer to include opusenc binary
+----1.3.1 released----
+Add support for mapping the Organization tag to the Publisher tag
+Allow drag/drop to the directory fields
+Cleanly throw an error when a too-long file path is given
+Update FLAC and Metaflac binaries to 1.3.1
+----1.3.2 released----
