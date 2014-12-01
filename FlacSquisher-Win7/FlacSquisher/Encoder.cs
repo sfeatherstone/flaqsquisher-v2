@@ -131,10 +131,20 @@ namespace FlacSquisher {
 					}
 
 					if(!Directory.Exists(outputPath + partialPath)) {
-						Directory.CreateDirectory(outputPath + partialPath);
+						try {
+							Directory.CreateDirectory(outputPath + partialPath);
+						}
+						catch(PathTooLongException) {
+							return "The output directory path for this file is too long for FlacSquisher to create.";
+						}
 					}
 
-					File.Copy(fi.FullName, destPath);
+					try {
+						File.Copy(fi.FullName, destPath);
+					}
+					catch(PathTooLongException) {
+						return "The output path for this file is too long for FlacSquisher to be able to copy.";
+					}
 					return "";
 				}
 			}
@@ -157,7 +167,12 @@ namespace FlacSquisher {
 			}
 			// LAME doesn't like to output to non-existent directories
 			if(!Directory.Exists(outputPath + partialPath)) {
-				Directory.CreateDirectory(outputPath + partialPath);
+				try {
+					Directory.CreateDirectory(outputPath + partialPath);
+				}
+				catch(PathTooLongException) {
+					return "The output directory path for this file is too long for FlacSquisher to create.";
+				}
 			}
 
 			if(encoderChoice == EncoderParams.EncoderChoice.OggEnc) {
