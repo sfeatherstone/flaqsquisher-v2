@@ -461,7 +461,7 @@ namespace FlacSquisher {
 			args.IgnoreList = ignoreList;
 			args.CopyList = copyList;
 			args.ThirdPartyLame = thirdPartyLame;
-			args.GainType = EncoderParams.ReplayGainType.LameTag;
+			args.GainType = replayGainType;
 			args.MaxImageSize = maxImageSize;
 
 			this.recursingBackgroundWorker1.RunWorkerAsync(args);
