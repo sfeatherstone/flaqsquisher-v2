@@ -157,3 +157,5 @@ Allow drag/drop to the directory fields
 Cleanly throw an error when a too-long file path is given
 Update FLAC and Metaflac binaries to 1.3.1
 ----1.3.2 released----
+Fix bug causing user choice for ReplayGain tagging to be overridden by hardcoded choice for Lame tag
+----1.3.3 released----
