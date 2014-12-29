@@ -630,5 +630,16 @@ namespace FlacSquisher {
 			return destPath;
 		}
 
+		/// <summary>
+		/// When an ampersand (&) needs to be used literally on the command line, it needs to be escaped by a caret (^).
+		/// This is negated by the use of double-quotes, and we put double-quotes around all of the strings used here.
+		/// If the string contains an ampersand inside escaped double-quotes, we need to escape it with a caret,
+		/// otherwise Windows will interpret it as a special character.
+		/// </summary>
+		/// <returns></returns>
+		private string escapeAmpersandInsideQuotes() {
+			return "";
+		}
+
 	}
 }
