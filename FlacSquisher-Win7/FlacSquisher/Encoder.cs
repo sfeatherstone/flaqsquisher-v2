@@ -101,9 +101,24 @@ namespace FlacSquisher {
 				// isn't sufficient, we don't want that condition to be fatal
 				catch(InvalidOperationException) {
 				}
-				String consoleText = encodeFile(fi);
 
-				EncoderResults results = new EncoderResults(String.Copy(fi.FullName), String.Copy(consoleText), jobQueue.Count);
+				String fullName = "";
+				String consoleText = "";
+				try {
+					fullName = fi.FullName;
+				}
+				catch(PathTooLongException){
+					consoleText = "The full path for this file is too long for FlacSquisher to handle.";
+				}
+
+				if(String.IsNullOrEmpty(consoleText)) {
+					consoleText = encodeFile(fi);
+				}
+				else {
+					fullName = fi.Name;
+				}
+
+				EncoderResults results = new EncoderResults(String.Copy(fullName), String.Copy(consoleText), jobQueue.Count);
 
 				// increment "value" on the progress bar by one
 				bw.ReportProgress(20, results);
