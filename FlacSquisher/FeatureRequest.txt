@@ -161,3 +161,6 @@ Fix bug causing user choice for ReplayGain tagging to be overridden by hardcoded
 ----1.3.3 released----
 Cleanly throw an error when a too-long file path is given for the input file
 ----1.3.4 released----
+Avoid exception by passing DirectoryInfo to recurser instead of directory path
+Update oggenc binary to 2.87 using libvorbis 1.3.5
+----1.3.5 released----
