@@ -52,14 +52,12 @@ namespace FlacSquisher {
 			if(string.IsNullOrEmpty(directory)) {
 				throw new Exception("No directory specified for FolderRecurser");
 			}
-			recurse(directory);
+			DirectoryInfo dirinfo = new DirectoryInfo(directory);
+			recurse(dirinfo);
 			rwl.ReleaseLock();
 		}
 
-		public Queue<FileInfo> recurse(string rootDir) {
-			DirectoryInfo dirinfo = new DirectoryInfo(rootDir);
-			//Queue<FileInfo> jobQueue = new Queue<FileInfo>();
-
+		public Queue<FileInfo> recurse(DirectoryInfo dirinfo) {
 			// make sure source directory exists (just a safeguard only really relevant on first level of recursion)
 			if(!dirinfo.Exists) {
 				return jobQueue;
@@ -82,20 +80,13 @@ namespace FlacSquisher {
 					}
 				}
 				if(!foundExt) {
-					//if(!fi->Name->ToLower()->EndsWith("flac")){
-					//MessageBox::Show(fi->Name);
-					//}
 					jobQueue.Enqueue(fi);
 				}
 			}
 
 			// pseudo-tail-recursive, if this compiler is helped by that at all
 			foreach(DirectoryInfo di in dirinfo.GetDirectories()) {
-				recurse(di.FullName);
-				//Queue<FileInfo> retQueue = recurse(di.FullName);
-				//foreach(FileInfo fi in retQueue) {
-				//	jobQueue.Enqueue(fi);
-				//}
+				recurse(di);
 			}
 			return jobQueue;
 		}
