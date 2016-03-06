@@ -392,15 +392,24 @@ namespace FlacSquisher {
 			encodeAborted = false;
 
 			ignoreList = new List<String>();
-			String[] split = ignoredExts.Split(' ');
+			String[] split = new String[0];
 			if(!String.IsNullOrEmpty(ignoredExts)) {
-				ignoreList.AddRange(split);
+				split = ignoredExts.Split(' ');
+				foreach(String ext in split) {
+					if(!String.IsNullOrEmpty(ext)) {
+						ignoreList.Add(ext);
+					}
+				}
 			}
 
 			copyList = new List<String>();
-			split = copiedExts.Split(' ');
 			if(!String.IsNullOrEmpty(copiedExts)) {
-				copyList.AddRange(split);
+				split = copiedExts.Split(' ');
+				foreach(String ext in split) {
+					if(!String.IsNullOrEmpty(ext)) {
+						copyList.Add(ext);
+					}
+				}
 			}
 
 			// make sure source and destination directories are given
