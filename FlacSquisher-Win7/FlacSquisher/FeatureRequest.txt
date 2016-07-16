@@ -167,3 +167,5 @@ Update oggenc binary to 2.87 using libvorbis 1.3.5
 Fix bug when parsing multiple spaces in the file extension lists
 Update oggenc binary to 2.88 using libvorbis 1.3.5
 ----1.3.6 released----
+Fix bug causing space at the end of the directory names to cause a hang
+----1.3.7 released----

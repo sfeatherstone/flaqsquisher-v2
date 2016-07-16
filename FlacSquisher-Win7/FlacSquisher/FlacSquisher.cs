@@ -437,11 +437,11 @@ namespace FlacSquisher {
 				TaskbarManager.Instance.SetProgressState(TaskbarProgressBarState.Indeterminate);
 			}
 
-			String flacDirString = flacDir.Text;
+			String flacDirString = flacDir.Text.Trim();
 			if(flacDirString.EndsWith(dirSeparator)) {
 				flacDirString = flacDirString.TrimEnd(new char[1] { System.IO.Path.DirectorySeparatorChar });
 			}
-			String outputDirString = outputDir.Text;
+			String outputDirString = outputDir.Text.Trim();
 			if(outputDirString.EndsWith(dirSeparator)) {
 				outputDirString = outputDirString.TrimEnd(new char[1] { System.IO.Path.DirectorySeparatorChar });
 			}
