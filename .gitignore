@@ -1,0 +1,5 @@
+FlacSquisher/obj/*
+.vs
+Backup
+FlacSquisher/bin/
+UpgradeLog.htm
